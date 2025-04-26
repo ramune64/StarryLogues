@@ -2727,7 +2727,7 @@ let button_back_imgs = [
     star_img7,
     sasanoha_img,
     hanabi_img
-]
+];
 const operate_buttons = document.getElementsByClassName("operate_button");
 const song_buttons = document.getElementsByClassName("song_button");
 const back_song_button = document.getElementsByClassName("back_song_button");
@@ -3515,7 +3515,6 @@ function placeTextSprite(text,bv,bright,size) {
         const lineMesh = new THREE.Line(lineGeometry, lineMaterial);
         scene.add(lineMesh);
     }
-
 }
 /* const text_obj = createTextSprite("a");
 scene.add(text_obj);
@@ -3523,3 +3522,110 @@ text_obj.position.set(1,3,1); */
 /* canvas.addEventListener("click",()=>{
     placeTextSprite("aaa")
 }) */
+import tanzaku_mi_img from "./imgs/tanzaku_mi.png";
+import tanzaku_me_img from "./imgs/tanzaku_me.png";
+import tanzaku_ri_img from "./imgs/tanzaku_ri.png";
+import tanzaku_le_img from "./imgs/tanzaku_le.png";
+import tanzaku_lu_img from "./imgs/tanzaku_lu.png";
+import tanzaku_ka_img from "./imgs/tanzaku_ka.png";
+const tanzaku_imgs = [
+    tanzaku_mi_img,
+    tanzaku_me_img,
+    tanzaku_ri_img,
+    tanzaku_le_img,
+    tanzaku_lu_img,
+    tanzaku_ka_img
+];
+
+function drawImageRotated(ctx, img, x, y, options = {}) {
+    const {
+        rotation = 0, 
+        scale = 1.0,    
+        opacity = 1.0, 
+        width = img.width,
+        height = img.height,
+        filter = null 
+    } = options;
+
+    ctx.save(); // 現在の状態を保存
+    ctx.globalAlpha = opacity; 
+    if (filter) {
+        ctx.filter = filter; 
+    }
+
+    ctx.translate(x, y);     
+    ctx.rotate(rotation); 
+    ctx.scale(scale, scale); 
+    ctx.drawImage(img, -width/2, -height/2, width, height);
+
+    ctx.restore(); // 状態を元に戻す
+}
+const tanzaku_back_ims = button_back_imgs.concat([milkyway_img]);
+function make_tanzaku_and_place(dis,quantity_per_one = 5){
+    tanzaku_imgs.forEach(tanzaku => {
+        const img = new Image();
+        img.src = tanzaku;
+        img.onload = async  () => { // 読み込みが終わったらこの中が実行される
+            for (let i = 0; i < quantity_per_one; i++) {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.height;
+                canvas.height = img.width;
+                ctx.save();
+                ctx.translate(canvas.width/2,canvas.height/2);
+                ctx.rotate(90* Math.PI / 180);
+                ctx.drawImage(img, -img.width / 2, -img.height / 2);
+                ctx.restore();
+                const promises = [];
+
+                for (let k = 0; k < 5; k++) { 
+                    const img_src = tanzaku_back_ims[Math.floor(Math.random() * tanzaku_back_ims.length)];
+                    
+                    const p = new Promise((resolve) => {
+                        const back_img = new Image();
+                        back_img.src = img_src;
+                        back_img.onload = () => {
+                            resolve(back_img); // 読み込み完了したら渡す
+                        };
+                    });
+
+                    promises.push(p);
+                }
+
+                const loaded_images = await Promise.all(promises); // 全部ロード完了を待つ
+
+                    loaded_images.forEach((back_img) => {
+                    
+                        const x = Math.random() * ctx.canvas.width;
+                        const y = Math.max(Math.random(),0.3) * ctx.canvas.height;
+                        console.log(x,y);
+                        drawImageRotated(ctx,back_img,
+                            x,y,
+                            {
+                                rotation: Math.random() * Math.PI * 2,
+                                scale: 0.5 + Math.random() * 1.0,
+                                opacity: 0.2 + Math.random() * 0.5,
+                                filter: 'blur(1px)'
+                            }
+                        );
+                    
+                })
+                const texture = new THREE.CanvasTexture(canvas);
+                
+                const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    opacity:0.3,
+                    alphaTest: 0.1,
+                    side: THREE.DoubleSide, 
+                });
+                const geometry = new THREE.PlaneGeometry(0.5, 2.5);
+                const tanzaku_mesh = new THREE.Mesh(geometry, material);
+                tanzaku_mesh.position.set(Math.random()*10-5,2,Math.random()*10-5);
+                tanzaku_mesh.lookAt(0, 0, 0);
+                scene.add(tanzaku_mesh);
+            }
+        }
+    });
+}
+make_tanzaku_and_place();
