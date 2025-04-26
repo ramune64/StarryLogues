@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- <p id="rylic"></p> -->
+    <div id="canvas_container">
+        <canvas id="myCanvas"></canvas>
+        <div id="direction_parent">
+
+        </div>
+        <div id="angle_parent">
+
+        </div>
+        <div id="loading_gray"></div>
+        <div id="loading">
+            <img src="./imgs/tanzaku_mi.png" alt="" style="rotate: 90deg; animation-delay: 0s;">
+            <img src="./imgs/tanzaku_me.png" alt="" style="rotate: 150deg;animation-delay: 0.3s;">
+            <img src="./imgs/tanzaku_le.png" alt="" style="rotate: 210deg;animation-delay: 0.6s;">
+            <img src="./imgs/tanzaku_ri.png" alt="" style="rotate: 270deg;animation-delay: 0.9s;">
+            <img src="./imgs/tanzaku_lu.png" alt="" style="rotate: 330deg;animation-delay: 1.2s;">
+            <img src="./imgs/tanzaku_ka.png" alt="" style="rotate: 30deg; animation-delay: 1.5s;">
+            <h1 id="loading_txt">準備中...</h1>
+        </div>
+        <img src="./imgs/telescope_filter2.png" alt="" id="telescope_filter">
+        
+            <img src="./imgs/galaxy3.png" alt="" id="galaxy_img">
+        
+        <img src="./imgs/info_icon.png" alt="" id="info_icon">
+        <!-- <img src="./imgs/target.png" alt="" id="star_name"> -->
+        <div id="location_firstQ">
+            <div class="firstQ_child">あなたの地域</div>
+            <div class="firstQ_child">日本国内の地域</div>
+            <div class="firstQ_child">それ以外の地域<span id="supplement_info">(首都)</span></div>
+        </div>
+        <div id="japan_option">
+            <div class="japan_option_child">札幌</div>
+            <div class="japan_option_child">仙台</div>
+            <div class="japan_option_child">東京</div>
+            <div class="japan_option_child">名古屋</div>
+            <div class="japan_option_child">大阪</div>
+            <div class="japan_option_child">広島</div>
+            <div class="japan_option_child">福岡</div>
+            <div class="japan_option_child">那覇</div>
+        </div>
+        <div id="world_option">
+            <div class="world_option_child">アメリカ</div>
+            <div class="world_option_child">中国</div>
+            <div class="world_option_child">インド</div>
+            <div class="world_option_child">オーストラリア</div>
+            <div class="world_option_child">ブラジル</div>
+            <div class="world_option_child">ケニア</div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="return_change_location" class="operate_button">戻る</div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="return_set_time" class="operate_button">戻る</div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="change_constellation_name" class="operate_button">星座名の表示切り替え</div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="set_now" class="operate_button">現在の時間にする</div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="change_time" class="operate_button"><span id="operate_button_text">時間を変更する</span></div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="change_location" class="operate_button">地域を変更する</div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div id="time_change_panel"></div>
+        <div id="show_time_and_location">
+            <p>星座名:<span id="constellation_name">日本語</span></p>
+            <p>地域:<span id="location">東京</span></p>
+            <p>時間:<span id="time">912025年10月30日17時20分</span></p>
+            <p style="text-align: right;">(UTC+9)</p>
+        </div>
+        <div id="warn_past">
+            <div id="close_parent">
+                <div id="close1"></div>
+                <div id="close2"></div>
+            </div>
+            <h1>過去に行くことは出来ません！</h1>
+            <p>未来はいずれやってきますが、<br>もう過去に戻ることは出来ません。</p>
+        </div>
+        <div id="info_operate">
+            <h1>操作方法</h1>
+            <div id="close_parent_info">
+                <div id="close1_info"></div>
+                <div id="close2_info"></div>
+            </div>
+            <p>1.画面内でどこかをクリックすると、望遠鏡がそれに追随して動くようになります。</p>
+            <p>2.その状態でもう一度クリックするか、Escキーを押すと再びマウスカーソルが表示されます。</p>
+        </div>
+        <div id="select_galaxy">
+            <h1>Choose a Galaxy</h1>
+            <div id="galaxy_container_song">
+            <div id="galaxy_container_right">
+                <div class="song_button_wrapper">
+                    <div class="song_button">
+                        1.ストリートライト
+                    </div>
+                    <div class="back_song_button"><span>加賀(ネギシャワーP)</span></div>
+                </div>
+                <div class="song_button_wrapper">
+                    <div class="song_button">
+                        2.アリフレーション
+                    </div>
+                    <div class="back_song_button"><span>雨良 Amala</span></div>
+                </div>
+                <div class="song_button_wrapper">
+                    <div class="song_button">
+                        3.インフォーマルダイブ
+                    </div>
+                    <div class="back_song_button"><span>99piano</span></div>
+                </div>
+            </div>
+            <div id="galaxy_container_left">
+                <div class="song_button_wrapper">
+                    <div class="song_button">
+                        4.ハロー、フェルミ。
+                    </div>
+                    <div class="back_song_button"><span>ど～ぱみん</span></div>
+                </div>
+                <div class="song_button_wrapper">
+                    <div class="song_button">
+                        5.パレードレコード
+                    </div>
+                    <div class="back_song_button"><span>きさら</span></div>
+                </div>
+                <div class="song_button_wrapper">
+                    <div class="song_button">
+                        6.ロンリーラン
+                    </div>
+                    <div class="back_song_button"><span>海風太陽</span></div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div id="observe_gauge">
+            <div id="gauge_mask"></div>
+            <img src="./imgs/star.png" alt="" id="gauge_star">
+        </div>
+        <div id="start_observe">
+            <img src="./imgs/play_button.png" alt="" id="play_button">
+            <p id="start_dbserve_child">観測を開始する</p>
+        </div>
+    </div>
+    <!-- <button onclick="downloadComposerOutput()">Download</button> -->
+<script src="./three.js" type="module"></script>
+</body>
+</html>

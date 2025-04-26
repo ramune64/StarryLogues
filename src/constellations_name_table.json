@@ -1,0 +1,536 @@
+[
+  {
+    "Andromeda": {
+      "JaName": "アンドロメダ",
+      "Abbreviations": "And"
+    }
+  },
+  {
+    "Monoceros": {
+      "JaName": "いっかくじゅう",
+      "Abbreviations": "Mon"
+    }
+  },
+  {
+    "Sagittarius": {
+      "JaName": "いて",
+      "Abbreviations": "Sgr"
+    }
+  },
+  {
+    "Delphinus": {
+      "JaName": "いるか",
+      "Abbreviations": "Del"
+    }
+  },
+  {
+    "Indus": {
+      "JaName": "インディアン",
+      "Abbreviations": "Ind"
+    }
+  },
+  {
+    "Pisces": {
+      "JaName": "うお",
+      "Abbreviations": "Psc"
+    }
+  },
+  {
+    "Lepus": {
+      "JaName": "うさぎ",
+      "Abbreviations": "Lep"
+    }
+  },
+  {
+    "Bootes": {
+      "JaName": "うしかい",
+      "Abbreviations": "Boo"
+    }
+  },
+  {
+    "Hydra": {
+      "JaName": "うみへび",
+      "Abbreviations": "Hya"
+    }
+  },
+  {
+    "Eridanus": {
+      "JaName": "エリダヌス",
+      "Abbreviations": "Eri"
+    }
+  },
+  {
+    "Taurus": {
+      "JaName": "おうし",
+      "Abbreviations": "Tau"
+    }
+  },
+  {
+    "Canis Major": {
+      "JaName": "おおいぬ",
+      "Abbreviations": "CMa"
+    }
+  },
+  {
+    "Lupus": {
+      "JaName": "おおかみ",
+      "Abbreviations": "Lup"
+    }
+  },
+  {
+    "Ursa Major": {
+      "JaName": "おおぐま",
+      "Abbreviations": "UMa"
+    }
+  },
+  {
+    "Virgo": {
+      "JaName": "おとめ",
+      "Abbreviations": "Vir"
+    }
+  },
+  {
+    "Aries": {
+      "JaName": "おひつじ",
+      "Abbreviations": "Ari"
+    }
+  },
+  {
+    "Orion": {
+      "JaName": "オリオン",
+      "Abbreviations": "Ori"
+    }
+  },
+  {
+    "Pictor": {
+      "JaName": "がか",
+      "Abbreviations": "Pic"
+    }
+  },
+  {
+    "Cassiopeia": {
+      "JaName": "カシオペヤ",
+      "Abbreviations": "Cas"
+    }
+  },
+  {
+    "Dorado": {
+      "JaName": "かじき",
+      "Abbreviations": "Dor"
+    }
+  },
+  {
+    "Cancer": {
+      "JaName": "かに",
+      "Abbreviations": "Cnc"
+    }
+  },
+  {
+    "Coma Berenices": {
+      "JaName": "かみのけ",
+      "Abbreviations": "Com"
+    }
+  },
+  {
+    "Chamaeleon": {
+      "JaName": "カメレオン",
+      "Abbreviations": "Cha"
+    }
+  },
+  {
+    "Corvus": {
+      "JaName": "からす",
+      "Abbreviations": "Crv"
+    }
+  },
+  {
+    "Corona Borealis": {
+      "JaName": "かんむり",
+      "Abbreviations": "CrB"
+    }
+  },
+  {
+    "Tucana": {
+      "JaName": "きょしちょう",
+      "Abbreviations": "Tuc"
+    }
+  },
+  {
+    "Auriga": {
+      "JaName": "ぎょしゃ",
+      "Abbreviations": "Aur"
+    }
+  },
+  {
+    "Camelopardalis": {
+      "JaName": "きりん",
+      "Abbreviations": "Cam"
+    }
+  },
+  {
+    "Pavo": {
+      "JaName": "くじゃく",
+      "Abbreviations": "Pav"
+    }
+  },
+  {
+    "Cetus": {
+      "JaName": "くじら",
+      "Abbreviations": "Cet"
+    }
+  },
+  {
+    "Cepheus": {
+      "JaName": "ケフェウス",
+      "Abbreviations": "Cep"
+    }
+  },
+  {
+    "Centaurus": {
+      "JaName": "ケンタウルス",
+      "Abbreviations": "Cen"
+    }
+  },
+  {
+    "Microscopium": {
+      "JaName": "けんびきょう",
+      "Abbreviations": "Mic"
+    }
+  },
+  {
+    "Canis Minor": {
+      "JaName": "こいぬ",
+      "Abbreviations": "CMi"
+    }
+  },
+  {
+    "Equuleus": {
+      "JaName": "こうま",
+      "Abbreviations": "Equ"
+    }
+  },
+  {
+    "Vulpecula": {
+      "JaName": "こぎつね",
+      "Abbreviations": "Vul"
+    }
+  },
+  {
+    "Ursa Minor": {
+      "JaName": "こぐま",
+      "Abbreviations": "UMi"
+    }
+  },
+  {
+    "Leo Minor": {
+      "JaName": "こじし",
+      "Abbreviations": "LMi"
+    }
+  },
+  {
+    "Crater": {
+      "JaName": "コップ",
+      "Abbreviations": "Crt"
+    }
+  },
+  {
+    "Lyra": {
+      "JaName": "こと",
+      "Abbreviations": "Lyr"
+    }
+  },
+  {
+    "Circinus": {
+      "JaName": "コンパス",
+      "Abbreviations": "Cir"
+    }
+  },
+  {
+    "Ara": {
+      "JaName": "さいだん",
+      "Abbreviations": "Ara"
+    }
+  },
+  {
+    "Scorpius": {
+      "JaName": "さそり",
+      "Abbreviations": "Sco"
+    }
+  },
+  {
+    "Triangulum": {
+      "JaName": "さんかく",
+      "Abbreviations": "Tri"
+    }
+  },
+  {
+    "Leo": {
+      "JaName": "しし",
+      "Abbreviations": "Leo"
+    }
+  },
+  {
+    "Norma": {
+      "JaName": "じょうぎ",
+      "Abbreviations": "Nor"
+    }
+  },
+  {
+    "Scutum": {
+      "JaName": "たて",
+      "Abbreviations": "Sct"
+    }
+  },
+  {
+    "Caelum": {
+      "JaName": "ちょうこくぐ",
+      "Abbreviations": "Cae"
+    }
+  },
+  {
+    "Sculptor": {
+      "JaName": "ちょうこくしつ",
+      "Abbreviations": "Scl"
+    }
+  },
+  {
+    "Grus": {
+      "JaName": "つる",
+      "Abbreviations": "Gru"
+    }
+  },
+  {
+    "Mensa": {
+      "JaName": "テーブルさん",
+      "Abbreviations": "Men"
+    }
+  },
+  {
+    "Libra": {
+      "JaName": "てんびん",
+      "Abbreviations": "Lib"
+    }
+  },
+  {
+    "Lacerta": {
+      "JaName": "とかげ",
+      "Abbreviations": "Lac"
+    }
+  },
+  {
+    "Horologium": {
+      "JaName": "とけい",
+      "Abbreviations": "Hor"
+    }
+  },
+  {
+    "Volans": {
+      "JaName": "とびうお",
+      "Abbreviations": "Vol"
+    }
+  },
+  {
+    "Puppis": {
+      "JaName": "とも",
+      "Abbreviations": "Pup"
+    }
+  },
+  {
+    "Musca": {
+      "JaName": "はえ",
+      "Abbreviations": "Mus"
+    }
+  },
+  {
+    "Cygnus": {
+      "JaName": "はくちょう",
+      "Abbreviations": "Cyg"
+    }
+  },
+  {
+    "Octans": {
+      "JaName": "はちぶんぎ",
+      "Abbreviations": "Oct"
+    }
+  },
+  {
+    "Columba": {
+      "JaName": "はと",
+      "Abbreviations": "Col"
+    }
+  },
+  {
+    "Apus": {
+      "JaName": "ふうちょう",
+      "Abbreviations": "Aps"
+    }
+  },
+  {
+    "Gemini": {
+      "JaName": "ふたご",
+      "Abbreviations": "Gem"
+    }
+  },
+  {
+    "Pegasus": {
+      "JaName": "ペガスス",
+      "Abbreviations": "Peg"
+    }
+  },
+  {
+    "Serpens": {
+      "JaName": "へび",
+      "Abbreviations": "Ser"
+    }
+  },
+  {
+    "": {
+      "JaName": "8月中旬",
+      "Abbreviations": ""
+    }
+  },
+  {
+    "Ophiuchus": {
+      "JaName": "へびつかい",
+      "Abbreviations": "Oph"
+    }
+  },
+  {
+    "Hercules": {
+      "JaName": "ヘルクレス",
+      "Abbreviations": "Her"
+    }
+  },
+  {
+    "Perseus": {
+      "JaName": "ペルセウス",
+      "Abbreviations": "Per"
+    }
+  },
+  {
+    "Vela": {
+      "JaName": "ほ",
+      "Abbreviations": "Vel"
+    }
+  },
+  {
+    "Telescopium": {
+      "JaName": "ぼうえんきょう",
+      "Abbreviations": "Tel"
+    }
+  },
+  {
+    "Phoenix": {
+      "JaName": "ほうおう",
+      "Abbreviations": "Phe"
+    }
+  },
+  {
+    "Antlia": {
+      "JaName": "ポンプ",
+      "Abbreviations": "Ant"
+    }
+  },
+  {
+    "Aquarius": {
+      "JaName": "みずがめ",
+      "Abbreviations": "Aqr"
+    }
+  },
+  {
+    "Hydrus": {
+      "JaName": "みずへび",
+      "Abbreviations": "Hyi"
+    }
+  },
+  {
+    "Crux": {
+      "JaName": "みなみじゅうじ",
+      "Abbreviations": "Cru"
+    }
+  },
+  {
+    "Piscis Austrinus": {
+      "JaName": "みなみのうお",
+      "Abbreviations": "PsA"
+    }
+  },
+  {
+    "Corona Australis": {
+      "JaName": "みなみのかんむり",
+      "Abbreviations": "CrA"
+    }
+  },
+  {
+    "Triangulum Australe": {
+      "JaName": "みなみのさんかく",
+      "Abbreviations": "TrA"
+    }
+  },
+  {
+    "Sagitta": {
+      "JaName": "や",
+      "Abbreviations": "Sge"
+    }
+  },
+  {
+    "Capricornus": {
+      "JaName": "やぎ",
+      "Abbreviations": "Cap"
+    }
+  },
+  {
+    "Lynx": {
+      "JaName": "やまねこ",
+      "Abbreviations": "Lyn"
+    }
+  },
+  {
+    "Pyxis": {
+      "JaName": "らしんばん",
+      "Abbreviations": "Pyx"
+    }
+  },
+  {
+    "Draco": {
+      "JaName": "りゅう",
+      "Abbreviations": "Dra"
+    }
+  },
+  {
+    "Carina": {
+      "JaName": "りゅうこつ",
+      "Abbreviations": "Car"
+    }
+  },
+  {
+    "Canes Venatici": {
+      "JaName": "りょうけん",
+      "Abbreviations": "CVn"
+    }
+  },
+  {
+    "Reticulum": {
+      "JaName": "レチクル",
+      "Abbreviations": "Ret"
+    }
+  },
+  {
+    "Fornax": {
+      "JaName": "ろ",
+      "Abbreviations": "For"
+    }
+  },
+  {
+    "Sextans": {
+      "JaName": "ろくぶんぎ",
+      "Abbreviations": "Sex"
+    }
+  },
+  {
+    "Aquila": {
+      "JaName": "わし",
+      "Abbreviations": "Aql"
+    }
+  }
+]

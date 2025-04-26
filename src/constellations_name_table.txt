@@ -1,0 +1,89 @@
+アンドロメダ	And	Andromeda	Andromedae	722.278	11月下旬
+いっかくじゅう（一角獣）	Mon	Monoceros	Monocerotis	481.569	3月上旬
+いて（射手）＊	Sgr	Sagittarius	Sagittarii	867.432	9月上旬
+いるか（海豚）	Del	Delphinus	Delphini	188.549	9月下旬
+インディアン	Ind	Indus	Indi	294.006	10月上旬
+うお（魚）＊	Psc	Pisces	Piscium	889.417	11月下旬
+うさぎ（兎）	Lep	Lepus	Leporis	290.291	2月上旬
+うしかい（牛飼）	Boo	Bootes	Bootis	906.831	6月下旬
+うみへび（海蛇）	Hya	Hydra	Hydrae	1302.844	4月下旬
+エリダヌス	Eri	Eridanus	Eridani	1137.919	1月中旬
+おうし（牡牛）＊	Tau	Taurus	Tauri	797.249	1月下旬
+おおいぬ（大犬）	CMa	Canis Major	Canis Majoris	380.118	2月下旬
+おおかみ（狼）	Lup	Lupus	Lupi	333.683	7月上旬
+おおぐま（大熊）	UMa	Ursa Major	Ursae Majoris	1279.660	5月上旬
+おとめ（乙女）＊	Vir	Virgo	Virginis	1294.428	6月上旬
+おひつじ（牡羊）＊	Ari	Aries	Arietis	441.395	12月下旬
+オリオン	Ori	Orion	Orionis	594.120	2月上旬
+がか（画架）	Pic	Pictor	Pictoris	246.739	2月上旬
+カシオペヤ	Cas	Cassiopeia	Cassiopeiae	598.407	12月上旬
+かじき（旗魚）	Dor	Dorado	Doradus	179.173	1月下旬
+かに（蟹）＊	Cnc	Cancer	Cancri	505.872	3月下旬
+かみのけ（髪）	Com	Coma Berenices	Comae Berenices	386.475	5月下旬
+カメレオン	Cha	Chamaeleon	Chamaeleontis	131.592	4月下旬
+からす（烏）	Crv	Corvus	Corvi	183.801	5月下旬
+かんむり（冠）	CrB	Corona Borealis	Coronae Borealis	178.710	7月中旬
+きょしちょう（巨嘴鳥）	Tuc	Tucana	Tucanae	294.557	11月中旬
+ぎょしゃ（馭者）	Aur	Auriga	Aurigae	657.438	2月中旬
+きりん（麒麟）	Cam	Camelopardalis	Camelopardalis	756.828	2月中旬
+くじゃく（孔雀）	Pav	Pavo	Pavonis	377.666	9月上旬
+くじら（鯨）	Cet	Cetus	Ceti	1231.411	12月中旬
+ケフェウス	Cep	Cepheus	Cephei	587.787	10月中旬
+ケンタウルス	Cen	Centaurus	Centauri	1060.422	6月上旬
+けんびきょう（顕微鏡）	Mic	Microscopium	Microscopii	209.513	9月下旬
+こいぬ（小犬）	CMi	Canis Minor	Canis Minoris	183.367	3月中旬
+こうま（小馬）	Equ	Equuleus	Equulei	71.641	10月上旬
+こぎつね（小狐）	Vul	Vulpecula	Vulpeculae	268.165	9月中旬
+こぐま（小熊）	UMi	Ursa Minor	Ursae Minoris	255.864	7月中旬
+こじし（小獅子）	LMi	Leo Minor	Leonis Minoris	231.956	4月下旬
+コップ	Crt	Crater	Crateris	282.398	5月上旬
+こと（琴）	Lyr	Lyra	Lyrae	286.476	8月下旬
+コンパス	Cir	Circinus	Circini	93.353	6月下旬
+さいだん（祭壇）	Ara	Ara	Arae	237.057	8月上旬
+さそり（蠍）＊	Sco	Scorpius	Scorpii	496.783	7月下旬
+さんかく（三角）	Tri	Triangulum	Trianguli	131.847	12月中旬
+しし（獅子）＊	Leo	Leo	Leonis	946.964	4月下旬
+じょうぎ（定規）	Nor	Norma	Normae	165.290	7月中旬
+たて（楯）	Sct	Scutum	Scuti	109.114	8月下旬
+ちょうこくぐ（彫刻具）	Cae	Caelum	Caeli	124.865	1月下旬
+ちょうこくしつ（彫刻室）	Scl	Sculptor	Sculptoris	474.764	11月下旬
+つる（鶴）	Gru	Grus	Gruis	365.513	10月下旬
+テーブルさん（テーブル山）	Men	Mensa	Mensae	153.484	2月上旬
+てんびん（天秤）＊	Lib	Libra	Librae	538.052	7月上旬
+とかげ（蜥蜴）	Lac	Lacerta	Lacertae	200.688	10月下旬
+とけい（時計）	Hor	Horologium	Horologii	248.885	1月上旬
+とびうお（飛魚）	Vol	Volans	Volantis	141.354	3月中旬
+とも（船尾）	Pup	Puppis	Puppis	673.434	3月中旬
+はえ（蠅）	Mus	Musca	Muscae	138.355	5月下旬
+はくちょう（白鳥）	Cyg	Cygnus	Cygni	803.983	9月下旬
+はちぶんぎ（八分儀）	Oct	Octans	Octantis	291.045	10月上旬
+はと（鳩）	Col	Columba	Columbae	270.184	2月上旬
+ふうちょう（風鳥）	Aps	Apus	Apodis	206.327	7月中旬
+ふたご（双子）＊	Gem	Gemini	Geminorum	513.761	3月上旬
+ペガスス	Peg	Pegasus	Pegasi	1120.794	10月下旬
+へび（蛇）	Ser	Serpens	Serpentis	636.928	7月中旬（頭部）
+8月中旬（尾部）			
+へびつかい（蛇遣）	Oph	Ophiuchus	Ophiuchi	948.340	8月上旬
+ヘルクレス	Her	Hercules	Herculis	1225.148	8月上旬
+ペルセウス	Per	Perseus	Persei	614.997	1月上旬
+ほ（帆）	Vel	Vela	Velorum	499.649	4月上旬
+ぼうえんきょう（望遠鏡）	Tel	Telescopium	Telescopii	251.512	9月上旬
+ほうおう（鳳凰）	Phe	Phoenix	Phoenicis	469.319	12月上旬
+ポンプ	Ant	Antlia	Antliae	238.901	4月中旬
+みずがめ（水瓶）＊	Aqr	Aquarius	Aquarii	979.854	10月下旬
+みずへび（水蛇）	Hyi	Hydrus	Hydri	243.035	12月下旬
+みなみじゅうじ（南十字）	Cru	Crux	Crucis	68.447	5月下旬
+みなみのうお（南魚）	PsA	Piscis Austrinus	Piscis Austrini	245.375	10月中旬
+みなみのかんむり（南冠）	CrA	Corona Australis	Coronae Australis	127.696	8月下旬
+みなみのさんかく（南三角）	TrA	Triangulum Australe	Trianguli Australis	109.978	7月中旬
+や（矢）	Sge	Sagitta	Sagittae	79.923	9月中旬
+やぎ（山羊）＊	Cap	Capricornus	Capricorni	413.947	9月下旬
+やまねこ（山猫）	Lyn	Lynx	Lyncis	545.386	3月中旬
+らしんばん（羅針盤）	Pyx	Pyxis	Pyxidis	220.833	3月下旬
+りゅう（竜）	Dra	Draco	Draconis	1082.952	8月上旬
+りゅうこつ（竜骨）	Car	Carina	Carinae	494.184	3月下旬
+りょうけん（猟犬）	CVn	Canes Venatici	Canum Venaticorum	465.194	6月上旬
+レチクル	Ret	Reticulum	Reticuli	113.936	1月中旬
+ろ（炉）	For	Fornax	Fornacis	397.502	12月下旬
+ろくぶんぎ（六分儀）	Sex	Sextans	Sextantis	313.515	4月中旬
+わし（鷲）	Aql	Aquila	Aquilae	652.473	9月上旬

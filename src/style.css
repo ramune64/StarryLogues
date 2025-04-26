@@ -1,0 +1,817 @@
+body{
+    margin: 0;
+    height: fit-content;
+}
+#myCanvas{
+    display: block;
+}
+#canvas_container{
+    width: fit-content;
+    position: relative;
+    overflow: hidden;
+}
+#direction_parent{
+    width: 100%;
+    height: 70px;
+    position: absolute;
+    top: 0;
+    display: flex;
+    z-index: 2;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    /* background-color: rgba(0, 255, 255, 0.334); */
+    pointer-events: none;
+}
+.directions{
+    position: absolute;
+    transform: translateX(-50%);
+    height: 70px;
+    opacity: 0.7;
+}
+#angle_parent{
+    height: 99.4%;
+    width: 60px;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+    /* background-color: #d74443; */
+}
+.angles{
+    text-align: right;
+    color: #e2e67d;
+    font-family: "nikokaku";
+    position: absolute;
+    transform: translateY(-50%);
+    opacity: 0.7;
+}
+#star_name{
+    position: absolute;
+    left: 20px;
+    bottom: 10px;
+    width: 350px;
+    transform-origin: bottom left;
+}
+@font-face {
+    font-family: "nikokaku";
+    src: url("./fonts/nicokaku_v2-5.ttf") format("truetype");
+}
+
+.firstQ_child,.japan_option_child,.world_option_child,#warn_past,#info_operate,
+#select_galaxy{
+    font-family: "nikokaku";
+    font-size: 27pt;
+    cursor: pointer;
+    border-radius: 20px;
+    /* background-color: rgba(0, 255, 255, 0.328); */
+    background-color: #4c59ab67;
+    border: 4px solid;
+    border-top-color: #d74443;
+    border-left-color: #e0e34c;
+    border-right-color:#e2e67d;
+    border-bottom-color:#eccbdc;
+    color: #92c1e4;
+    padding: 20px;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+
+#change_location{
+    bottom: 110px;
+}
+
+#location_firstQ{
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    gap: 20px;
+}
+.firstQ_child{
+    width: 330px;
+    text-align: center;
+    font-size: 30pt;
+    position: relative;
+    top:0;
+    left: 0;
+}
+
+#japan_option,#world_option{
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    gap: 20px;
+    flex-wrap:wrap;
+    justify-content: center;
+}
+.japan_option_child,.world_option_child{
+    width: 100px;
+    text-align: center;
+    vertical-align:middle;
+    font-size: 20pt;
+    top:0;
+    left: 0;
+    position: relative;
+}
+.world_option_child{
+    width: 160px;
+}
+#supplement_info{
+    font-size: 16pt;
+}
+#show_time_and_location{
+    position: absolute;
+    width: 380px;
+    cursor: auto;
+    color: #92c1e4;
+    font-family: "nikokaku";
+    font-size: 15pt;
+    right: 0px;
+    bottom: 5px;
+    & p{
+        margin: 5px;
+    }
+}
+#change_constellation_name{
+    bottom: 200px;
+}
+#warn_past{
+    position: absolute;
+    text-align: center;
+    cursor: auto;
+    top: 50%;
+    left: 50%;
+    height: fit-content;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: #4c59abCC;
+    display: none;
+    & h1{
+        color: #e0e34c;
+    }
+    & p{
+        font-size: 30pt;
+        margin: 0;
+    }
+    & #close_parent{
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 44px;
+        & div{
+            position: absolute;
+            height: 7px;
+            width: 40px;
+            background-color: #d74443;
+            transform-origin: center center;
+        }
+        & #close1{
+            rotate: 45deg;
+        }
+        & #close2{
+            rotate: -45deg;
+        }
+    }
+}
+
+#telescope_filter{
+    top: 0;
+    left: 0;
+    z-index: 1;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none;
+}
+.opacity_animation{
+    animation: opacity_animation 3s forwards;
+}
+.size_animation{
+    animation: size_animation 3s forwards ease;
+}
+@keyframes opacity_animation{
+    from{
+        opacity: 0;
+        filter: blur(10%);
+    }
+    to{
+        opacity: 1;
+        filter: blur(0%);
+    }
+}
+@keyframes size_animation{
+    0%{
+        width: 50%;
+        height: 80%;
+        opacity: 0;
+        filter: blur(10%);
+        /* rotate: 360deg; */
+    }
+    70%{
+        width: 65%;
+        height: 120%;
+        /* rotate: 0deg; */
+    }
+    100%{
+        width: 65%;
+        height: 120%;
+        opacity: 1;
+        filter: blur(0%);
+    }
+}
+#info_icon{
+    position: absolute;
+    bottom: 10px;
+    right: 70px;
+    height: 5%;
+    z-index: 1;
+    cursor: pointer;
+    display: none;
+}
+#info_operate{
+    position: absolute;
+    text-align: left;
+    cursor: auto;
+    top: 50%;
+    left: 50%;
+    height: fit-content;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: #4c59abCC;
+    display: none;
+    & h1{
+        text-align: center;
+        color: #eccbdc;
+    }
+    & p{
+        font-size: 20pt;
+        margin: 0;
+    }
+    & #close_parent_info{
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 44px;
+        & div{
+            position: absolute;
+            height: 7px;
+            width: 40px;
+            background-color: #d74443;
+            transform-origin: center center;
+        }
+        & #close1_info{
+            rotate: 45deg;
+        }
+        & #close2_info{
+            rotate: -45deg;
+        }
+    }
+}
+#galaxy_img{
+    display: none;
+    position: absolute;
+    opacity: 0;
+    z-index: 0;;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    /* width: 116vmin;
+    height: 110vmin; */
+    transform-origin: 0% 0%;
+    /* animation: rotation 3s infinite linear; */
+}
+@keyframes rotation{
+    0%,100%{
+        opacity: 0.9;
+    }
+    50%{
+        opacity:1;
+    }
+}
+/* #galaxy_container{
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+} */
+#select_galaxy{
+    background-color: #eccbdcd4;
+    border-bottom-color: #4c59ab;
+    color: white;
+    cursor: auto;
+    display: none;
+    position: absolute;
+    height: fit-content;
+    /* background-color: #d74443; */
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    & h1{
+        text-align: center;
+        margin-bottom: 7px;
+    }
+}
+#galaxy_container_song{
+    margin: auto;
+    position: relative;
+    display: flex;
+    align-content: center;
+    height: fit-content;
+    justify-content: center;
+}
+div:has(audio){
+    display: none !important;
+}
+#galaxy_container_left,#galaxy_container_right{
+    position: relative;
+    display: block;
+    & .song_button_wrapper div:not(.back_song_button){
+        cursor: pointer;
+        position: absolute;
+        display: flex;
+        z-index: 3;
+        left: 30px;
+        bottom: 20px;
+        /* background-color: #92c1e4; */
+        
+        color: white;
+        padding: 10px;
+        /* border-radius: 5px; */
+        /* border-bottom: 4px solid #6b90ad; */
+        box-shadow: 0 3px 5px white;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 65px 20px;
+        font-size: 22pt;
+        padding-left: 1.1em;
+        overflow: hidden;
+    }
+    & .song_button_wrapper div:not(.back_song_button)::before{
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url(./imgs/tanzaku_me.png);
+        background-repeat:no-repeat;
+        background-position: center left;
+        background-size: cover;
+        z-index: -1;
+        background-image: url(./imgs/tanzaku_mi.png);
+    }
+    & div:active{
+        box-shadow: 0 0 0;
+        transform: translateX(-2px) translateY(2px);
+    }
+}
+.back_song_button{
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: 0;
+    transform-origin: bottom left;
+    transition: transform 0.2s ease;
+    filter: contrast(1.5);
+    pointer-events: none; /* hoverの邪魔をしない */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    & span{
+        color: #4c59ab;
+        font-size: 17pt;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+.song_button_wrapper {
+    position: relative;
+    overflow: visible;
+}
+.song_button_wrapper:hover .back_song_button{
+    transform: rotate(-10deg);
+}
+@keyframes fade_out{
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
+.fade_out{
+    animation: fade_out 1s forwards linear;
+}
+
+#start_observe{
+    cursor: pointer;
+    position: absolute;
+    display: none;
+    z-index: 3;
+    left: 10px;
+    bottom: 20px;
+    background-color: #92c1e4;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    border-bottom: 4px solid #6b90ad;
+    box-shadow: 0 3px 5px white;
+    overflow: hidden;
+    
+    & img{
+        opacity: 0.8;
+        margin: auto;
+        height: 60px;
+        margin-right: 10px;
+    }
+    & p{
+        font-family: "nikokaku";
+        font-size: 20pt;
+        background-color: #076fc081;
+        border-radius: 5px;
+    }
+}
+
+#start_observe:active{
+    box-shadow: 0 0 0;
+    transform: translateX(-2px) translateY(2px);
+}
+#start_observe::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/telescope.png);
+    background-repeat:no-repeat;
+    background-position: center center;
+    background-size: cover;
+    z-index: -1;
+    transform: scaleX(-1);
+}
+
+#observe_gauge{
+    position: absolute;
+    cursor: auto;
+    display: none;
+    left:40px;
+    top: 50%;
+    border: #60717e 8px groove;
+    z-index: 3;
+    transform: translateY(-50%);
+    background:linear-gradient(#00182a,#004a82,#92c1e4);
+    width: 5%;
+    height: 70%;
+}
+#observe_gauge img.back_star{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    opacity: 0.8;
+    z-index: -1;
+}
+#gauge_mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(#60717e,#8e9fab,#50738e);
+}
+#gauge_star{
+    /* filter: hue-rotate(38deg) saturate(3); */
+    position: absolute;
+    height: 12%;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+}
+.beat_animation_star{
+    animation: beat_animation_star 0.1s forwards linear;
+}
+@keyframes beat_animation_star{
+    0%,100%{
+        transform: translateX(-50%) translateY(calc(-100%));
+    }
+    50%{
+        transform: translateX(-50%) translateY(calc(-100% + 5px));
+    }
+}
+
+#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location{
+    position: absolute;
+    border: none;
+    background: none;
+    border-radius: 0;
+    z-index: 2;
+    font-family: "nikokaku";
+    
+    cursor: pointer;
+    overflow: hidden;
+    bottom: 20px;
+    left: 30px;
+    min-width: 280px;
+    text-align: center;
+
+
+        color: #92c1e4;
+
+        font-size: 20pt;
+        padding: 20px;
+    
+}
+#change_time::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_ka.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+/* #change_time::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_ka.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -2;
+    transform-origin: bottom left;
+    
+    filter: contrast(1.5);
+}
+#change_time:hover::after{
+    transform: rotate(-5deg);
+    
+} */
+
+#change_location{
+    bottom: 120px;
+}
+#change_location::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_me.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+/* #change_location::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_me.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -2;
+    transform-origin: bottom left;
+    
+    filter: contrast(1.5);
+}
+#change_location:hover::after{
+    transform: rotate(-5deg);
+} */
+#change_constellation_name{
+    bottom: 219px;
+}
+#change_constellation_name::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_lu.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+/* #change_constellation_name::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_lu.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -2;
+    transform-origin: bottom left;
+    
+    filter: contrast(1.5);
+}
+#change_constellation_name:hover::after{
+    transform: rotate(-5deg);
+} */
+#set_now{
+    font-size: 25pt;
+    display: none;
+    bottom: 132px;
+}
+#set_now::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_ri.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+/* #set_now::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_ri.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -2;
+    transform-origin: bottom left;
+    
+    filter: contrast(1.5);
+}
+#set_now:hover::after{
+    transform: rotate(-5deg);
+} */
+#return_set_time{
+    font-size: 27pt;
+    display: none;
+    bottom: 235px;
+}
+#return_set_time::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_le.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+/* #return_set_time::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_le.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -2;
+    transform-origin: bottom left;
+    
+    filter: contrast(1.5);
+}
+#return_set_time:hover::after{
+    transform: rotate(-5deg);
+} */
+#return_change_location{
+    font-size: 27pt;
+    display: none;
+    bottom: 219px;
+}
+#return_change_location::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_lu.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+/* #return_change_location::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_lu.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -2;
+    transform-origin: bottom left;
+    
+    filter: contrast(1.5);
+}
+#return_change_location:hover::after{
+    transform: rotate(-5deg);
+} */
+.operate_button{
+    overflow: hidden;
+}
+.operate_button img.back_star,.back_tanzaku img.back_star ,.back_song_button img.back_star,.song_button img.back_star{
+    position: absolute;
+    width: 30px;
+    z-index: -1;
+    opacity: 0.6;
+}
+img.back_milkyway{
+    width: 50px;
+    position: absolute;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+.operate_button_wrapper {
+    position: relative;
+    overflow: visible;
+}
+.back_tanzaku{
+    overflow: hidden;
+}
+
+#change_time + .back_tanzaku,
+#change_location + .back_tanzaku,
+#change_constellation_name + .back_tanzaku,
+#return_change_location + .back_tanzaku,
+#return_set_time + .back_tanzaku,
+#set_now + .back_tanzaku{
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_ka.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: 0;
+    transform-origin: bottom left;
+    transition: transform 0.2s ease;
+    filter: contrast(1.5);
+    pointer-events: none; /* hoverの邪魔をしない */
+    width: 100%;
+    height: 100%;
+}
+.operate_button_wrapper:hover .back_tanzaku{
+    transform: rotate(-5deg);
+}
+#change_location + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_me.png);
+}
+#change_constellation_name + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_lu.png);
+}
+#return_change_location + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_lu.png);
+}
+#return_set_time + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_le.png);
+}
+#set_now + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_ri.png);
+}
+
+#loading{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: fit-content;
+    width: fit-content;
+    transform: translateX(-50%) scale(1); 
+    z-index: 21;
+    & img{
+        transform-origin: 140% 50%;
+        width: 150px;
+        position: absolute;
+        animation: loading 1.8s ease-in-out infinite;
+    }
+    & h1{
+        color: white;
+        font-family: "nikokaku";
+        font-size: 105px;
+        white-space: nowrap;
+        transform: translateY(170px);
+    }
+}
+@keyframes loading{
+    0%,100%,20%{
+        transform: translateX(0%);
+    }
+    10%{
+        transform: translateX(-20%);
+    }
+    18%{
+        transform: translateX(5%);
+    }
+}
+#loading_gray{
+    background-color: rgba(128, 128, 128, 0.735);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    height: 100%;
+    width: 100%;
+}
