@@ -2972,6 +2972,7 @@ player.addListener({
         current = null;
         prev = null;
         last_beat = null;
+        make_tanzaku_and_place();
         InPreparationSong = false;
         
     },
@@ -3492,6 +3493,19 @@ function placeTextSprite(text,bv,bright,size) {
         scene.add(sprite);
         console.log("failed");
     }
+    //短冊が近くにあったら処理
+    const pos = sprite.position;
+    tanzaku_list.forEach(tanzaku=>{
+        const dis = pos.distanceTo(tanzaku.mesh.position);
+        //console.log(dis);
+        if(radius>=dis){
+            //scene.remove(tanzaku);
+            if(!tanzaku.isAnimating){
+                get_tanzaku_animation(tanzaku.mesh,tanzaku.imgURL);
+                tanzaku.isAnimating = true;
+            }
+        }
+    })
     //ここで線を描画
     const len = existingSprites.length;
     if (len >= 2) {
@@ -3561,7 +3575,9 @@ function drawImageRotated(ctx, img, x, y, options = {}) {
     ctx.restore(); // 状態を元に戻す
 }
 const tanzaku_back_ims = button_back_imgs.concat([milkyway_img]);
-function make_tanzaku_and_place(dis,quantity_per_one = 5){
+let tanzaku_list = [];
+function make_tanzaku_and_place(dis=40,quantity_per_one = 10){
+    tanzaku_list = [];
     tanzaku_imgs.forEach(tanzaku => {
         const img = new Image();
         img.src = tanzaku;
@@ -3604,28 +3620,78 @@ function make_tanzaku_and_place(dis,quantity_per_one = 5){
                             {
                                 rotation: Math.random() * Math.PI * 2,
                                 scale: 0.5 + Math.random() * 1.0,
-                                opacity: 0.2 + Math.random() * 0.5,
-                                filter: 'blur(1px)'
+                                opacity: 0.4 + Math.random() * 0.5,
+                                filter: 'blur(6px)'
                             }
                         );
                     
                 })
+                const dataUrl = canvas.toDataURL();
                 const texture = new THREE.CanvasTexture(canvas);
                 
                 const material = new THREE.MeshBasicMaterial({
                     map: texture,
                     transparent: true,
-                    opacity:0.3,
+                    opacity:0.4,
                     alphaTest: 0.1,
                     side: THREE.DoubleSide, 
                 });
-                const geometry = new THREE.PlaneGeometry(0.5, 2.5);
+                const geometry = new THREE.PlaneGeometry(0.4, 2.0);
                 const tanzaku_mesh = new THREE.Mesh(geometry, material);
-                tanzaku_mesh.position.set(Math.random()*10-5,2,Math.random()*10-5);
+                //tanzaku_mesh.position.set(Math.random()*10-5,2,Math.random()*10-5);
+                const theta = Math.random()*Math.PI*2;//短冊の緯度
+                const phi = Math.asin(2 * Math.random() - 1);//短冊の経度//直接高さの角度を決めると偏るのでasinで逆算
+                const x = dis* Math.cos(phi) * Math.cos(theta);
+                const y = dis* Math.sin(phi);
+                const z = dis* Math.cos(phi) * Math.sin(theta);
+                tanzaku_mesh.position.set(x,y,z);
                 tanzaku_mesh.lookAt(0, 0, 0);
                 scene.add(tanzaku_mesh);
+                tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl});
             }
         }
     });
 }
-make_tanzaku_and_place();
+const wishList = [
+    "受験に合格しますように",
+    "友達と仲良くなりたいです",
+    "全国大会に出場できますように",
+    "遠足の日に晴れてくれますように"
+]
+function get_tanzaku_animation(tanzaku_mesh,imgURL){
+    let tl = gsap.timeline();
+    const twist_z = Math.random()*2*Math.PI;
+    const twist_x = Math.random()*2*Math.PI;
+    tl.to(tanzaku_mesh.position,{
+        duration:0.5,
+        y:"+=1"
+    },0);
+    tl.to(tanzaku_mesh.rotation,{
+        duration:1,
+        z: tanzaku_mesh.rotation.x + twist_x,
+        y: tanzaku_mesh.rotation.y + Math.PI * 2,
+        z: tanzaku_mesh.rotation.z + twist_z
+    },0);
+    tl.to(tanzaku_mesh.material,{
+        duration:0.2,
+        opacity:5,
+    },0.8);
+    tl.to(tanzaku_mesh.material,{
+        duration:0.5,
+        opacity:0,
+        onComplete: () => {
+            //scene.remove(tanzaku_mesh);
+            const tanzaku_space = document.getElementById("tanzaku_space");
+            const tanzaku_img_ele = document.createElement('img');
+            tanzaku_img_ele.src = imgURL;
+            
+            const img_parent_ele = document.createElement('div');
+            img_parent_ele.classList.add("slidedown");
+            img_parent_ele.appendChild(tanzaku_img_ele);
+            const tanzaku_txt = document.createElement('p');
+            tanzaku_txt.innerText = wishList[Math.floor(Math.random()*wishList.length)]
+            img_parent_ele.appendChild(tanzaku_txt);
+            tanzaku_space.insertBefore(img_parent_ele,tanzaku_space.children[0]);
+        }
+    },1.0);
+}

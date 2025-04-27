@@ -817,3 +817,61 @@ img.back_milkyway{
     height: 100%;
     width: 100%;
 }
+#tanzaku_space::-webkit-scrollbar{
+    display: none;
+}
+#tanzaku_space{
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 10%;
+    height: 70%;
+    border: white 2px dotted;
+    z-index: 3;
+    overflow: scroll;
+    scrollbar-width: none;
+    transition: 0.3s;
+    & div{
+        position: relative;
+        transition: 0.3s;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 95%;
+        width: fit-content;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        & img{
+            height: 100%;
+            width: 100%;
+        }
+        & p{
+            position: absolute;
+            color: rgb(0, 0, 0);
+            writing-mode: vertical-rl;
+            top: 15%;
+            right: 50%;
+            transform: translateX(50%);
+            font-size: 25pt;
+            margin: 0;
+            margin-bottom:10px;
+            font-family: "nikokaku";
+        }
+    }
+}
+.slidedown {
+    position: relative;
+    animation: slideDown 0.5s ease-out forwards;
+}
+
+@keyframes slideDown {
+    from {
+      top: -100px;  /* 初期位置は画面外 */
+      opacity: 0;   /* 初めは見えない */
+    }
+    to {
+      top: 0;      /* 最終的には元の位置に */
+      opacity: 1;  /* 最終的には完全に表示 */
+    }
+}
