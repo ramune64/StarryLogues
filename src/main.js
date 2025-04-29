@@ -321,7 +321,7 @@ ctx.canvas.height = 540;
 
 var target_data = "data:image/png;base64,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"
 
-// 背景（薄い白）
+// 背景
 ctx.fillStyle = 'rgba(255, 255, 255, 0)';
 ctx.fillRect(0, 0, canvas_panel.width, canvas_panel.height);
 
@@ -995,6 +995,7 @@ fetch(starnameURL).then(res=>res.json()).then(starnamejson=>HIP2StarName = starn
 import constellationsURL from "./constellations_name_table.json?url"
 var ConNative2JaName;
 fetch(constellationsURL).then(res=>res.json()).then(conmejson=>ConNative2JaName = conmejson)
+let inmusicGalaxy = false;
 canvas.addEventListener('mousemove', (event) => {
     if(!at_main_content){
     // マウス座標を正規化（-1から1の範囲に変換）
@@ -1020,7 +1021,7 @@ canvas.addEventListener('mousemove', (event) => {
     // マウス位置からRayを発射
     raycaster.setFromCamera(mouse, camera);
     var allObjects;
-    if(!changing_time && !moving_location){
+    if(!changing_time && !moving_location && !inmusicGalaxy){
         allObjects = scene.children.filter(obj => obj !== panel && obj !== star_panel && obj !== star_panel_time); // panelを除外
     }else{
         allObjects = scene.children.filter(obj => obj === star_panel_time); 
@@ -2635,16 +2636,20 @@ function animate() {
                     scene.remove(hide_plane);
                     galaxy_img.style.display = "none";
                     in_transition_telescope = false;
+                    start_observe_button.style.pointerEvents = "auto";
+                    start_observe_button.style.opacity = 1;
                     start_observe_button.style.display = "flex";
                     observe_gauge_ele.style.display = "block";
                     loading.style.display = "none";
+                    tanzaku_space.style.display = "block";
+                    name_galaxy.innerText = "観測中の銀河："+player.data.song.name;
                 }
             })
         }
     }
     update_back_tanzaku();
 }
-
+const tanzaku_space = document.getElementById("tanzaku_space_wrapper");
 const start_observe_button = document.getElementById("start_observe");
 const observe_gauge_ele = document.getElementById("observe_gauge");
 const gauge_mask = document.getElementById("gauge_mask");
@@ -2957,7 +2962,11 @@ let min_VO_A = Infinity;
 const loading_gray = document.getElementById("loading_gray");
 const loading = document.getElementById("loading");
 const loading_txt = document.getElementById("loading_txt");
+let current_wishList;
 
+let num_found_tanzaku;
+const name_galaxy = document.getElementById("name_galaxy");
+const finaly_tanzaku_num = document.getElementById("finaly_tanzaku_num");
 player.addListener({
     onAppReady: (app) => {
         if (!app.managed) {
@@ -2973,7 +2982,10 @@ player.addListener({
         prev = null;
         last_beat = null;
         make_tanzaku_and_place();
+        current_wishList = wishList;
         InPreparationSong = false;
+        num_found_tanzaku = 0;
+        found_tanzaku.innerText = num_found_tanzaku;
         
     },
     onPlay:()=>{
@@ -2994,6 +3006,10 @@ player.addListener({
             start_dbserve_child.innerText = "観測を再開する";
         }else{
             start_dbserve_child.innerText = "観測完了！！！";
+            start_observe_button.style.pointerEvents = "none";
+            start_observe_button.style.opacity = 0.5;
+            finaly_tanzaku_num.innerText = num_found_tanzaku;
+            back_telescope.style.display = "block";
         }
         if(!hasEverPlayed){
             start_dbserve_child.innerText = "観測を開始する";
@@ -3009,7 +3025,8 @@ player.addListener({
     onTimerReady:()=>{
         console.log("楽曲準備完了")
         console.log(player);
-        console.log(player.data.songMap);
+        console.log(player.data.song);
+        
         isStopped = true;
         hasEverPlayed = false;
         play_button.src = play_button_img;
@@ -3501,6 +3518,7 @@ function placeTextSprite(text,bv,bright,size) {
         if(radius>=dis){
             //scene.remove(tanzaku);
             if(!tanzaku.isAnimating){
+                num_found_tanzaku++;
                 get_tanzaku_animation(tanzaku.mesh,tanzaku.imgURL);
                 tanzaku.isAnimating = true;
             }
@@ -3576,7 +3594,7 @@ function drawImageRotated(ctx, img, x, y, options = {}) {
 }
 const tanzaku_back_ims = button_back_imgs.concat([milkyway_img]);
 let tanzaku_list = [];
-function make_tanzaku_and_place(dis=40,quantity_per_one = 10){
+function make_tanzaku_and_place(dis=40,quantity_per_one = 5){
     tanzaku_list = [];
     tanzaku_imgs.forEach(tanzaku => {
         const img = new Image();
@@ -3656,8 +3674,72 @@ const wishList = [
     "受験に合格しますように",
     "友達と仲良くなりたいです",
     "全国大会に出場できますように",
-    "遠足の日に晴れてくれますように"
+    "遠足の日に晴れてくれますように",
+    "単位が全部取れますように",
+    "免許が一発で取れますように",
+    "バイト先が見つかりますように",
+    "就活がうまくいきますように",
+    "仕事がうまくいきますように",
+    "健康で楽しい毎日を送れますように",//10
+    "小さな幸せに気づけますように",
+    "親と仲直りできますように",
+    "後悔のない高校生活が送れますように",
+    "夢をあきらめずに頑張れますように",
+    "新しい挑戦に成功しますように",
+    "一度でいいから空を飛んでみたい",
+    "友達のことをもっと知れますように",
+    "お金と時間に余裕が持てますように",
+    "宝くじが当たりますように",
+    "自分のペースを大切にできますように",//20
+    "ストレスを上手に発散できますように",
+    "好きな人に想いが届きますように",
+    "好きなバンドのライブに行けますように",
+    "できるだけ多く皆の願いが届きますように",
+    "ずっと若々しくいられますように",
+    "友達とずっと仲良くいられますように",
+    "朝早く起きられる体になりますように",
+    "一人暮らしをしてみたいなぁ",
+    "無事に定時で帰れますように",
+    "休日出勤がなくなりますように",//30
+    "希望通りの研究室に行けますように",
+    "プレゼンが成功しますように",
+    "怪我無く一年を過ごせますように",
+    "試験が神頼みになりませんように",
+    "←この人の願いが叶いますように",
+    "自分の気持ちに正直になれますように",
+    "自分にもっと自信が持てますように",
+    "突然IQが跳ね上がりますように",
+    "先生が言ってることが理解できますように",
+    "覚えた英単語をずっと覚えていられますように",//40
+    "通勤が快適になりますように",
+    "健康寿命がのびますように",
+    "足腰が丈夫でいられますように",
+    "何歳になっても好奇心を忘れませんように",
+    "家族と仲良く暮らせますように",
+    "バス停が家の目の前に移動してきますように",
+    "いろんな人に好かれるようになりたい",
+    "可愛くなりたい",
+    "大金持ちになれますように",
+    "カッコよくなれますように",//50
+    "常に他人に優しくあれますように",
+    "恥ずかしがらずに感謝を伝えられるようにれますように",
+    "光軸がずれないレーザーカッターが欲しい",
+    "ギターを弾けるようになれますように",
+    "きれいな字を書けるようになれますように",
+    "絵をうまく書けるようになれますように",
+    "周りの人に心配されないようになれますように",
+    "常に誇れるような人生でありますように",
+    "好きな漫画の最新巻が早く読めますように",
+    "尊敬されるような人になれますように",
+    "自分の顔がお札に載りますように",
+    "好きなことを通して世界中と繋がれますように"
 ]
+const fonts = [
+    "nikokaku",
+    "Xim-Sans",
+    "れいこ"
+]
+const found_tanzaku = document.getElementById("found_tanzaku");
 function get_tanzaku_animation(tanzaku_mesh,imgURL){
     let tl = gsap.timeline();
     const twist_z = Math.random()*2*Math.PI;
@@ -3689,9 +3771,64 @@ function get_tanzaku_animation(tanzaku_mesh,imgURL){
             img_parent_ele.classList.add("slidedown");
             img_parent_ele.appendChild(tanzaku_img_ele);
             const tanzaku_txt = document.createElement('p');
-            tanzaku_txt.innerText = wishList[Math.floor(Math.random()*wishList.length)]
+            const wish_idx = Math.floor(Math.random()*current_wishList.length);
+            const current_wish = current_wishList[wish_idx];
+            current_wishList.splice(wish_idx,1);
+            tanzaku_txt.innerText = current_wish;
+            tanzaku_txt.style.fontFamily = fonts[Math.floor(Math.random()*fonts.length)];
             img_parent_ele.appendChild(tanzaku_txt);
             tanzaku_space.insertBefore(img_parent_ele,tanzaku_space.children[0]);
+            found_tanzaku.innerText = num_found_tanzaku;
         }
     },1.0);
 }
+const back_telescope = document.getElementById("back_telescope");
+const all_wrapper = document.getElementById("all_wrapper");
+back_telescope.addEventListener("click",()=>{
+    all_wrapper.style.display = "block";
+    update_back_tanzaku();
+})
+const disagree_return_button = document.getElementById("disagree_return");
+disagree_return_button.addEventListener("click",()=>{
+    all_wrapper.style.display = "none";
+})
+const return_hide_ele = document.getElementById("return_hide");
+const agree_return_button = document.getElementById("agree_return");
+agree_return_button.addEventListener("click",()=>{
+    back_telescope.style.display = "none";
+    all_wrapper.style.display = "none";
+    return_hide_ele.style.display = "block";
+    return_hide_ele.classList.remove("opacity120");
+    return_hide_ele.classList.add("opacity021");
+    starDistance = 600;
+    /* constellation_lines.forEach(element => {
+        element.visible = true;
+    }); */
+    let tl = gsap.timeline();
+    tl.to(camera,{
+        duration:0.5,
+        onComplete:()=>{
+            telescope_filter_img.style.display = "none";
+            tanzaku_space.style.display = "none";
+            observe_gauge_ele.style.display = "none";
+            start_observe_button.style.display = "none";
+            camera.zoom = 1;
+            camera.updateProjectionMatrix();
+        }
+    })
+    tl.to(camera,{
+        duration:0.5,
+        onComplete:()=>{
+            return_hide_ele.classList.remove("opacity021");
+            return_hide_ele.classList.add("opacity120");
+        }
+    })
+    tl.to(camera,{
+        duration:0.5,
+        onComplete:()=>{
+            return_hide_ele.style.display = "none";
+            at_main_content = false;
+            inmusicGalaxy = true;
+        }
+    })
+})

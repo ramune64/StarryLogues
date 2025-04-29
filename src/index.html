@@ -157,9 +157,45 @@
             <img src="./imgs/play_button.png" alt="" id="play_button">
             <p id="start_dbserve_child">観測を開始する</p>
         </div>
-        <div id="tanzaku_space">
+        <div id="tanzaku_space_wrapper">
+            <div id="tanzaku_space">
+            </div>
+            <div id="found_tanzaku_wrapper"><p>見つけた願いの数</p><p><span id="found_tanzaku">0</span>/30</p></div>
         </div>
+        <div id="name_galaxy">観測中の銀河：太陽系</div>
+        <div id="back_telescope"><h1>全体を見渡す</h1></div>
+        <div id="all_wrapper">
+            <h1>
+                全体を見渡す
+            </h1>
+            <p>
+                探索お疲れ様でした！
+            </p>
+            <p>
+                あなたは<span id="finaly_tanzaku_num">0</span>個の願いを星に届けることが出来ました。
+            </p>
+            <p>
+                望遠鏡を覗くのをやめ、広い視界であなたが探索した夜空全体を見渡してみましょう！！
+            </p>
+            <p>
+                また、左下の「記録を保存」を押すとあなたの観測結果を1枚の画像にして保存できます。
+            </p>
+            <p>
+                ※覗くのをやめるともう一度覗くことはできません。
+            </p>
+            <div id="return_or_not">
+                <div class="operate_button_wrapper">
+                    <div id="agree_return" class="operate_button">見渡しに行く!!</div>
+                    <div class="back_tanzaku"></div>
+                </div>
+                <div class="operate_button_wrapper">
+                    <div id="disagree_return" class="operate_button">まだ望遠鏡で見る</div>
+                    <div class="back_tanzaku"></div>
+                </div>
+            </div>
     </div>
+    </div>
+    <div id="return_hide"></div>
     <!-- <button onclick="downloadComposerOutput()">Download</button> -->
 <script src="./main.js" type="module"></script>
 </body>

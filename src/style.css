@@ -60,6 +60,14 @@ body{
     font-family: "nikokaku";
     src: url("./fonts/nicokaku_v2-5.ttf") format("truetype");
 }
+@font-face{
+    font-family: "Xim-Sans";
+    src: url("./fonts/Xim-Sans-Brahmic.ttf") format("truetype");
+}
+@font-face{
+    font-family: "れいこ";
+    src: url("./fonts/れいこフォント.TTF") format("truetype");
+}
 
 .firstQ_child,.japan_option_child,.world_option_child,#warn_past,#info_operate,
 #select_galaxy{
@@ -205,7 +213,7 @@ body{
         filter: blur(10%);
     }
     to{
-        opacity: 1;
+        opacity: 0.7;
         filter: blur(0%);
     }
 }
@@ -511,7 +519,7 @@ div:has(audio){
     }
 }
 
-#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location{
+#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return{
     position: absolute;
     border: none;
     background: none;
@@ -827,11 +835,16 @@ img.back_milkyway{
     transform: translateX(-50%) translateY(-50%);
     width: 10%;
     height: 70%;
-    border: white 2px dotted;
+    border: rgb(11, 185, 161) 8px inset;
+    background-color: #006a05;
     z-index: 3;
     overflow: scroll;
     scrollbar-width: none;
     transition: 0.3s;
+    background-image: url(./imgs/sasanoha.png);
+    background-repeat:no-repeat;
+    background-position: center center;
+    display: block;
     & div{
         position: relative;
         transition: 0.3s;
@@ -842,6 +855,7 @@ img.back_milkyway{
         width: fit-content;
         margin-bottom: 10px;
         margin-top: 10px;
+        box-shadow: 10px 10px 3px rgba(56, 50, 85, 0.603);
         & img{
             height: 100%;
             width: 100%;
@@ -850,13 +864,15 @@ img.back_milkyway{
             position: absolute;
             color: rgb(0, 0, 0);
             writing-mode: vertical-rl;
-            top: 15%;
+            top: 10%;
             right: 50%;
             transform: translateX(50%);
-            font-size: 25pt;
+            font-size: 20pt;
             margin: 0;
             margin-bottom:10px;
-            font-family: "nikokaku";
+            text-orientation: upright;
+            font-weight: bold;
+
         }
     }
 }
@@ -864,7 +880,49 @@ img.back_milkyway{
     position: relative;
     animation: slideDown 0.5s ease-out forwards;
 }
-
+#found_tanzaku_wrapper{
+    position: absolute;
+    color: white;
+    bottom: 0%;
+    right: 0%;
+    text-align: right;
+    z-index: 5;
+    transform: translateX(-50%) translateY(-50%);
+    padding: 10px;
+    padding-left: 30px;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    box-shadow: 5px 5px 5px white;
+    cursor: auto;
+    & p{
+        font-family: "nikokaku";
+        font-size: 15pt;
+        margin: 0;
+    }
+}
+#tanzaku_space_wrapper{
+    display: none;
+    cursor: auto;
+}
+#name_galaxy{
+    position: absolute;
+    top: 75px;
+    left: 20px;
+    color: white;
+    z-index: 5;
+    font-family: "nikokaku";
+    font-size: 15pt;
+    cursor: auto;
+    padding: 10px;
+    padding-left: 30px;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    box-shadow: 5px 5px 5px white;
+}
 @keyframes slideDown {
     from {
       top: -100px;  /* 初期位置は画面外 */
@@ -874,4 +932,137 @@ img.back_milkyway{
       top: 0;      /* 最終的には元の位置に */
       opacity: 1;  /* 最終的には完全に表示 */
     }
+}
+#back_telescope{
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 12pt;
+    background-color: #92c1e4;
+    font-family: "nikokaku";
+    box-shadow: 5px 5px 5px white;
+    cursor: pointer;
+    z-index: 5;
+    display: none;
+    & h1{
+        margin: 10px;
+    }
+}
+#all_wrapper{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.8;
+    z-index: 100;
+    display: none;
+    padding-top: 15%;
+    & h1{
+        text-align: center;
+        font-family: "nikokaku";
+        color: white;
+        font-size: 40pt;
+    }
+    & p{
+        font-size: 20pt;
+        text-align: center;
+        font-family: "nikokaku";
+        margin: auto;
+        color: white;
+    }
+}
+#return_or_not{
+    opacity: 1;
+    margin: 25px auto;
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+#agree_return + .back_tanzaku{
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: 0;
+    transform-origin: bottom left;
+    transition: transform 0.2s ease;
+    filter: contrast(1.5);
+    pointer-events: none; /* hoverの邪魔をしない */
+    width: 100%;
+    height: 100%;
+}
+#disagree_return + .back_tanzaku{
+    inset: 0;
+    background-image: url(./imgs/tanzaku_lu.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: 0;
+    transform-origin: bottom left;
+    transition: transform 0.2s ease;
+    filter: contrast(1.5);
+    pointer-events: none; /* hoverの邪魔をしない */
+    width: 100%;
+    height: 100%;
+}
+#agree_return,#disagree_return{
+    opacity: 1;
+    bottom: 0;
+    left: 0;
+    color:#000000;
+}
+#agree_return::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+#disagree_return::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_lu.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+#return_hide{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    z-index: 300;
+    display: none;
+}
+@keyframes opacity021{
+    from{
+        opacity: 0;
+    }to{
+        opacity: 1;
+    }
+}
+@keyframes opacity120{
+    from{
+        opacity: 1;
+    }to{
+        opacity: 0;
+    }
+}
+.opacity021{
+    animation: opacity021 0.5s ease forwards;
+}
+.opacity120{
+    animation: opacity120 0.5s ease forwards;
 }
