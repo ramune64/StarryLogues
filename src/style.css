@@ -519,7 +519,7 @@ div:has(audio){
     }
 }
 
-#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return{
+#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy{
     position: absolute;
     border: none;
     background: none;
@@ -749,7 +749,12 @@ img.back_milkyway{
 #change_constellation_name + .back_tanzaku,
 #return_change_location + .back_tanzaku,
 #return_set_time + .back_tanzaku,
-#set_now + .back_tanzaku{
+#set_now + .back_tanzaku,
+#run_save + .back_tanzaku,
+#save_return + .back_tanzaku,
+#return_galaxy + .back_tanzaku,
+#agree_return_galaxy + .back_tanzaku,
+#disagree_return_galaxy + .back_tanzaku{
     position: absolute;
     inset: 0;
     background-image: url(./imgs/tanzaku_ka.png);
@@ -934,30 +939,52 @@ img.back_milkyway{
     }
 }
 #back_telescope{
-    position: absolute;
-    top: 70px;
-    right: 10px;
-    padding: 5px;
-    border-radius: 10px;
-    font-size: 12pt;
-    background-color: #92c1e4;
-    font-family: "nikokaku";
-    box-shadow: 5px 5px 5px white;
+    top: 50px;
+    right: 4.5%;
     cursor: pointer;
-    z-index: 5;
+    position: absolute;
     display: none;
+    z-index: 3;
+    background-color: #0e568d;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    border-bottom: 4px solid #08131b;
+    box-shadow: 0 3px 5px white;
+    font-family: "nikokaku";
+    overflow: hidden;
     & h1{
+        font-size: 23pt;
         margin: 10px;
     }
+    & img{
+        position: absolute;
+        width: 20px;
+        z-index: -1;
+        rotate: 0deg;
+        transition: 0.5s;
+        transform-origin: 50% 50%;
+        opacity: 0;
+    }
 }
-#all_wrapper{
+#back_telescope:hover img{
+    rotate: 720deg;
+    transition: 0.5s;
+    transform-origin:  50% 50%;
+    opacity: 1;
+}
+#back_telescope:active{
+    box-shadow: 0 0 0;
+    transform: translateX(-2px) translateY(2px);
+}
+#all_wrapper,#save_record,#realy_return{
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    background-color: black;
-    opacity: 0.8;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 1;
     z-index: 100;
     display: none;
     padding-top: 15%;
@@ -975,7 +1002,7 @@ img.back_milkyway{
         color: white;
     }
 }
-#return_or_not{
+#return_or_not,#save_return_or_not,#return_galaxy_or_not{
     opacity: 1;
     margin: 25px auto;
     display: flex;
@@ -1065,4 +1092,185 @@ img.back_milkyway{
 }
 .opacity120{
     animation: opacity120 0.5s ease forwards;
+}
+#take_picture{
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    color: white;
+    display: none;
+}
+#take_picture::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+    
+}
+#take_picture + .back_tanzaku{
+    position: absolute;
+    top: 0;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: 0;
+    transform-origin: bottom left;
+    transition: transform 0.2s ease;
+    filter: contrast(1.5);
+    pointer-events: none; /* hoverの邪魔をしない */
+    width: 100%;
+    height: 100%;
+}
+#save_record{
+    display: none;
+    padding-top: 10%;
+    & h2{
+        padding-top: 15px;
+        font-size: 25pt;
+        font-family: "nikokaku";
+        color: white;
+        display: block;
+        margin: 0;
+    }
+}
+#run_save + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_mi.png);
+}
+#save_return + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_lu.png);
+
+}
+#run_save,#save_return{
+    position: relative;
+    opacity: 1;
+    bottom: 0;
+    left: 0;
+    color:#000000;
+}
+#run_save::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+#save_return::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_lu.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+.parent_setting{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    margin-top: 20px;
+}
+#switch_area1,#switch_area2{
+    line-height: 60px;
+    text-align: center;
+    font-size: 20pt;
+    position: relative;
+
+    width: 180px;
+    cursor: pointer;
+}
+#switch_area1 input,#switch_area2 input{
+    display: none;
+}
+#switch_area1 label,#switch_area2 label{
+    cursor: pointer;
+    display: block;
+    height: 60px;
+    background-color:#00a1f8;
+    border: 5px solid #464b4f;
+    border-radius: 30px;
+}
+#switch_area1 input:checked + label,#switch_area2 input:checked + label{
+    cursor: pointer;
+    border-color: #92c1e4;
+    background-color:#4c59ab;
+}
+#switch_area1 label:after,#switch_area2 label:after{
+    content: "非表示";
+    font-family: "nikokaku";
+    color: #004a82;
+}
+#switch_area1 input:checked + label:after,#switch_area2 input:checked + label:after{
+    content: "表示";
+    font-family: "nikokaku";
+    color: #92c1e4;
+}
+#switch_area1 img#swing1,#switch_area2 img#swing2{
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 5px;
+    left: 0%;
+    transition: 0.2s;
+    transform: translateX(-50%) rotate(0deg);
+}
+#switch_area1 input:checked ~ img#swing1,#switch_area2 input:checked ~ img#swing2{
+    transition: 0.2s;
+    transform: translateX(calc(180px - 50%)) rotate(360deg);
+    filter: hue-rotate(270deg) saturate(7);
+}
+#return_galaxy{
+    display: none;
+    bottom: 120px;
+}
+#return_galaxy::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_ri.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+#return_galaxy + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_ri.png);
+}
+#realy_return{
+    display: none;
+}
+#agree_return_galaxy,#disagree_return_galaxy{
+    position: relative;
+    top: 0;
+    left: 0;
+    color: white;
+}
+#agree_return_galaxy::before,#disagree_return_galaxy::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+}
+#disagree_return_galaxy::before{
+    background-image: url(./imgs/tanzaku_me.png);
+}
+#agree_return_galaxy + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_mi.png);
+}
+#disagree_return_galaxy + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_me.png);
 }

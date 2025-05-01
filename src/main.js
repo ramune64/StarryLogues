@@ -18,7 +18,7 @@ const height =  window.innerHeight;
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
     canvas: document.querySelector('#myCanvas'),
-    alpha: false // ← これが大事！
+    alpha: false
 });
 renderer.setSize(width, height);
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -1731,7 +1731,7 @@ const directions = [
     { name: 'nz', lookAt: [0, 0, -1], up: [0, 1, 0] }
 ];
 
-const size = 512*2; 
+const size = 512*2;
 
 function get_6dir_img() {
 
@@ -1796,7 +1796,7 @@ function get_6dir_img() {
     ctx.putImageData(imageData, 0, 0);
         
         // 作成した画像をfaceImagesに追加
-        document.body.appendChild(canvas);
+        //document.body.appendChild(canvas);
         faceImages.push(canvas);
     }
     const faceMap = {};
@@ -1897,10 +1897,10 @@ function downloadComposerOutput() {
 
 }
 
-show_time_and_location_ele.addEventListener("click",()=>{
+/* show_time_and_location_ele.addEventListener("click",()=>{
     //downloadComposerOutput();
     get_6dir_img();
-})
+}) */
 
 //リアルな星空の背景をヒッパルコス星表で作ろう！
 //等級と大きさの変換
@@ -2696,6 +2696,18 @@ for(let i=0;i<back_star_count;i++){
     observe_gauge_ele.appendChild(img);
 }
 
+const back_telescope_button = document.getElementById("back_telescope");
+for(let i=0;i<12;i++){
+    const img = document.createElement('img');
+    img.src = back_star_img;
+    img.style.top = Math.random() * 100 + '%';
+    img.style.left = Math.random() * 100  + '%';
+    img.style.transform = ` rotate(${Math.random() * 360}deg) scale(${0.8 + Math.random()})`;
+    img.style.filter = filter_list[Math.floor(Math.random()*filter_list.length)];
+    back_telescope_button.appendChild(img);
+}
+
+
 const backTanzakus = document.getElementsByClassName("back_tanzaku");
 const back_song_buttons = document.getElementsByClassName("back_song_button");
 function update_back_tanzaku(){
@@ -3010,6 +3022,8 @@ player.addListener({
             start_observe_button.style.opacity = 0.5;
             finaly_tanzaku_num.innerText = num_found_tanzaku;
             back_telescope.style.display = "block";
+            all_wrapper.style.display = "block";
+            update_back_tanzaku();
         }
         if(!hasEverPlayed){
             start_dbserve_child.innerText = "観測を開始する";
@@ -3132,7 +3146,7 @@ player.addListener({
                     const min_size = 0.7;
                     const max_siza = 1.4
                     const size = min_size + normalized_VO_A*(max_siza-min_size);
-                    console.log(size);
+                    //console.log(size);
                     //bv = minBV + (maxBV - minBV) * -1*centeredA;
                     //console.log(bv);
                     ///console.log(player.getVocalAmplitude(current.startTime));
@@ -3369,7 +3383,7 @@ player.addListener({
                     console.log("現在の歌詞:",text);
                     //rylic_ele.innerText += current.text;  // 現在の歌詞を即座に表示
                     if(text !== ""){
-                        placeTextSprite(text,bv,bright,size);
+                        placeTextSprite(text,bv,bright,size*3/2);
                     }
                     //scene.add(text_obj);
                     //const dir = new THREE.Vector3();
@@ -3450,7 +3464,7 @@ function sphericalToCartesian(radius, latitude, longitude) {
     return new THREE.Vector3(x, y, z);
 }
 const line_colors = [0x7dbbe6,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc]
-const existingSprites = [];
+let existingSprites = [];
 function placeTextSprite(text,bv,bright,size) {
     //console.log(bv);
     const color_rgb = bvToRgb(bv);
@@ -3794,6 +3808,8 @@ disagree_return_button.addEventListener("click",()=>{
 })
 const return_hide_ele = document.getElementById("return_hide");
 const agree_return_button = document.getElementById("agree_return");
+const take_picture_button = document.getElementById("take_picture");
+const return_galaxy_button = document.getElementById("return_galaxy");
 agree_return_button.addEventListener("click",()=>{
     back_telescope.style.display = "none";
     all_wrapper.style.display = "none";
@@ -3829,6 +3845,119 @@ agree_return_button.addEventListener("click",()=>{
             return_hide_ele.style.display = "none";
             at_main_content = false;
             inmusicGalaxy = true;
+            take_picture_button.style.display = "block";
+            return_galaxy_button.style.display = "block";
+            update_back_tanzaku();
         }
     })
 })
+
+take_picture_button.addEventListener("click",()=>{
+    save_record_ele.style.display = "block";
+})
+const save_record_ele = document.getElementById("save_record");
+const save_return_button = document.getElementById("save_return");
+save_return_button.addEventListener("click",()=>{
+    save_record_ele.style.display = "none";
+})
+const run_save_button = document.getElementById("run_save");
+const switch1_background = document.getElementById("switch1");
+const switch2_tanzaku = document.getElementById("switch2");
+run_save_button.addEventListener("click",()=>{
+    if(!switch1_background.checked){
+        star_points.visible = false;
+    }
+    if(!switch2_tanzaku.checked){
+        tanzaku_list.forEach(tanzaku=>{
+            tanzaku.mesh.visible = false;
+        })
+    }
+    existingSprites.forEach(sprite=>{
+        sprite.sprite.matrixAutoUpdate = false;
+        sprite.sprite.updateMatrix();
+    });
+    get_6dir_img();
+    existingSprites.forEach(sprite=>{
+        sprite.sprite.matrixAutoUpdate = true;
+        sprite.sprite.updateMatrix();
+    });
+    star_points.visible = true;
+    tanzaku_list.forEach(tanzaku=>{
+        tanzaku.mesh.visible = true;
+    })
+})
+const realy_return_ele = document.getElementById("realy_return");
+const agree_return_galaxy_button = document.getElementById("agree_return_galaxy");
+const disagree_return_galaxy_button = document.getElementById("disagree_return_galaxy");
+return_galaxy_button.addEventListener("click",()=>{
+    realy_return_ele.style.display = "block";
+    
+})
+agree_return_galaxy_button.addEventListener("click",()=>{
+    realy_return_ele.style.display = "none";
+    take_picture_button.style.display = "none";
+    return_galaxy_button.style.display = "none";
+    return_hide_ele.style.display = "block";
+    return_hide_ele.classList.remove("opacity120");
+    return_hide_ele.classList.add("opacity021");
+    let tl = gsap.timeline();
+    tl.to(camera,{
+        duration:0.5,
+        onComplete:()=>{
+            camera.zoom = 1;
+            camera.updateProjectionMatrix();
+        }
+    })
+    tl.to(camera,{
+        duration:0.5,
+        onComplete:()=>{
+            return_hide_ele.classList.remove("opacity021");
+            return_hide_ele.classList.add("opacity120");
+            camera.position.set(0, 3, 0);
+            yaw = -Math.PI / 2;   // 左右
+            pitch = 0; // 上下
+            camera.rotation.y = yaw;
+            camera.rotation.x = pitch;
+            existingSprites.forEach(sprite=>{
+                sprite.sprite.visible = false;
+                scene.remove(sprite.sprite);
+            });
+            existingSprites = [];
+            tanzaku_list.forEach(tanzaku=>{
+                tanzaku.mesh.visible = false;
+                scene.remove(tanzaku.mesh);
+            })
+            tanzaku_list = [];
+            telescope.visible = true;
+            constellation_lines.forEach(element => {
+                element.visible = true;
+            });
+        }
+    })
+    tl.to(camera,{
+        duration:0.5,
+        onComplete:()=>{
+            return_hide_ele.style.display = "none";
+            at_main_content = false;
+            inmusicGalaxy = true;
+            take_picture_button.style.display = "block";
+            return_galaxy_button.style.display = "block";
+            show_time_and_location_ele.style.display = "block";
+            change_constellation_name_button.style.display = "block";
+            change_location_button.style.display = "block";
+            change_time_button.style.display = "block";
+            name_galaxy.innerText = "観測中の銀河：天の川銀河";
+            
+            inmusicGalaxy = false;
+            update_back_tanzaku();
+            
+            
+        }
+    })
+    
+    
+    
+});
+disagree_return_galaxy_button.addEventListener("click",()=>{
+    realy_return_ele.style.display = "none";
+});

@@ -162,7 +162,7 @@
             </div>
             <div id="found_tanzaku_wrapper"><p>見つけた願いの数</p><p><span id="found_tanzaku">0</span>/30</p></div>
         </div>
-        <div id="name_galaxy">観測中の銀河：太陽系</div>
+        <div id="name_galaxy">観測中の銀河：天の川銀河</div>
         <div id="back_telescope"><h1>全体を見渡す</h1></div>
         <div id="all_wrapper">
             <h1>
@@ -193,9 +193,87 @@
                     <div class="back_tanzaku"></div>
                 </div>
             </div>
+        </div>
+        <div id="save_record">
+            <h1>
+                記録を保存
+            </h1>
+            <p>
+                あなたが探索したこの星空を画像にして保存することができます！
+            </p>
+            <p>
+                以下の項目を設定して保存できます
+            </p>
+            <div class="parent_setting">
+                <h2>
+                    1.背景の星を表示
+                </h2>
+                <div id="switch_area1">
+                    <input type="checkbox" id="switch1">
+                    <label for="switch1"><span></span></label>
+                    <img src="./imgs/star.png" id="swing1">
+                </div>
+                
+            </div>
+            <div class="parent_setting">
+                <h2>
+                    2.残った短冊を表示
+                </h2>
+                <div id="switch_area2">
+                    <input type="checkbox" id="switch2">
+                    <label for="switch2"><span></span></label>
+                    <img src="./imgs/star.png" id="swing2">
+                </div>
+                
+            </div>
+            <p>
+                ※実行するとしばらくフリ－ズします。
+            </p>
+            <div id="save_return_or_not">
+                <div class="operate_button_wrapper">
+                    <div id="run_save" class="operate_button">保存</div>
+                    <div class="back_tanzaku"></div>
+                </div>
+                <div class="operate_button_wrapper">
+                    <div id="save_return" class="operate_button">戻る</div>
+                    <div class="back_tanzaku"></div>
+                </div>
+            </div>
+        </div>
+        <div id="realy_return">
+            <h1>
+                元の銀河に戻る
+            </h1>
+            <p>
+                観測を完全に終了したら、元の銀河に戻りましょう。
+            </p>
+            <p>
+                戻ったら二度とこの銀河に戻ってくることはできません。
+            </p>
+            <p>
+                元の銀河(天の川銀河)に戻りますか？
+            </p>
+            <div id="return_galaxy_or_not">
+                <div class="operate_button_wrapper">
+                    <div id="agree_return_galaxy" class="operate_button">はい</div>
+                    <div class="back_tanzaku"></div>
+                </div>
+                <div class="operate_button_wrapper">
+                    <div id="disagree_return_galaxy" class="operate_button">キャンセル</div>
+                    <div class="back_tanzaku"></div>
+                </div>
+            </div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="return_galaxy" class="operate_button">元の銀河へ戻る</div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div class="operate_button_wrapper">
+            <div id="take_picture" class="operate_button">記録を保存</div>
+            <div class="back_tanzaku"></div>
+        </div>
+        <div id="return_hide"></div>
     </div>
-    </div>
-    <div id="return_hide"></div>
     <!-- <button onclick="downloadComposerOutput()">Download</button> -->
 <script src="./main.js" type="module"></script>
 </body>
