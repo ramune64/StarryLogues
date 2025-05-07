@@ -1744,7 +1744,7 @@ const directions = [
     { name: 'nz', lookAt: [0, 0, -1], up: [0, 1, 0] }
 ];
 
-const size = 512*3;
+const size = 512;
 
 function get_6dir_img() {
 
@@ -1809,7 +1809,7 @@ function get_6dir_img() {
     ctx.putImageData(imageData, 0, 0);
         
         // 作成した画像をfaceImagesに追加
-        //document.body.appendChild(canvas);
+        document.body.appendChild(canvas);
         faceImages.push(canvas);
     }
     const faceMap = {};
