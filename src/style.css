@@ -1,7 +1,11 @@
 body{
     margin: 0;
     height: fit-content;
+    overflow: hidden;
 }
+
+
+
 #myCanvas{
     height: 100vh;
     width: 100vw;
@@ -1273,4 +1277,53 @@ img.back_milkyway{
 }
 #disagree_return_galaxy + .back_tanzaku{
     background-image: url(./imgs/tanzaku_me.png);
+}
+
+@media (max-width: 1550px) {
+    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy{
+        font-size: 17pt;
+        padding: 20px;
+    }
+    #select_galaxy{
+        font-size: 18pt;
+    }
+    #galaxy_container_left,#galaxy_container_right{
+        & .song_button_wrapper div:not(.back_song_button){
+            font-size: 14pt;
+            margin: 35px 15px;
+        }
+    }
+    .back_song_button span{
+        font-size: 11pt;
+    }
+    #start_observe{
+        & img{
+            height: 40px;
+        }
+        & p{
+            margin: 13px 0;
+        }
+    }
+    #observe_gauge{
+        top: 52%;
+        height: 65%;
+    }
+    #tanzaku_space{
+        & div p{
+            font-size: 15pt;
+        }
+    }
+    #all_wrapper,#save_record,#realy_return{
+        padding-top: 5%;
+    }
+    #loading{
+        transform: translateX(-30%) scale(1); 
+        & img{
+            
+            width: 100px;
+        }
+        & h1{
+            font-size: 70pt;
+        }
+    }
 }

@@ -1557,13 +1557,17 @@ if (navigator.geolocation) {
         firstQ_options[0].style.pointerEvents = "auto";
     },
     function(error) {
+        console.log("disenable");
         enabled_user_location = false;
-        latitude,longitude = location_list["東京"][0],location_list["東京"][1];
+        latitude = location_list["東京"][0]
+        longitude = location_list["東京"][1];
     }
     );
     } else {
+        console.log("disenable2");
         enabled_user_location = false;
-        latitude,longitude = location_list["東京"][0],location_list["東京"][1];
+        latitude = location_list["東京"][0]
+        longitude = location_list["東京"][1];
 }
 let to_latitude,to_longitude;
 let from_latitude,from_longitude;
@@ -1897,10 +1901,10 @@ function downloadComposerOutput() {
 
 }
 
-/* show_time_and_location_ele.addEventListener("click",()=>{
+show_time_and_location_ele.addEventListener("click",()=>{
     //downloadComposerOutput();
     get_6dir_img();
-}) */
+})
 
 //リアルな星空の背景をヒッパルコス星表で作ろう！
 //等級と大きさの変換
