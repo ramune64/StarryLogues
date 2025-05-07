@@ -375,10 +375,10 @@ const chTime_x_list = { "y5":[0,0.09],
                         "f2":[0.6,0.685],//minやとmonthのmと被るなぁ。せや！秒が"second"なら分は"first"でもいいやろ！！
                         "f1":[0.686,0.77]
                     };
-const chTime_y_list = { "up1":[0.98,0.91],
-                        "down1":[0.58,0.51],
-                        "up2":[0.46,0.4],
-                        "down2":[0.1,0.03]
+const chTime_y_list = { "up1":[1,0.935],
+                        "down1":[0.595,0.525],
+                        "up2":[0.485,0.425],
+                        "down2":[0.12,0.05]
                     };
 //時間変更を記録する変数
 let CT_year,CT_month,CT_day,CT_hour,CT_min,CT_sec;
@@ -416,6 +416,9 @@ canvas.addEventListener('mousedown', (event) => {
     var allObjects;
     if(!changing_time && !moving_location && !transitioning){
         allObjects = scene.children.filter(obj => obj !== panel && obj !== star_panel && obj !== star_panel_time); // panelを除外
+        particle_list.forEach(particles=>{
+            allObjects = allObjects.filter(obj => obj !== particles);
+        })
     }else{
         allObjects = scene.children.filter(obj => obj === star_panel_time); 
     }
@@ -718,7 +721,7 @@ canvas.addEventListener('mousedown', (event) => {
                                                 CT_hour -= 10;
                                             }
                                     }else{
-                                        if((CT_hour)%10==9){
+                                        if((CT_hour)%10==0){
                                             CT_hour += 9;
                                         }else{
                                             CT_hour -= 1;
@@ -1023,6 +1026,9 @@ canvas.addEventListener('mousemove', (event) => {
     var allObjects;
     if(!changing_time && !moving_location && !inmusicGalaxy){
         allObjects = scene.children.filter(obj => obj !== panel && obj !== star_panel && obj !== star_panel_time); // panelを除外
+        particle_list.forEach(particles=>{
+            allObjects = allObjects.filter(obj => obj !== particles);
+        })
     }else{
         allObjects = scene.children.filter(obj => obj === star_panel_time); 
         //console.log(allObjects);
@@ -1032,6 +1038,9 @@ canvas.addEventListener('mousemove', (event) => {
     }
     if(telescope.visible == false){
         allObjects = allObjects.filter(obj => obj!==telescope);
+        particle_list.forEach(particles=>{
+            allObjects = allObjects.filter(obj => obj !== particles);
+        })
     }
     // オブジェクトとの交差を検出
     const intersects = raycaster.intersectObjects(allObjects, true);
@@ -1731,7 +1740,7 @@ const directions = [
     { name: 'nz', lookAt: [0, 0, -1], up: [0, 1, 0] }
 ];
 
-const size = 512*2;
+const size = 512*3;
 
 function get_6dir_img() {
 
@@ -2568,7 +2577,20 @@ function animate() {
     } */
     //console.log(camera.position.x,camera.position.y,camera.position.z);
     //renderer.render(scene, camera);
-    
+    const clock = new THREE.Clock();
+    const delta = clock.getDelta();
+    // パーティクル更新
+    if(explosions){
+        for (let i = explosions.length - 1; i >= 0; i--) {
+            explosions[i].update(delta);
+            if (explosions[i].isDead()) {
+            explosions[i].dispose();
+            explosions.splice(i, 1); // 削除
+            }
+        }
+    }
+
+
     const rotate_y = ((camera.rotation.y/Math.PI*180)%360+360)%360;
 
     let left_rate_N = 100 - (360-rotate_y) /180 *100;
@@ -3465,6 +3487,7 @@ function sphericalToCartesian(radius, latitude, longitude) {
 }
 const line_colors = [0x7dbbe6,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc]
 let existingSprites = [];
+let starlines = [];
 function placeTextSprite(text,bv,bright,size) {
     //console.log(bv);
     const color_rgb = bvToRgb(bv);
@@ -3526,6 +3549,7 @@ function placeTextSprite(text,bv,bright,size) {
     }
     //短冊が近くにあったら処理
     const pos = sprite.position;
+    triggerExplosion(pos);
     tanzaku_list.forEach(tanzaku=>{
         const dis = pos.distanceTo(tanzaku.mesh.position);
         //console.log(dis);
@@ -3560,8 +3584,80 @@ function placeTextSprite(text,bv,bright,size) {
         lineMaterial.color.multiplyScalar(25);
         const lineMesh = new THREE.Line(lineGeometry, lineMaterial);
         scene.add(lineMesh);
+        starlines.push(lineMesh);
     }
 }
+let particle_list = [];
+
+const star_texture = textureLoader.load(back_star_img);
+class ParticleExplosion  {
+    constructor(position, scene, count = 10, lifetime = 2.0) {
+        this.scene = scene;
+        this.lifetime = lifetime;
+        this.elapsed = 0;
+
+        this.geometry = new THREE.BufferGeometry();
+        this.positions = new Float32Array(count * 3);
+        this.velocities = [];
+
+        for (let i = 0; i < count; i++) {
+            this.positions[i * 3] = position.x;
+            this.positions[i * 3 + 1] = position.y;
+            this.positions[i * 3 + 2] = position.z;
+            
+            const dir = new THREE.Vector3(
+                (Math.random() - 0.5)*0.3,
+                (Math.random() - 0.5)*0.3,
+                (Math.random() - 0.5)*0.3
+            );
+            this.velocities.push(dir);
+            }
+        this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+
+        this.material = new THREE.PointsMaterial({
+            map:star_texture,
+            size: 2,
+            color: 0xffffaa,
+            transparent: true,
+            opacity: 10,
+            depthWrite: false,
+            alphaTest: 0.1
+        });
+
+        this.points = new THREE.Points(this.geometry, this.material);
+        this.scene.add(this.points);
+        particle_list.push(this.points);
+    }
+    update(delta) {
+        this.elapsed += delta;
+        for (let i = 0; i < this.velocities.length; i++) {
+          this.positions[i * 3] += this.velocities[i].x;
+          this.positions[i * 3 + 1] += this.velocities[i].y;
+          this.positions[i * 3 + 2] += this.velocities[i].z;
+        }
+    
+        this.material.opacity = Math.max(10 - this.elapsed / this.lifetime, 0);
+        this.geometry.attributes.position.needsUpdate = true;
+    }
+    
+    isDead() {
+        return this.elapsed >= this.lifetime;
+    }
+    
+    dispose() {
+        this.scene.remove(this.points);
+        this.geometry.dispose();
+        this.material.dispose();
+    }
+}
+const explosions = [];
+
+function triggerExplosion(pos) {
+    const explosion = new ParticleExplosion(pos, scene);
+    explosions.push(explosion);
+}
+//triggerExplosion(new THREE.Vector3(0,0,0));
+
 /* const text_obj = createTextSprite("a");
 scene.add(text_obj);
 text_obj.position.set(1,3,1); */
@@ -3932,6 +4028,10 @@ agree_return_galaxy_button.addEventListener("click",()=>{
             constellation_lines.forEach(element => {
                 element.visible = true;
             });
+            lineMesh.forEach(starline =>{
+                starline.visible = false;
+                scene.remove(starline);
+            })
         }
     })
     tl.to(camera,{
