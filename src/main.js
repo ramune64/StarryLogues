@@ -1916,10 +1916,10 @@ function downloadComposerOutput() {
 
 }
 
-show_time_and_location_ele.addEventListener("click",()=>{
+/* show_time_and_location_ele.addEventListener("click",()=>{
     //downloadComposerOutput();
     get_6dir_img();
-})
+}) */
 
 //リアルな星空の背景をヒッパルコス星表で作ろう！
 //等級と大きさの変換
