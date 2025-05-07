@@ -1783,6 +1783,7 @@ function get_6dir_img() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
 
         composer.render();
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.readPixels(0, 0, size, size, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
         const canvas = document.createElement('canvas');
