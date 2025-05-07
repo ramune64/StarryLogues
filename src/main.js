@@ -1744,7 +1744,7 @@ const directions = [
     { name: 'nz', lookAt: [0, 0, -1], up: [0, 1, 0] }
 ];
 
-const size = 512;
+const size = 512*3;
 
 function get_6dir_img() {
 
