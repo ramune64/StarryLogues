@@ -3616,9 +3616,9 @@ class ParticleExplosion  {
             this.positions[i * 3 + 2] = position.z;
             
             const dir = new THREE.Vector3(
-                (Math.random() - 0.5)*0.3,
-                (Math.random() - 0.5)*0.3,
-                (Math.random() - 0.5)*0.3
+                (Math.random() - 0.5)*0.1,
+                (Math.random() - 0.5)*0.1,
+                (Math.random() - 0.5)*0.1
             );
             this.velocities.push(dir);
             }
