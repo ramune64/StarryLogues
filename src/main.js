@@ -1766,24 +1766,29 @@ function get_6dir_img() {
     for (const dir of directions) {
         // 新しいカメラを作成
         //const cam = new THREE.PerspectiveCamera(90, 1, 0.1, 10000);
-        camera.position.set(0,0,0)
+        camera.position.set(0,0,0);
         camera.up.fromArray(dir.up);
-        const lookAtVector = new THREE.Vector3().fromArray(dir.lookAt).add(camera.position);
-        camera.lookAt(lookAtVector);
-        renderer.setSize(size, size);
-        composer.setSize(size, size);
-        
+        camera.lookAt(new THREE.Vector3().fromArray(dir.lookAt));
+        //camera.lookAt(lookAtVector);
+        renderer.setSize(size/window.devicePixelRatio, size/window.devicePixelRatio);
+        composer.setSize(size/window.devicePixelRatio, size/window.devicePixelRatio);
+        //renderer.setSize(size, size, false); // 物理サイズとCSSサイズを一致させない
+        renderer.domElement.style.width = `${size}px`;
+        renderer.domElement.style.height = `${size}px`;
           // Composerのサイズをターゲットに合わせる
         
         // ピクセルデータを格納するための配列
         const pixels = new Uint8Array(size * size * 4);  // RGBA
-
+        
         // レンダーターゲットを指定
-        const framebuffer = gl.createFramebuffer();
-        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-
+        //const framebuffer = gl.createFramebuffer();
         composer.render();
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        const buffer = composer.readBuffer;
+        gl.bindFramebuffer(gl.FRAMEBUFFER, buffer.__webglFramebuffer);
+        //gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        //renderer.render()
+        
+        
         gl.readPixels(0, 0, size, size, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 
         const canvas = document.createElement('canvas');
@@ -1810,7 +1815,7 @@ function get_6dir_img() {
     ctx.putImageData(imageData, 0, 0);
         
         // 作成した画像をfaceImagesに追加
-        document.body.appendChild(canvas);
+        //document.body.appendChild(canvas);
         faceImages.push(canvas);
     }
     const faceMap = {};
