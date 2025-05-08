@@ -820,14 +820,9 @@ canvas.addEventListener('mouseup', (event) => {
     }
 }
 });
-const geometry_hide_panel = new THREE.PlaneGeometry(10, 10);  // 板のサイズ（カメラの前に大きく配置）
-const material_hide_panel = new THREE.MeshBasicMaterial({
-    color: 0xffffff, // 白色に設定
-    opacity: 10,      // 最初は完全に不透明
-    transparent: true // 透明にする
-});
 
-const hide_plane = new THREE.Mesh(geometry_hide_panel, material_hide_panel);
+
+let hide_plane;
 let at_main_content = false;
 const show_time_and_location_ele = document.getElementById("show_time_and_location");
 const telescope_filter_img = document.getElementById("telescope_filter");
@@ -838,6 +833,13 @@ const galaxy_img = document.getElementById("galaxy_img");
 const select_galaxy_ele = document.getElementById("select_galaxy");
 let in_transition_telescope = false;
 function into_telescope(){
+    const geometry_hide_panel = new THREE.PlaneGeometry(10, 10);  // 板のサイズ（カメラの前に大きく配置）
+    const material_hide_panel = new THREE.MeshBasicMaterial({
+        color: 0xffffff, // 白色に設定
+        opacity: 10,      // 最初は完全に不透明
+        transparent: true // 透明にする
+    });
+    hide_plane = new THREE.Mesh(geometry_hide_panel, material_hide_panel);
     in_transition_telescope = true;
     at_main_content = true;
     panel.visible = false;
@@ -879,10 +881,13 @@ function into_telescope(){
             camera.updateProjectionMatrix();
         },
         onComplete:()=>{
+            
             hide_plane.position.set(1, 0, 0); // カメラの前に配置（距離を調整）
             hide_plane.rotation.y = -Math.PI/2
             scene.add(hide_plane);
+            hide_plane.visible = true;
             hide_plane.material.transparent = true;
+            console.log("panel",hide_plane);
         }
     });
     tl.to(camera.position,{
@@ -2372,6 +2377,7 @@ Promise.all([
     geometry.setAttribute('hipNumbers', new THREE.Float32BufferAttribute(hipNumbers, 1));
     star_geometry = geometry;
     const star_img = "data:image/png;base64,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"
+    //ありがとうChatGPT
     star_material = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0.0 },
@@ -2561,7 +2567,7 @@ function compute_left_rate_E(r){
         left_rate_E = 100 - (90-r) /90 *50;
     }return left_rate_E;
 }
-
+const clock = new THREE.Clock();
 function animate() {
     //requestAnimationFrame(animate);
     time += 0.01;
@@ -2587,8 +2593,9 @@ function animate() {
     } */
     //console.log(camera.position.x,camera.position.y,camera.position.z);
     //renderer.render(scene, camera);
-    const clock = new THREE.Clock();
+    
     const delta = clock.getDelta();
+    //console.log(delta);
     // パーティクル更新
     if(explosions){
         for (let i = explosions.length - 1; i >= 0; i--) {
@@ -2666,12 +2673,21 @@ function animate() {
                 onComplete: () => {
                     hide_plane.visible = false;
                     scene.remove(hide_plane);
+                    galaxy_img.style.transform = `scale(${1}) translateX(-50%) translateY(-50%)`;
                     galaxy_img.style.display = "none";
+                    galaxy_img.classList.remove("size_animation");
+                    galaxy_img.classList.remove("fade_out");
                     in_transition_telescope = false;
                     start_observe_button.style.pointerEvents = "auto";
                     start_observe_button.style.opacity = 1;
                     start_observe_button.style.display = "flex";
+                    
+                    player.timer.seek(0);
+                    
+                    player.requestStop();
+                    update_gauge(0);
                     observe_gauge_ele.style.display = "block";
+                    update_gauge(0);
                     loading.style.display = "none";
                     tanzaku_space.style.display = "block";
                     name_galaxy.innerText = "観測中の銀河："+player.data.song.name;
@@ -2851,6 +2867,8 @@ galaxy_container_song_ele.addEventListener("click",(e)=>{
 })
 
 function load_music(num){
+    
+    
     // ストリートライト / 加賀(ネギシャワーP)
     if(num == 0){
     player.createFromSongUrl("https://piapro.jp/t/ULcJ/20250205120202", {
@@ -3030,7 +3048,8 @@ player.addListener({
         InPreparationSong = false;
         num_found_tanzaku = 0;
         found_tanzaku.innerText = num_found_tanzaku;
-        
+        appear_last_word = false;
+        updateCount = 0;
     },
     onPlay:()=>{
         console.log("play");
@@ -3056,6 +3075,7 @@ player.addListener({
             back_telescope.style.display = "block";
             all_wrapper.style.display = "block";
             update_back_tanzaku();
+            player.timer.seek(0);
         }
         if(!hasEverPlayed){
             start_dbserve_child.innerText = "観測を開始する";
@@ -3093,27 +3113,29 @@ player.addListener({
             rylic =rylic.next;
         }
         //console.log(max_A,min_A,max_V,min_V);
+        
 
         finished_loop = true;
-        //player.timer.seek(96937);
+        //player.timer.seek(180000);
         medianVA = player.getMedianValenceArousal();
         console.log(Max_Vo_A,min_VO_A);
-        
+        player.timer.seek(0);
     },
     onTimeUpdate : (pos) =>{
+        //console.log(pos);
         let bv;
         updateCount++;
         //console.log("再生位置のアップデート:", pos, "ミリ秒");
         const duration = player.video.duration;
         //console.log(pos);
-        if(!(pos > 500 && last_pos < 1000 && updateCount <= 5)){
+        if(!(pos > 500 && last_pos < 1000 && updateCount <= 7)){
             update_gauge(pos/duration*100);
             last_pos = pos;
         }
         
         //console.log(currentChar)
         const beat = player.findBeat(pos+50);
-        if(beat != last_beat && updateCount > 5){
+        if(beat != last_beat && updateCount > 7){
             //console.log(filter_list[beat_index%6]);
             //console.log(beat_index);
             gauge_star.style.filter = filter_list[beat_index%6];
@@ -3148,7 +3170,7 @@ player.addListener({
         //console.log(finished_loop);
         /* if(!finished_loop){
             ignor_count = 0;
-        }    */while (current && current.startTime < pos + 100 && updateCount > 5) {
+        }    */while (current && current.startTime < pos + 100 && updateCount > 7) {
             if(!appear_last_word && prev !== current){
                 if(current == player.video.lastWord){
                     appear_last_word = true;
@@ -3469,13 +3491,13 @@ function createTextSprite(text,RGB,bright,size) {
     const material = new THREE.SpriteMaterial({
         map: texture,
         transparent: true,
-        opacity:bright,
+        opacity:0,
         alphaTest: 0.1,
     });
     const sprite = new THREE.Sprite(material);
     
     // スケール調整（大きさ）
-    sprite.scale.set(size*text.length,size, 1); // 横:縦の比率をCanvasと合わせると綺麗
+    sprite.scale.set(size*text.length*0.01,size*0.01, 1); // 横:縦の比率をCanvasと合わせると綺麗
 
     return {sprite,radius:text.length*size};
 }
@@ -3516,10 +3538,10 @@ function placeTextSprite(text,bv,bright,size) {
     
     let corrected_pos;
     //corrected_pos = basePos;
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
         let safe = true;
         const angle = Math.random() * 2 * Math.PI;
-        const r = 0.06 * i;
+        const r = 0.06 * i*size;
         const latOffset = Math.sin(angle) * r;
         const lngOffset = Math.cos(angle) * r;
             //const latOffset = Math.sign((Math.random()) - 0.5) * 0.06*i; // 調整可
@@ -3557,13 +3579,29 @@ function placeTextSprite(text,bv,bright,size) {
         scene.add(sprite);
         console.log("failed");
     }
+    let tl = gsap.timeline();
+    sprite.material.rotation = 0;
+    tl.to(sprite.material,{
+        rotation:Math.PI*2,
+        duration:0.2
+    },0);
+    tl.to(sprite.scale,{
+        x:size*text.length,
+        y:size,
+        duration:0.2,
+        ease: "power3.inOut"
+    },0)
+    tl.to(sprite.material,{
+        opacity:bright,
+        duration:1
+    },0);
     //短冊が近くにあったら処理
     const pos = sprite.position;
     triggerExplosion(pos);
     tanzaku_list.forEach(tanzaku=>{
         const dis = pos.distanceTo(tanzaku.mesh.position);
         //console.log(dis);
-        if(radius>=dis){
+        if(radius/3*2>=dis){
             //scene.remove(tanzaku);
             if(!tanzaku.isAnimating){
                 num_found_tanzaku++;
@@ -3601,7 +3639,7 @@ let particle_list = [];
 
 const star_texture = textureLoader.load(back_star_img);
 class ParticleExplosion  {
-    constructor(position, scene, count = 10, lifetime = 2.0) {
+    constructor(position, scene, count = 10, lifetime = 0.5) {
         this.scene = scene;
         this.lifetime = lifetime;
         this.elapsed = 0;
@@ -3616,9 +3654,9 @@ class ParticleExplosion  {
             this.positions[i * 3 + 2] = position.z;
             
             const dir = new THREE.Vector3(
-                (Math.random() - 0.5)*0.1,
-                (Math.random() - 0.5)*0.1,
-                (Math.random() - 0.5)*0.1
+                (Math.random() - 0.5)*0.05,
+                (Math.random() - 0.5)*0.05,
+                (Math.random() - 0.5)*0.05
             );
             this.velocities.push(dir);
             }
@@ -3629,7 +3667,7 @@ class ParticleExplosion  {
             size: 2,
             color: 0xffffaa,
             transparent: true,
-            opacity: 10,
+            opacity: 1,
             depthWrite: false,
             alphaTest: 0.1
         });
@@ -3646,7 +3684,7 @@ class ParticleExplosion  {
           this.positions[i * 3 + 2] += this.velocities[i].z;
         }
     
-        this.material.opacity = Math.max(10 - this.elapsed / this.lifetime, 0);
+        this.material.opacity = Math.max(4 - 4*this.elapsed / this.lifetime, 0);
         this.geometry.attributes.position.needsUpdate = true;
     }
     
@@ -3655,6 +3693,7 @@ class ParticleExplosion  {
     }
     
     dispose() {
+        this.points.visible = false;
         this.scene.remove(this.points);
         this.geometry.dispose();
         this.material.dispose();
@@ -3930,8 +3969,11 @@ agree_return_button.addEventListener("click",()=>{
     tl.to(camera,{
         duration:0.5,
         onComplete:()=>{
+            const tanzaku_space_ch = document.getElementById("tanzaku_space");
             telescope_filter_img.style.display = "none";
+            tanzaku_space_ch.innerHTML = "";
             tanzaku_space.style.display = "none";
+            update_gauge(0);
             observe_gauge_ele.style.display = "none";
             start_observe_button.style.display = "none";
             camera.zoom = 1;
@@ -4038,7 +4080,7 @@ agree_return_galaxy_button.addEventListener("click",()=>{
             constellation_lines.forEach(element => {
                 element.visible = true;
             });
-            lineMesh.forEach(starline =>{
+            starlines.forEach(starline =>{
                 starline.visible = false;
                 scene.remove(starline);
             })
@@ -4050,12 +4092,13 @@ agree_return_galaxy_button.addEventListener("click",()=>{
             return_hide_ele.style.display = "none";
             at_main_content = false;
             inmusicGalaxy = true;
-            take_picture_button.style.display = "block";
-            return_galaxy_button.style.display = "block";
+            take_picture_button.style.display = "none";
+            return_galaxy_button.style.display = "none";
             show_time_and_location_ele.style.display = "block";
-            change_constellation_name_button.style.display = "block";
-            change_location_button.style.display = "block";
-            change_time_button.style.display = "block";
+            //【謎】なんで俺はわざわざparentElementを操作している部分があるのか。何のためのupdate_back_tanzakuだ。
+            change_constellation_name_button.parentElement.style.display = "block";
+            change_location_button.parentElement.style.display = "block";
+            change_time_button.parentElement.style.display = "block";
             name_galaxy.innerText = "観測中の銀河：天の川銀河";
             
             inmusicGalaxy = false;
