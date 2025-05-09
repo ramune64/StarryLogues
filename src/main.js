@@ -26,7 +26,7 @@ renderer.autoClear = false;
 
 // シーンを作成
 const scene = new THREE.Scene();
-
+scene.background = new THREE.Color(0x051014);
 // カメラを作成
 const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 5000);
 // カメラの初期座標を設定（X座標:0, Y座標:0, Z座標:0）
@@ -851,6 +851,12 @@ function into_telescope(){
     canvas.style.cursor = "auto";
     const tl = gsap.timeline();
     // 目標の回転（rad）
+    console.log(camera.rotation.y/Math.PI*180);
+    camera.rotation.y = camera.rotation.y%(Math.PI*2);
+    if(camera.rotation.y>0){
+        camera.rotation.y-=Math.PI*2;
+    }
+    console.log(camera.rotation.y/Math.PI*180);
     const targetRotation = {
         x: -30 * Math.PI / 180,
         y: -Math.PI / 2,
@@ -2691,6 +2697,7 @@ function animate() {
                     loading.style.display = "none";
                     tanzaku_space.style.display = "block";
                     name_galaxy.innerText = "観測中の銀河："+player.data.song.name;
+                    introduce_ele.style.display = "block";
                 }
             })
         }
@@ -2703,6 +2710,7 @@ const observe_gauge_ele = document.getElementById("observe_gauge");
 const gauge_mask = document.getElementById("gauge_mask");
 const gauge_star = document.getElementById("gauge_star");
 const play_button = document.getElementById("play_button");
+const introduce_ele = document.getElementById("introduce");
 
 import stop_button_img from "./imgs/play_stop.png";
 import play_button_img from "./imgs/play_button.png";
@@ -3071,6 +3079,7 @@ player.addListener({
             start_dbserve_child.innerText = "観測完了！！！";
             start_observe_button.style.pointerEvents = "none";
             start_observe_button.style.opacity = 0.5;
+            
             finaly_tanzaku_num.innerText = num_found_tanzaku;
             back_telescope.style.display = "block";
             all_wrapper.style.display = "block";
@@ -3116,6 +3125,7 @@ player.addListener({
         
 
         finished_loop = true;
+        
         //player.timer.seek(180000);
         medianVA = player.getMedianValenceArousal();
         console.log(Max_Vo_A,min_VO_A);
@@ -4114,3 +4124,7 @@ agree_return_galaxy_button.addEventListener("click",()=>{
 disagree_return_galaxy_button.addEventListener("click",()=>{
     realy_return_ele.style.display = "none";
 });
+const go_observe_button = document.getElementById("go_observe");
+go_observe_button.addEventListener("click",()=>{
+    introduce_ele.style.display = "none";
+})

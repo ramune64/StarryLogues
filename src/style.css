@@ -523,7 +523,7 @@ div:has(audio){
     }
 }
 
-#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy{
+#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe{
     position: absolute;
     border: none;
     background: none;
@@ -758,7 +758,8 @@ img.back_milkyway{
 #save_return + .back_tanzaku,
 #return_galaxy + .back_tanzaku,
 #agree_return_galaxy + .back_tanzaku,
-#disagree_return_galaxy + .back_tanzaku{
+#disagree_return_galaxy + .back_tanzaku,
+#go_observe + .back_tanzaku{
     position: absolute;
     inset: 0;
     background-image: url(./imgs/tanzaku_ka.png);
@@ -981,7 +982,7 @@ img.back_milkyway{
     box-shadow: 0 0 0;
     transform: translateX(-2px) translateY(2px);
 }
-#all_wrapper,#save_record,#realy_return{
+#all_wrapper,#save_record,#realy_return,#introduce{
     width: 100%;
     height: 100%;
     position: absolute;
@@ -991,22 +992,42 @@ img.back_milkyway{
     opacity: 1;
     z-index: 100;
     display: none;
-    padding-top: 15%;
+    padding-top: 10%;
     & h1{
         text-align: center;
         font-family: "nikokaku";
         color: white;
         font-size: 40pt;
+        margin: 20px;
+    }
+    & h2{
+        text-align: center;
+        font-family: "nikokaku";
+        color: white;
+        font-size: 30pt;
+        margin: 10px;
     }
     & p{
         font-size: 20pt;
         text-align: center;
-        font-family: "nikokaku";
-        margin: auto;
+        font-family: "myfont";
+        margin: 10px auto;
         color: white;
     }
+    & ul{
+        margin: 0 auto;
+        width: fit-content;
+        text-align: center;
+        color: white;
+        font-family: "myfont";
+        font-size: 18pt;
+    }
+    & li{
+        text-align: center;
+    }
 }
-#return_or_not,#save_return_or_not,#return_galaxy_or_not{
+
+#return_or_not,#save_return_or_not,#return_galaxy_or_not,#LetsGo{
     opacity: 1;
     margin: 25px auto;
     display: flex;
@@ -1279,8 +1300,31 @@ img.back_milkyway{
     background-image: url(./imgs/tanzaku_me.png);
 }
 
+
+
+#go_observe{
+    color: white;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+#go_observe::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url(./imgs/tanzaku_mi.png);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+    
+}
+#go_observe + .back_tanzaku{
+    background-image: url(./imgs/tanzaku_mi.png);
+}
+
 @media (max-width: 1550px) {
-    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy{
+    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe{
         font-size: 17pt;
         padding: 20px;
     }
@@ -1313,7 +1357,7 @@ img.back_milkyway{
             font-size: 15pt;
         }
     }
-    #all_wrapper,#save_record,#realy_return{
+    #all_wrapper,#save_record,#realy_return,#introduce{
         padding-top: 5%;
     }
     #loading{
