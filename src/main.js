@@ -893,7 +893,11 @@ function into_telescope(){
             scene.add(hide_plane);
             hide_plane.visible = true;
             hide_plane.material.transparent = true;
-            console.log("panel",hide_plane);
+            
+            star_points.visible = false;
+            constellation_lines.forEach(element => {
+                element.visible = false;
+            });
         }
     });
     tl.to(camera.position,{
@@ -931,7 +935,7 @@ function into_telescope(){
         onStart:()=>{
             
             telescope_filter_img.style.display = "block";
-            galaxy_img.style.display = "block";
+            //galaxy_img.style.display = "block";
             
             /* telescope_filter_img.classList.add("opacity_animation");
             galaxy_img.classList.add("opacity_animation"); */
@@ -943,6 +947,10 @@ function into_telescope(){
             telescope_filter_img.classList.add("opacity_animation");
             yaw = -Math.PI / 2;   // 左右
             pitch = 45 * Math.PI / 180; // 上下
+            scene.remove(hide_plane);
+            create_galaxy();
+            rotation_pase = 20;
+            always_GalaxyRotating = true;
             //scene.remove(hide_plane);
             //in_transition_telescope = false;
         }
@@ -2594,6 +2602,9 @@ function animate() {
         //star_panel.lookAt(-3,3,-1);
         star_panel.quaternion.copy(camera.quaternion);
     }
+    if(cloudsprite && cloudsprite.material){
+        cloudsprite.position.y += panel_updown*3;
+    }
     /* if(star_panel_time){
         star_panel_time.quaternion.copy(camera.quaternion);
     } */
@@ -2638,28 +2649,35 @@ function animate() {
     angle_m90.style.top = `${scaled_x+50}%`;
     
     if(InPreparationSong){
-        galaxy_img_scale *= 1.0002;
+        
+        changed_rotate_mode = false;
+        
+        rotation_pase = 2;
         //galaxy_img_scale = Math.min(galaxy_img_scale,1.6);
-        galaxy_img.style.transform = `scale(${galaxy_img_scale}) translateX(-50%) translateY(-50%)`;
+        
     }else if(InPreparationSong === false){
-        galaxy_img_scale *= 1.009;
-        galaxy_img.style.transform = `scale(${galaxy_img_scale}) translateX(-50%) translateY(-50%)`;
-        console.log(getComputedStyle(galaxy_img).height);
-        if(galaxy_img_scale>=20){
-            console.log(getComputedStyle(galaxy_img).height);
+        console.log("music_num:",music_num);
+        if(!changed_rotate_mode && (music_num == 0 || music_num == 3 || music_num == 4)){
+            always_GalaxyRotating = false;
+            GalaxyRotateStart_time = undefined;
+            current_galaxy_rotate = addition_angle;
+            GalaxyRotating = true;
+            changed_rotate_mode = true;
+        }else if(!changed_rotate_mode && !(music_num == 0 || music_num == 3 || music_num == 4)){
+
+            changed_rotate_mode = true;
+        }
+        if((rotate_progress>0.8 && (music_num == 0 || music_num == 3 || music_num == 4)) || false){//ここにサムネの演出を入れる
             InPreparationSong=undefined;
-            galaxy_img_scale = 1;
+            
             //galaxy_img.style.display = "none";
-            galaxy_img.classList.add("fade_out");
             let tl = gsap.timeline();
             tl.to(camera,{
                 duration:1,
                 onComplete:()=>{
-                    //star_points.visible = false;
+                    star_points.visible = true;
                     starDistance = 200;
-                    constellation_lines.forEach(element => {
-                        element.visible = false;
-                    });
+                    scene.add(hide_plane);
                 }
             })
             /* tl.to(hide_plane.material.color,{
@@ -2677,6 +2695,8 @@ function animate() {
                 
                 opacity: 0,
                 onComplete: () => {
+                    scene.remove(cloudsprite);
+                    scene.remove(galaxy_star_points);
                     hide_plane.visible = false;
                     scene.remove(hide_plane);
                     galaxy_img.style.transform = `scale(${1}) translateX(-50%) translateY(-50%)`;
@@ -2687,7 +2707,7 @@ function animate() {
                     start_observe_button.style.pointerEvents = "auto";
                     start_observe_button.style.opacity = 1;
                     start_observe_button.style.display = "flex";
-                    
+                    make_tanzaku_and_place();
                     player.timer.seek(0);
                     
                     player.requestStop();
@@ -2703,6 +2723,8 @@ function animate() {
         }
     }
     update_back_tanzaku();
+    rotate_galaxyStars();
+    always_rotate_galaxyStars();
 }
 const tanzaku_space = document.getElementById("tanzaku_space_wrapper");
 const start_observe_button = document.getElementById("start_observe");
@@ -2963,7 +2985,10 @@ function load_music(num){
             },
         });
     }
+    music_num = num;
     InPreparationSong = true;
+    GalaxyRotateStart_time = undefined;
+    current_galaxy_rotate = addition_angle;
     select_galaxy_ele.style.display = "none";
     loading.style.display = "block";
     loading.style.transform = "translateX(-50%) scale(0.2)";
@@ -2996,6 +3021,8 @@ function fit_loading_parent(){
 }
 fit_loading_parent();
 
+let changed_rotate_mode = false;
+let music_num;
 let InPreparationSong;
 let galaxy_img_scale = 1;
 let last_pos = 0;
@@ -3051,7 +3078,7 @@ player.addListener({
         current = null;
         prev = null;
         last_beat = null;
-        make_tanzaku_and_place();
+        
         current_wishList = wishList.concat();;
         InPreparationSong = false;
         num_found_tanzaku = 0;
@@ -4161,17 +4188,23 @@ function loadImages(srcArray) {
         })
     );
 }
-
+let galazy_star_geometory;
+let arms_data = [];
+const zRotation = -Math.PI / 4;
+let current_galaxy_rotate = 0;
+let cloudsprite;
+let galaxy_star_points;
 function create_galaxy(){
-    const count = 1000;
+    arms_data = [];
+    const count = 14400;
     const r_base = 400;
     const radiusStep = r_base/count;
     const angleStep = Math.PI*2/count*0.8;
     let positions = [];
     const arms = 5;
     const geometry = new THREE.BufferGeometry();
-    const center = new THREE.Vector3(400, 400, 0);
-    const zRotation = -Math.PI / 4;
+    const center = new THREE.Vector3(1200, 1200, 0);
+    
     const color_list = [0xbb99bb,0xbb9999,0x99bbbb,0xbb99aa,0x99bbdd];
     const color = new THREE.Color();
     let colors = [];
@@ -4181,20 +4214,20 @@ function create_galaxy(){
         for (let i = 0; i < count; i++) {
             const r = i * radiusStep;
             const theta = i * angleStep + armOffset;
-            const spread_range = random_spread(i,60,count);
+            const spread_range = random_spread(i,70,count);
             let armz = r * Math.cos(theta) + (Math.random()-0.5)*spread_range;
             let army = r * Math.sin(theta) + (Math.random()-0.5)*spread_range;
             let armx = (Math.random() - 0.5) * spread_range; // 少し厚みを持たせる
             const rotatedX = army * Math.cos(zRotation);
-            const rotatedY = army * Math.sin(zRotation)
-
+            const rotatedY = army * Math.sin(zRotation);
+            arms_data.push([armx,army,armz,center.clone()]);
             armx = rotatedX + center.x + armx;
             army = rotatedY + center.y;
             armz = armz + center.z;
 
             positions.push(armx, army, armz);
             if(i>count*0.6){
-                color.setHex(0x9999bb)
+                color.setHex(0x9999bb);
                 
             }else if(i<=count*0.6 && i>=count*0.07){
                 color.setHex(color_list[Math.floor(Math.random()*color_list.length)]);
@@ -4207,18 +4240,20 @@ function create_galaxy(){
     console.log(colors);
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+    galazy_star_geometory = geometry;
     const material = new THREE.PointsMaterial({
-        size: 6,
+        size: 7,
         vertexColors: true,
         /* color: 0xbb99aa, */
         transparent: true,
-        opacity: 10,
+        opacity: 5,
         depthWrite: false,
         /* map: texture, */
         alphaTest: 0.1,
         blending: THREE.AdditiveBlending,
     });
     const points = new THREE.Points(geometry, material);
+    galaxy_star_points = points
     scene.add(points);
     
     loadImages(clouds).then(images => {
@@ -4244,17 +4279,131 @@ function create_galaxy(){
         // CanvasからThree.js用のテクスチャに
         const texture = new THREE.CanvasTexture(canvas);
         //document.body.appendChild(canvas);
-        const cloudmaterial = new THREE.MeshBasicMaterial({
+        const cloudmaterial = new THREE.SpriteMaterial({
             map: texture,
             transparent: true,
             depthWrite: false,
-            opacity:0.9,
+            opacity:0.8,
+            color:0x11ffff
         });
-        const cloudsprite = new THREE.Sprite(cloudmaterial);
+        cloudsprite = new THREE.Sprite(cloudmaterial);
         cloudsprite.scale.set(1000, 1000, 1);
-        cloudsprite.position.set(350, 350, 0);
+        cloudsprite.position.set(800, 800, 0);
         scene.add(cloudsprite);
         cloudsprite.lookAt(0,0,0);
     });
 }
-create_galaxy();
+
+
+const total_addition_angle = -Math.PI*2;
+const GalaxyRotate_duration = 5000;
+let GalaxyRotateStart_time = undefined;
+let GalaxyRotating = false;
+let rotate_progress = 0;
+function rotate_galaxyStars(){
+    let addition_angle = 0;
+
+    if(GalaxyRotating){
+        if(GalaxyRotateStart_time == undefined){
+            GalaxyRotateStart_time = performance.now();
+        }
+        const now = performance.now();
+        const galaxystar_positions = galazy_star_geometory.attributes.position.array;
+        const past_time_ms = now - GalaxyRotateStart_time;
+        rotate_progress = past_time_ms/GalaxyRotate_duration;
+        if(rotate_progress>=1){
+            rotate_progress = 0;
+            GalaxyRotateStart_time = undefined;
+            GalaxyRotating = false;
+            return
+        }
+        const eased_progress = easeInOutCubic(rotate_progress);
+        addition_angle = total_addition_angle * eased_progress + current_galaxy_rotate;
+        let index = 0;
+        arms_data.forEach(arms=>{
+            let armx = arms[0];
+            let army = arms[1];
+            let armz = arms[2];
+            let center = arms[3];
+            let radius = Math.sqrt(army**2 + armz**2);
+            const angleRad = Math.atan2(army,armz);
+            const updated_angleRad = angleRad + addition_angle;
+            
+            army = radius*Math.sin(updated_angleRad);
+            armz = radius*Math.cos(updated_angleRad);
+            const rotatedX = army * Math.cos(zRotation);
+            const rotatedY = army * Math.sin(zRotation);
+
+            armx = rotatedX + center.x + armx;
+            army = rotatedY + center.y;
+            armz = armz + center.z;
+            center.x -= 2;
+            center.y -= 2;
+            galaxystar_positions[index*3] = armx;
+            galaxystar_positions[1+index*3] = army;
+            galaxystar_positions[2+index*3] = armz;
+            index++;
+        })
+        if (cloudsprite && cloudsprite.material) {
+            cloudsprite.material.rotation = -addition_angle;
+        }
+
+        galazy_star_geometory.attributes.position.needsUpdate = true;
+    }else{
+        if(GalaxyRotateStart_time!==undefined){
+            current_galaxy_rotate = addition_angle;
+        }
+    }
+}
+let always_GalaxyRotating = false;
+let rotation_pase = 5;
+let addition_angle = 0;
+function always_rotate_galaxyStars(){
+
+    if(always_GalaxyRotating){
+        if(GalaxyRotateStart_time == undefined){
+            GalaxyRotateStart_time = performance.now();
+        }
+        
+        const now = performance.now();
+        const galaxystar_positions = galazy_star_geometory.attributes.position.array;
+        const past_time_ms = now - GalaxyRotateStart_time;
+        const progress = (past_time_ms%(GalaxyRotate_duration*rotation_pase))/(GalaxyRotate_duration*rotation_pase);
+        addition_angle = total_addition_angle * progress;
+        let index = 0;
+        arms_data.forEach(arms=>{
+            let armx = arms[0];
+            let army = arms[1];
+            let armz = arms[2];
+            let center = arms[3];
+            let radius = Math.sqrt(army**2 + armz**2);
+            const angleRad = Math.atan2(army,armz);
+            const updated_angleRad = angleRad + addition_angle + current_galaxy_rotate;
+            
+            army = radius*Math.sin(updated_angleRad);
+            armz = radius*Math.cos(updated_angleRad);
+            const rotatedX = army * Math.cos(zRotation);
+            const rotatedY = army * Math.sin(zRotation);
+
+            armx = rotatedX + center.x + armx;
+            army = rotatedY + center.y;
+            armz = armz + center.z;
+            galaxystar_positions[index*3] = armx;
+            galaxystar_positions[1+index*3] = army;
+            galaxystar_positions[2+index*3] = armz;
+            index++;
+        })
+        if (cloudsprite && cloudsprite.material) {
+            cloudsprite.material.rotation = -addition_angle;
+        }
+        galazy_star_geometory.attributes.position.needsUpdate = true;
+    }else{
+        if(GalaxyRotateStart_time!==undefined){
+            current_galaxy_rotate = addition_angle;
+        }
+        
+    }
+}
+function transform2MVimg(music_num){//星をサムネの画像に変形させる関数
+
+}
