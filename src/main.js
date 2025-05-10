@@ -26,7 +26,7 @@ renderer.autoClear = false;
 
 // シーンを作成
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x051014);
+scene.background = new THREE.Color(0x101530);
 // カメラを作成
 const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 5000);
 // カメラの初期座標を設定（X座標:0, Y座標:0, Z座標:0）
@@ -3052,7 +3052,7 @@ player.addListener({
         prev = null;
         last_beat = null;
         make_tanzaku_and_place();
-        current_wishList = wishList;
+        current_wishList = wishList.concat();;
         InPreparationSong = false;
         num_found_tanzaku = 0;
         found_tanzaku.innerText = num_found_tanzaku;
@@ -3901,7 +3901,15 @@ const wishList = [
     "好きな漫画の最新巻が早く読めますように",
     "尊敬されるような人になれますように",
     "自分の顔がお札に載りますように",
-    "好きなことを通して世界中と繋がれますように"
+    "好きなことを通して世界中と繋がれますように",
+    "カニ食べたい",
+    "しゃっくりの終わりを見届けたい",
+    "義務の代わりに権利が欲しい",
+    "手ごろな油田が欲しい",
+    "スシのシャリをうまく握れるようになりたい",
+    "指からお菓子を発射したい",
+    "大学側から来てほしい",
+    "見たフォント名がすぐわかる能力が欲しい",
 ]
 const fonts = [
     "nikokaku",
@@ -3943,6 +3951,7 @@ function get_tanzaku_animation(tanzaku_mesh,imgURL){
             const wish_idx = Math.floor(Math.random()*current_wishList.length);
             const current_wish = current_wishList[wish_idx];
             current_wishList.splice(wish_idx,1);
+            console.log(current_wishList.length,wishList.length);
             tanzaku_txt.innerText = current_wish;
             tanzaku_txt.style.fontFamily = fonts[Math.floor(Math.random()*fonts.length)];
             img_parent_ele.appendChild(tanzaku_txt);
@@ -4128,3 +4137,124 @@ const go_observe_button = document.getElementById("go_observe");
 go_observe_button.addEventListener("click",()=>{
     introduce_ele.style.display = "none";
 })
+
+function random_spread(current,top=60,count=500){
+    return  -((top-20)*4/count**2)*((current - count/2)**2)+top;//みんな大好き二次関数上に凸の二次関数だね
+}
+import cloud1 from "./imgs/cloud1.png";
+import cloud2 from "./imgs/cloud2.png";
+import cloud3 from "./imgs/cloud3.png";
+import cloud4 from "./imgs/cloud4.png";
+import cloud5 from "./imgs/cloud5.png";
+const clouds = [cloud1,cloud2,cloud3,cloud4,cloud5];
+
+//ありがとうchatgpt(n度目)
+function loadImages(srcArray) {
+    return Promise.all(
+        srcArray.map(src => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+        })
+    );
+}
+
+function create_galaxy(){
+    const count = 1000;
+    const r_base = 400;
+    const radiusStep = r_base/count;
+    const angleStep = Math.PI*2/count*0.8;
+    let positions = [];
+    const arms = 5;
+    const geometry = new THREE.BufferGeometry();
+    const center = new THREE.Vector3(400, 400, 0);
+    const zRotation = -Math.PI / 4;
+    const color_list = [0xbb99bb,0xbb9999,0x99bbbb,0xbb99aa,0x99bbdd];
+    const color = new THREE.Color();
+    let colors = [];
+    for (let j = 0; j < arms; j++) {
+        const armOffset = (Math.PI * 2 / arms) * j;
+        
+        for (let i = 0; i < count; i++) {
+            const r = i * radiusStep;
+            const theta = i * angleStep + armOffset;
+            const spread_range = random_spread(i,60,count);
+            let armz = r * Math.cos(theta) + (Math.random()-0.5)*spread_range;
+            let army = r * Math.sin(theta) + (Math.random()-0.5)*spread_range;
+            let armx = (Math.random() - 0.5) * spread_range; // 少し厚みを持たせる
+            const rotatedX = army * Math.cos(zRotation);
+            const rotatedY = army * Math.sin(zRotation)
+
+            armx = rotatedX + center.x + armx;
+            army = rotatedY + center.y;
+            armz = armz + center.z;
+
+            positions.push(armx, army, armz);
+            if(i>count*0.6){
+                color.setHex(0x9999bb)
+                
+            }else if(i<=count*0.6 && i>=count*0.07){
+                color.setHex(color_list[Math.floor(Math.random()*color_list.length)]);
+            }else{
+                color.setHex(0xffffff);
+            }
+            colors.push(color.r,color.g,color.b);
+        }
+    }
+    console.log(colors);
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+    const material = new THREE.PointsMaterial({
+        size: 6,
+        vertexColors: true,
+        /* color: 0xbb99aa, */
+        transparent: true,
+        opacity: 10,
+        depthWrite: false,
+        /* map: texture, */
+        alphaTest: 0.1,
+        blending: THREE.AdditiveBlending,
+    });
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+    
+    loadImages(clouds).then(images => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 800;
+        const ctx = canvas.getContext('2d');
+
+        let weights = [];
+        for(let i = 0;i<images.length-1;i++){
+            let total = weights.reduce((sum, element) => sum + element, 0);
+            weights.push(Math.random() * (1-total));
+        }
+        let total = weights.reduce((sum, element) => sum + element, 0);
+        weights.push(1-total);
+
+        images.forEach((img, i) => {
+            //console.log(weights[i]);
+            ctx.globalAlpha = weights[i];
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        });
+
+        // CanvasからThree.js用のテクスチャに
+        const texture = new THREE.CanvasTexture(canvas);
+        //document.body.appendChild(canvas);
+        const cloudmaterial = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            depthWrite: false,
+            opacity:0.9,
+        });
+        const cloudsprite = new THREE.Sprite(cloudmaterial);
+        cloudsprite.scale.set(1000, 1000, 1);
+        cloudsprite.position.set(350, 350, 0);
+        scene.add(cloudsprite);
+        cloudsprite.lookAt(0,0,0);
+    });
+}
+create_galaxy();
