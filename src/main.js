@@ -2725,6 +2725,7 @@ function animate() {
     update_back_tanzaku();
     rotate_galaxyStars();
     always_rotate_galaxyStars();
+    transform_stars();
 }
 const tanzaku_space = document.getElementById("tanzaku_space_wrapper");
 const start_observe_button = document.getElementById("start_observe");
@@ -3079,7 +3080,7 @@ player.addListener({
         prev = null;
         last_beat = null;
         
-        current_wishList = wishList.concat();;
+        current_wishList = wishList.concat();
         InPreparationSong = false;
         num_found_tanzaku = 0;
         found_tanzaku.innerText = num_found_tanzaku;
@@ -4293,7 +4294,7 @@ function create_galaxy(){
         cloudsprite.lookAt(0,0,0);
     });
 }
-
+//create_galaxy();
 
 const total_addition_angle = -Math.PI*2;
 const GalaxyRotate_duration = 5000;
@@ -4404,6 +4405,127 @@ function always_rotate_galaxyStars(){
         
     }
 }
-function transform2MVimg(music_num){//星をサムネの画像に変形させる関数
 
+const thumbnails = {
+    1:"https://i.ytimg.com/vi/4thcMKIMBYE/hqdefault.jpg",
+    2:"https://i.ytimg.com/vi/H0JMACH0hy4/sddefault.jpg",
+    5:"https://i.ytimg.com/vi/TjiNmDf9p0Y/sddefault.jpg"
 }
+
+let move_target = [];
+function prepareMVimg(music_num){//星をサムネの画像に変形させる関数
+    
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    console.log(thumbnails[music_num]);
+    img.onload = () => {
+        const scaledWidth = 160;
+        const scaledHeight = 90;
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext("2d");
+
+        const sourceWidth = img.width;
+        const sourceHeight = img.height;
+
+        // 上下をカットしたい → 中央部をトリミング
+        const cropTop = 45; // 上からカット
+        const cropBottom = 45; // 下からカット
+        const cropHeight = sourceHeight - cropTop - cropBottom;
+
+        // 出力サイズ
+        const targetWidth = 160;
+        const targetHeight = 90;
+
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+
+        // drawImage の第2引数以降でトリミング指定
+        ctx.drawImage(
+            img,
+            0, cropTop, sourceWidth, cropHeight, // ソースのトリミング範囲
+            0, 0, targetWidth, targetHeight      // 出力先キャンバスの描画範囲
+        );
+        
+        const imageData = ctx.getImageData(0, 0, scaledWidth, scaledHeight);
+        const pixels = imageData.data;
+        
+        for (let y = 0; y < scaledHeight; y++) {
+            for (let x = 0; x < scaledWidth; x++) {
+                const i = (y * scaledWidth + x) * 4;
+                const r = pixels[i];
+                const g = pixels[i + 1];
+                const b = pixels[i + 2];
+                //console.log(`(${x}, ${y}) = rgb(${r}, ${g}, ${b})`);
+                move_target.push({"z":(scaledWidth/2-x)*20,"y":(scaledHeight-y)*20,"color":new THREE.Color(r,g,b)});
+                
+            }
+        }
+        GalaxyTransforming = true;
+
+    };
+    img.src = thumbnails[music_num];
+}
+const GalaxyTransform_duration = 5000;
+let GalaxyTransformStart_time = undefined;
+let GalaxyTransforming = false;
+let Transform_progress = 0;
+let start_pos;
+let start_color;
+function transform_stars(){
+    if(GalaxyTransforming){
+        if(GalaxyTransformStart_time === undefined){
+            GalaxyTransformStart_time = performance.now();
+            start_pos = Array.from(galazy_star_geometory.attributes.position.array);
+            start_color = Array.from(galazy_star_geometory.attributes.color.array)
+        }
+        const now = performance.now();
+        const galaxystar_positions = galazy_star_geometory.attributes.position.array;
+        const galaxystar_colors = galazy_star_geometory.attributes.color.array;
+        const past_time_ms = now - GalaxyTransformStart_time;
+        Transform_progress = past_time_ms/GalaxyTransform_duration;
+        if(Transform_progress>=1){
+            Transform_progress = 0;
+            GalaxyTransformStart_time = undefined;
+            GalaxyTransforming = false;
+            return
+        }
+        const eased_progress = easeInOutCubic(Transform_progress);
+        let index = 0;
+        arms_data.forEach(arms=>{
+            const target = move_target[Math.floor(index/5)];
+            const start = new THREE.Vector3(
+                start_pos[index*3],
+                start_pos[index*3+1],
+                start_pos[index*3+2]
+            ); 
+            const end  = new THREE.Vector3(
+                3000,target.y,target.z
+            );
+            const current = new THREE.Vector3().lerpVectors(start, end, eased_progress);
+
+            galaxystar_positions[index*3]   = current.x;
+            galaxystar_positions[index*3+1] = current.y;
+            galaxystar_positions[index*3+2] = current.z;
+
+            const r_start = start_color[index*3];
+            const g_start = start_color[index*3+1];
+            const b_start = start_color[index*3+2];
+
+            const r_end = target.color.r;
+            const g_end = target.color.g;
+            const b_end = target.color.b;
+
+            galaxystar_colors[index*3]   = r_start * (1 - eased_progress) + r_end * eased_progress;
+            galaxystar_colors[index*3+1] = g_start * (1 - eased_progress) + g_end * eased_progress;
+            galaxystar_colors[index*3+2] = b_start * (1 - eased_progress) + b_end * eased_progress;
+
+            index++;
+        })
+        galazy_star_geometory.attributes.position.needsUpdate = true;
+        galazy_star_geometory.attributes.color.needsUpdate = true;
+    }
+}
+
+
+//prepareMVimg(1);
