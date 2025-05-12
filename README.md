@@ -15,5 +15,29 @@
       
 * 歳差運動の考慮
 
-　上記の操作で固有運動を考慮することができたので、今度はそれを使って歳差運動による恒星の移動を計算します。こちらはastronomia(<https://github.com/commenthol/astronomia/tree/master>)を用いて計算しています。
-* 
+　上記の操作で固有運動を考慮することができたので、今度はそれを使って歳差運動による恒星の移動を計算します。こちらは[astronomia](https://github.com/commenthol/astronomia)を用いて計算しています。
+
+* 観測地域、観測時刻の考慮
+
+ これで地球から見た星の動きが考慮された恒星の赤緯赤経が取得できたため、観測地点の緯度経度、観測時刻を考慮して、観測地点からの見え方を計算します。
+
+## 使用ライブラリ
+
+* astronomia（MIT License）  
+  Copyright (c) 2013 Sonia Keys  
+  Copyright (c) 2016 Commenthol  
+  [GitHub リポジトリ]https://github.com/commenthol/astronomia
+
+## 使用データ
+
+### Stellarium Skycultures - Western
+* データ元: [stellarium/stellarium-skycultures](https://github.com/Stellarium/stellarium-skycultures)
+* 該当ファイル: `western/index.json`(本プロジェクトでは`/src/index.json`に使用)
+* 著者: Stellarium's team
+
+  **ライセンス情報**  
+- `stellarium/stellarium-skycultures/western/index.json`（元データ）: [Creative Commons Attribution-ShareAlike (CC BY-SA)](https://creativecommons.org/licenses/by-sa/4.0/deed.ja)  
+- `/src/index.json`（改変後のデータ）: 同上（CC BY-SA）
+
+  **変更点**
+- 元データの 583 行目および 598 行目に記載されていた `"thin"` を削除しました。
