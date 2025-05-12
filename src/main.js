@@ -2664,10 +2664,11 @@ function animate() {
             GalaxyRotating = true;
             changed_rotate_mode = true;
         }else if(!changed_rotate_mode && !(music_num == 0 || music_num == 3 || music_num == 4)){
-
+            prepareMVimg(music_num);
+            always_GalaxyRotating = false;
             changed_rotate_mode = true;
         }
-        if((rotate_progress>0.8 && (music_num == 0 || music_num == 3 || music_num == 4)) || false){//ここにサムネの演出を入れる
+        if((rotate_progress>0.8 && (music_num == 0 || music_num == 3 || music_num == 4))){//ここにサムネの演出を入れる
             InPreparationSong=undefined;
             
             //galaxy_img.style.display = "none";
@@ -2699,10 +2700,54 @@ function animate() {
                     scene.remove(galaxy_star_points);
                     hide_plane.visible = false;
                     scene.remove(hide_plane);
-                    galaxy_img.style.transform = `scale(${1}) translateX(-50%) translateY(-50%)`;
-                    galaxy_img.style.display = "none";
-                    galaxy_img.classList.remove("size_animation");
-                    galaxy_img.classList.remove("fade_out");
+                    in_transition_telescope = false;
+                    start_observe_button.style.pointerEvents = "auto";
+                    start_observe_button.style.opacity = 1;
+                    start_observe_button.style.display = "flex";
+                    make_tanzaku_and_place();
+                    player.timer.seek(0);
+                    
+                    player.requestStop();
+                    update_gauge(0);
+                    observe_gauge_ele.style.display = "block";
+                    update_gauge(0);
+                    loading.style.display = "none";
+                    tanzaku_space.style.display = "block";
+                    name_galaxy.innerText = "観測中の銀河："+player.data.song.name;
+                    introduce_ele.style.display = "block";
+                }
+            })
+        }else if(Transform_progress>=0.9 && !(music_num == 0 || music_num == 3 || music_num == 4)){
+            console.log("Transform Done")
+            InPreparationSong=undefined;
+            let tl = gsap.timeline();
+            tl.to(camera,{
+                duration:2,
+                onComplete:()=>{
+                    console.log("wait finished");
+                    GalaxyTransformStart_time = undefined;
+                    GalaxyTransforming = true;
+                    Transform_progress = 0;
+                    move_center = true;
+                }
+            },0);
+            tl.to(camera,{
+                duration:4.5,
+                onComplete:()=>{
+                    star_points.visible = true;
+                    starDistance = 200;
+                    scene.add(hide_plane);
+                }
+            })
+            tl.to(hide_plane.material,{
+                duration: 1,
+                
+                opacity: 0,
+                onComplete: () => {
+                    scene.remove(cloudsprite);
+                    scene.remove(galaxy_star_points);
+                    hide_plane.visible = false;
+                    scene.remove(hide_plane);
                     in_transition_telescope = false;
                     start_observe_button.style.pointerEvents = "auto";
                     start_observe_button.style.opacity = 1;
@@ -3555,7 +3600,7 @@ function sphericalToCartesian(radius, latitude, longitude) {
     const z = radius * Math.cos(latitude) * Math.sin(longitude);
     return new THREE.Vector3(x, y, z);
 }
-const line_colors = [0x7dbbe6,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc]
+const line_colors = [0x7dbbe6,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc];
 let existingSprites = [];
 let starlines = [];
 function placeTextSprite(text,bv,bright,size) {
@@ -3573,7 +3618,8 @@ function placeTextSprite(text,bv,bright,size) {
     const baseLat = Math.asin(dir.y)/Math.PI*180;
     const baseLng = Math.atan2(dir.z, dir.x)/Math.PI*180;
     let placed = false;
-    
+    let final_lat;
+    let final_lng;
     let corrected_pos;
     //corrected_pos = basePos;
     for (let i = 0; i < 200; i++) {
@@ -3587,6 +3633,8 @@ function placeTextSprite(text,bv,bright,size) {
 
             const lat = (baseLat + latOffset)*Math.PI/180;
             const lng = (baseLng + lngOffset)*Math.PI/180;
+            final_lat = lat;
+            final_lng = lng;
             
             corrected_pos = sphericalToCartesian(40,lat,lng);
             //corrected_pos = basePos.clone().add(offset);
@@ -3612,6 +3660,8 @@ function placeTextSprite(text,bv,bright,size) {
         }
     }
     if (!placed) {
+        final_lat = baseLat;
+        final_lng = baseLng;
         sprite.position.copy(basePos);
         existingSprites.push({ sprite:sprite, radius:radius });
         scene.add(sprite);
@@ -3635,7 +3685,7 @@ function placeTextSprite(text,bv,bright,size) {
     },0);
     //短冊が近くにあったら処理
     const pos = sprite.position;
-    triggerExplosion(pos);
+    triggerExplosion(pos,final_lat,final_lng);
     tanzaku_list.forEach(tanzaku=>{
         const dis = pos.distanceTo(tanzaku.mesh.position);
         //console.log(dis);
@@ -3677,25 +3727,66 @@ let particle_list = [];
 
 const star_texture = textureLoader.load(back_star_img);
 class ParticleExplosion  {
-    constructor(position, scene, count = 10, lifetime = 0.5) {
+    constructor(position, scene, num_found_tanzaku,lat,lng,count = 20, lifetime = 0.5) {
         this.scene = scene;
         this.lifetime = lifetime;
         this.elapsed = 0;
-
+        this.count = count;
+        this.clear_border = 2;
+        this.num_found_tanzaku = num_found_tanzaku;
+        if(num_found_tanzaku>=this.clear_border){
+            this.color = line_colors[Math.floor(Math.random()*line_colors.length)];
+            this.count = 60;
+            this.lifetime = 0.8;
+            const normal = new THREE.Vector3(position.x, position.y, position.z).normalize();//(0,0,0)から目標座標への単位ベクトル
+            const temp = new THREE.Vector3(0, 1, 0);
+            if (Math.abs(normal.dot(temp)) > 0.99) {//内積が1だと平行だよね(単位ベクトルどうしの場合)
+                temp.set(1, 0, 0);  // ほぼ平行な場合は別の軸を使う
+            }
+            this.axis1 = new THREE.Vector3().crossVectors(normal, temp).normalize();
+            this.axis2 = new THREE.Vector3().crossVectors(normal, this.axis1).normalize();
+        }else{
+            this.color = 0xffffaa;
+        }
         this.geometry = new THREE.BufferGeometry();
-        this.positions = new Float32Array(count * 3);
+        this.positions = new Float32Array(this.count  * 3);
         this.velocities = [];
-
-        for (let i = 0; i < count; i++) {
+        
+        for (let i = 0; i < this.count ; i++) {
             this.positions[i * 3] = position.x;
             this.positions[i * 3 + 1] = position.y;
             this.positions[i * 3 + 2] = position.z;
-            
-            const dir = new THREE.Vector3(
-                (Math.random() - 0.5)*0.05,
-                (Math.random() - 0.5)*0.05,
-                (Math.random() - 0.5)*0.05
-            );
+            let dir;
+            if(num_found_tanzaku<this.clear_border){
+                dir = new THREE.Vector3(
+                    (Math.random() - 0.5)*0.05,
+                    (Math.random() - 0.5)*0.05,
+                    (Math.random() - 0.5)*0.05
+                );
+            }else{
+                
+                if(i<20){
+                    const angle = (Math.PI * 2 / 20) * i;
+                    const direction = new THREE.Vector3()
+                        .addScaledVector(this.axis1, Math.cos(angle))
+                        .addScaledVector(this.axis2, Math.sin(angle));
+                    dir = direction.clone().multiplyScalar(0.03);
+                }else if(20<=i&&i<40){
+                    const angle = (Math.PI * 2 / 20) * (i-20);
+                    const direction = new THREE.Vector3()
+                        .addScaledVector(this.axis1, Math.cos(angle))
+                        .addScaledVector(this.axis2, Math.sin(angle));
+                    dir = direction.clone().multiplyScalar(0.06);
+                }else{
+                    const angle = (Math.PI * 2 / 20) * (i-40);
+                    const direction = new THREE.Vector3()
+                        .addScaledVector(this.axis1, Math.cos(angle))
+                        .addScaledVector(this.axis2, Math.sin(angle));
+                    dir = direction.clone().multiplyScalar(0.045);
+                }
+            }
+
+
             this.velocities.push(dir);
             }
         this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
@@ -3703,9 +3794,9 @@ class ParticleExplosion  {
         this.material = new THREE.PointsMaterial({
             map:star_texture,
             size: 2,
-            color: 0xffffaa,
+            color: this.color,
             transparent: true,
-            opacity: 1,
+            opacity: 0.5,
             depthWrite: false,
             alphaTest: 0.1
         });
@@ -3721,8 +3812,11 @@ class ParticleExplosion  {
           this.positions[i * 3 + 1] += this.velocities[i].y;
           this.positions[i * 3 + 2] += this.velocities[i].z;
         }
-    
-        this.material.opacity = Math.max(4 - 4*this.elapsed / this.lifetime, 0);
+        if(this.num_found_tanzaku<this.clear_border){
+            this.material.opacity = Math.max(3 - 3*this.elapsed / this.lifetime, 0);
+        }else{
+            this.material.opacity = Math.min(8*this.elapsed / this.lifetime, 8);
+        }
         this.geometry.attributes.position.needsUpdate = true;
     }
     
@@ -3739,8 +3833,8 @@ class ParticleExplosion  {
 }
 const explosions = [];
 
-function triggerExplosion(pos) {
-    const explosion = new ParticleExplosion(pos, scene);
+function triggerExplosion(pos,lng,lat) {
+    const explosion = new ParticleExplosion(pos, scene,num_found_tanzaku,lng,lat);
     explosions.push(explosion);
 }
 //triggerExplosion(new THREE.Vector3(0,0,0));
@@ -3938,11 +4032,14 @@ const wishList = [
     "指からお菓子を発射したい",
     "大学側から来てほしい",
     "見たフォント名がすぐわかる能力が欲しい",
+    "ママがこわくなくなりますように",
+    "七夕とクリスマスを混同してる人がいなくなりますように"
 ]
 const fonts = [
-    "nikokaku",
+    //"nikokaku",
     "Xim-Sans",
-    "れいこ"
+    "れいこ",
+    "MyFont"
 ]
 const found_tanzaku = document.getElementById("found_tanzaku");
 function get_tanzaku_animation(tanzaku_mesh,imgURL){
@@ -4142,13 +4239,13 @@ agree_return_galaxy_button.addEventListener("click",()=>{
             take_picture_button.style.display = "none";
             return_galaxy_button.style.display = "none";
             show_time_and_location_ele.style.display = "block";
-            //【謎】なんで俺はわざわざparentElementを操作している部分があるのか。何のためのupdate_back_tanzakuだ。
             change_constellation_name_button.parentElement.style.display = "block";
             change_location_button.parentElement.style.display = "block";
             change_time_button.parentElement.style.display = "block";
             name_galaxy.innerText = "観測中の銀河：天の川銀河";
             
             inmusicGalaxy = false;
+            move_center = false;
             update_back_tanzaku();
             
             
@@ -4167,7 +4264,7 @@ go_observe_button.addEventListener("click",()=>{
 })
 
 function random_spread(current,top=60,count=500){
-    return  -((top-20)*4/count**2)*((current - count/2)**2)+top;//みんな大好き二次関数上に凸の二次関数だね
+    return  -((top-10)*4/count**2)*((current - count/2)**2)+top;//みんな大好き二次関数上に凸の二次関数だね
 }
 import cloud1 from "./imgs/cloud1.png";
 import cloud2 from "./imgs/cloud2.png";
@@ -4206,7 +4303,7 @@ function create_galaxy(){
     const geometry = new THREE.BufferGeometry();
     const center = new THREE.Vector3(1200, 1200, 0);
     
-    const color_list = [0xbb99bb,0xbb9999,0x99bbbb,0xbb99aa,0x99bbdd];
+    const color_list = [0xbb99bb,0xbb9999,0x99bbbb,0xbb99aa,0x99bbdd,0xff6688,0x66ff88,0xff9966];
     const color = new THREE.Color();
     let colors = [];
     for (let j = 0; j < arms; j++) {
@@ -4227,13 +4324,13 @@ function create_galaxy(){
             armz = armz + center.z;
 
             positions.push(armx, army, armz);
-            if(i>count*0.6){
+            if(i>count*0.5){
                 color.setHex(0x9999bb);
                 
-            }else if(i<=count*0.6 && i>=count*0.07){
+            }else if(i<=count*0.5 && i>=count*0.05){
                 color.setHex(color_list[Math.floor(Math.random()*color_list.length)]);
             }else{
-                color.setHex(0xffffff);
+                color.setHex(0xaaaaaa);
             }
             colors.push(color.r,color.g,color.b);
         }
@@ -4247,10 +4344,10 @@ function create_galaxy(){
         vertexColors: true,
         /* color: 0xbb99aa, */
         transparent: true,
-        opacity: 5,
+        opacity: 3,
         depthWrite: false,
         /* map: texture, */
-        alphaTest: 0.1,
+        alphaTest: 0.001,
         blending: THREE.AdditiveBlending,
     });
     const points = new THREE.Points(geometry, material);
@@ -4284,7 +4381,7 @@ function create_galaxy(){
             map: texture,
             transparent: true,
             depthWrite: false,
-            opacity:0.8,
+            opacity:0.5,
             color:0x11ffff
         });
         cloudsprite = new THREE.Sprite(cloudmaterial);
@@ -4414,13 +4511,15 @@ const thumbnails = {
 
 let move_target = [];
 function prepareMVimg(music_num){//星をサムネの画像に変形させる関数
-    
+    move_target = [];
     const img = new Image();
     img.crossOrigin = 'Anonymous';
-    console.log(thumbnails[music_num]);
+    //console.log(thumbnails[music_num]);
+    img.src = thumbnails[music_num];
     img.onload = () => {
-        const scaledWidth = 160;
-        const scaledHeight = 90;
+        const scale = 1;
+        const scaledWidth = 160*scale;
+        const scaledHeight = 90*scale;
 
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext("2d");
@@ -4434,8 +4533,8 @@ function prepareMVimg(music_num){//星をサムネの画像に変形させる関
         const cropHeight = sourceHeight - cropTop - cropBottom;
 
         // 出力サイズ
-        const targetWidth = 160;
-        const targetHeight = 90;
+        const targetWidth = 160*scale;
+        const targetHeight = 90*scale;
 
         canvas.width = targetWidth;
         canvas.height = targetHeight;
@@ -4457,14 +4556,21 @@ function prepareMVimg(music_num){//星をサムネの画像に変形させる関
                 const g = pixels[i + 1];
                 const b = pixels[i + 2];
                 //console.log(`(${x}, ${y}) = rgb(${r}, ${g}, ${b})`);
-                move_target.push({"z":(scaledWidth/2-x)*20,"y":(scaledHeight-y)*20,"color":new THREE.Color(r,g,b)});
-                
+                const center = new THREE.Vector3(1500, 1500, 0);
+                for(let k = 0;k<5;k++){
+                    let Adjusted_z = -((scaledWidth/2-x)*5+k);
+                    let Adjusted_y = -((scaledHeight/2-y)*5+k);
+                    
+                    const rotatedX = Adjusted_y * Math.cos(-Math.PI / 4);
+                    const rotatedY = Adjusted_y * Math.sin(-Math.PI / 4);
+                    move_target.push({"z":Adjusted_z,"y":rotatedY,"x":rotatedX,"color":new THREE.Color(r/255,g/255,b/255),"center":center});
+                }
             }
         }
         GalaxyTransforming = true;
 
     };
-    img.src = thumbnails[music_num];
+    
 }
 const GalaxyTransform_duration = 5000;
 let GalaxyTransformStart_time = undefined;
@@ -4472,12 +4578,18 @@ let GalaxyTransforming = false;
 let Transform_progress = 0;
 let start_pos;
 let start_color;
+let start_opacity;
+let start_opacity_cloud;
+let move_center = false;
+let center_goal = new THREE.Vector3(5,5,0);
 function transform_stars(){
     if(GalaxyTransforming){
         if(GalaxyTransformStart_time === undefined){
             GalaxyTransformStart_time = performance.now();
             start_pos = Array.from(galazy_star_geometory.attributes.position.array);
-            start_color = Array.from(galazy_star_geometory.attributes.color.array)
+            start_color = Array.from(galazy_star_geometory.attributes.color.array);
+            start_opacity = galaxy_star_points.material.opacity;
+            start_opacity_cloud = cloudsprite.material.opacity;
         }
         const now = performance.now();
         const galaxystar_positions = galazy_star_geometory.attributes.position.array;
@@ -4488,19 +4600,28 @@ function transform_stars(){
             Transform_progress = 0;
             GalaxyTransformStart_time = undefined;
             GalaxyTransforming = false;
+            scene.remove(cloudsprite);
             return
         }
         const eased_progress = easeInOutCubic(Transform_progress);
         let index = 0;
         arms_data.forEach(arms=>{
-            const target = move_target[Math.floor(index/5)];
+            //const target = move_target[Math.floor(index/5)];
+            const target = move_target[index];
+            let center = target.center;
+            if(move_center){
+                center = new THREE.Vector3().lerpVectors(center, center_goal, eased_progress);
+                galaxy_star_points.material.opacity = start_opacity * (1 - eased_progress) + 0.2 * eased_progress;
+            }else{
+                galaxy_star_points.material.opacity = start_opacity * (1 - eased_progress) + 0.015 * eased_progress;
+            }
             const start = new THREE.Vector3(
                 start_pos[index*3],
                 start_pos[index*3+1],
                 start_pos[index*3+2]
-            ); 
+            );
             const end  = new THREE.Vector3(
-                3000,target.y,target.z
+                target.x+center.x,target.y+center.y,target.z+center.z
             );
             const current = new THREE.Vector3().lerpVectors(start, end, eased_progress);
 
@@ -4512,20 +4633,24 @@ function transform_stars(){
             const g_start = start_color[index*3+1];
             const b_start = start_color[index*3+2];
 
-            const r_end = target.color.r;
-            const g_end = target.color.g;
-            const b_end = target.color.b;
+            const r_end = target.color.r*0.14*255;
+            const g_end = target.color.g*0.14*255;
+            const b_end = target.color.b*0.14*255;
 
             galaxystar_colors[index*3]   = r_start * (1 - eased_progress) + r_end * eased_progress;
             galaxystar_colors[index*3+1] = g_start * (1 - eased_progress) + g_end * eased_progress;
             galaxystar_colors[index*3+2] = b_start * (1 - eased_progress) + b_end * eased_progress;
 
+            
+            cloudsprite.material.opacity = start_opacity_cloud * (1 - eased_progress) + 0 * eased_progress;;
+
             index++;
         })
         galazy_star_geometory.attributes.position.needsUpdate = true;
         galazy_star_geometory.attributes.color.needsUpdate = true;
+        galaxy_star_points.material.needsUpdate = true;
     }
 }
 
-
+//create_galaxy();
 //prepareMVimg(1);
