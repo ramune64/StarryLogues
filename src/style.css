@@ -886,6 +886,10 @@ img.back_milkyway{
         }
     }
 }
+.rotate{
+    display: inline-block;
+    transform: rotate(90deg);
+}
 .slidedown {
     position: relative;
     animation: slideDown 0.5s ease-out forwards;

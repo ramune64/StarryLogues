@@ -3129,6 +3129,7 @@ player.addListener({
         InPreparationSong = false;
         num_found_tanzaku = 0;
         found_tanzaku.innerText = num_found_tanzaku;
+        found_tanzaku.style.color = "white";
         appear_last_word = false;
         updateCount = 0;
     },
@@ -3693,6 +3694,9 @@ function placeTextSprite(text,bv,bright,size) {
             //scene.remove(tanzaku);
             if(!tanzaku.isAnimating){
                 num_found_tanzaku++;
+                if(num_found_tanzaku>=2){
+                    found_tanzaku.style.color = "red";
+                }
                 get_tanzaku_animation(tanzaku.mesh,tanzaku.imgURL);
                 tanzaku.isAnimating = true;
             }
@@ -3737,7 +3741,8 @@ class ParticleExplosion  {
         if(num_found_tanzaku>=this.clear_border){
             this.color = line_colors[Math.floor(Math.random()*line_colors.length)];
             this.count = 60;
-            this.lifetime = 0.8;
+            this.lifetime = 0.5;
+            
             const normal = new THREE.Vector3(position.x, position.y, position.z).normalize();//(0,0,0)から目標座標への単位ベクトル
             const temp = new THREE.Vector3(0, 1, 0);
             if (Math.abs(normal.dot(temp)) > 0.99) {//内積が1だと平行だよね(単位ベクトルどうしの場合)
@@ -3770,19 +3775,19 @@ class ParticleExplosion  {
                     const direction = new THREE.Vector3()
                         .addScaledVector(this.axis1, Math.cos(angle))
                         .addScaledVector(this.axis2, Math.sin(angle));
-                    dir = direction.clone().multiplyScalar(0.03);
+                    dir = direction.clone().multiplyScalar(0.06);
                 }else if(20<=i&&i<40){
                     const angle = (Math.PI * 2 / 20) * (i-20);
                     const direction = new THREE.Vector3()
                         .addScaledVector(this.axis1, Math.cos(angle))
                         .addScaledVector(this.axis2, Math.sin(angle));
-                    dir = direction.clone().multiplyScalar(0.06);
+                    dir = direction.clone().multiplyScalar(0.12);
                 }else{
                     const angle = (Math.PI * 2 / 20) * (i-40);
                     const direction = new THREE.Vector3()
                         .addScaledVector(this.axis1, Math.cos(angle))
                         .addScaledVector(this.axis2, Math.sin(angle));
-                    dir = direction.clone().multiplyScalar(0.045);
+                    dir = direction.clone().multiplyScalar(0.09);
                 }
             }
 
@@ -3815,7 +3820,11 @@ class ParticleExplosion  {
         if(this.num_found_tanzaku<this.clear_border){
             this.material.opacity = Math.max(3 - 3*this.elapsed / this.lifetime, 0);
         }else{
-            this.material.opacity = Math.min(8*this.elapsed / this.lifetime, 8);
+            if(this.elapsed / this.lifetime<0.5){
+                this.material.opacity = Math.min(10*this.elapsed / this.lifetime*2, 10);
+            }else{
+                this.material.opacity = Math.max(5 - 5*this.elapsed / this.lifetime-0.5*2, 0);
+            }
         }
         this.geometry.attributes.position.needsUpdate = true;
     }
@@ -4033,7 +4042,8 @@ const wishList = [
     "大学側から来てほしい",
     "見たフォント名がすぐわかる能力が欲しい",
     "ママがこわくなくなりますように",
-    "七夕とクリスマスを混同してる人がいなくなりますように"
+    "七夕とクリスマスを混同してる人がいなくなりますように",
+    //'「」（）()" = - － " ＝',
 ]
 const fonts = [
     //"nikokaku",
@@ -4077,7 +4087,7 @@ function get_tanzaku_animation(tanzaku_mesh,imgURL){
             const current_wish = current_wishList[wish_idx];
             current_wishList.splice(wish_idx,1);
             console.log(current_wishList.length,wishList.length);
-            tanzaku_txt.innerText = current_wish;
+            tanzaku_txt.innerHTML = current_wish.replace(/=/g, '<span class="rotate">=</span>').replace(/－/g, '<span class="rotate">－</span>').replace(/\)/g, '<span class="rotate">)</span>').replace(/\(/g, '<span class="rotate">(</span>').replace(/-/g, '<span class="rotate">-</span>');
             tanzaku_txt.style.fontFamily = fonts[Math.floor(Math.random()*fonts.length)];
             img_parent_ele.appendChild(tanzaku_txt);
             tanzaku_space.insertBefore(img_parent_ele,tanzaku_space.children[0]);
