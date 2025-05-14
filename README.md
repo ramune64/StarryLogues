@@ -114,24 +114,26 @@
   今回は軸が`this.axis1`と`this.axis2`であるため、以下のようなコードになります。<br>
   ```JS
   // 軸1にcosθ、軸2にsinθの重みをかけて合成する
-  if(i<20){
-      const angle = (Math.PI * 2 / 20) * i;
-      const direction = new THREE.Vector3()
-          .addScaledVector(this.axis1, Math.cos(angle))
-          .addScaledVector(this.axis2, Math.sin(angle));
-      dir = direction.clone().multiplyScalar(0.06);
-  }else if(20<=i&&i<40){
-      const angle = (Math.PI * 2 / 20) * (i-20);
-      const direction = new THREE.Vector3()
-          .addScaledVector(this.axis1, Math.cos(angle))
-          .addScaledVector(this.axis2, Math.sin(angle));
-      dir = direction.clone().multiplyScalar(0.12);
-  }else{
-      const angle = (Math.PI * 2 / 20) * (i-40);
-      const direction = new THREE.Vector3()
-          .addScaledVector(this.axis1, Math.cos(angle))
-          .addScaledVector(this.axis2, Math.sin(angle));
-      dir = direction.clone().multiplyScalar(0.09);
+  for (let i = 0; i < this.count ; i++) {
+      if(i<20){
+          const angle = (Math.PI * 2 / 20) * i;
+          const direction = new THREE.Vector3()
+              .addScaledVector(this.axis1, Math.cos(angle))
+              .addScaledVector(this.axis2, Math.sin(angle));
+          dir = direction.clone().multiplyScalar(0.06);
+      }else if(20<=i&&i<40){
+          const angle = (Math.PI * 2 / 20) * (i-20);
+          const direction = new THREE.Vector3()
+              .addScaledVector(this.axis1, Math.cos(angle))
+              .addScaledVector(this.axis2, Math.sin(angle));
+          dir = direction.clone().multiplyScalar(0.12);
+      }else{
+          const angle = (Math.PI * 2 / 20) * (i-40);
+          const direction = new THREE.Vector3()
+              .addScaledVector(this.axis1, Math.cos(angle))
+              .addScaledVector(this.axis2, Math.sin(angle));
+          dir = direction.clone().multiplyScalar(0.09);
+      }
   }
   ```
 
