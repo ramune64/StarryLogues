@@ -1359,7 +1359,8 @@ change_time_button.addEventListener("click",()=>{
         change_show_time(year,month,day,hour,min);
         star_panel_time.visible = true;
         operate_button_text.innerText = "決定！！";
-        change_time_button.style.fontSize = "30pt";
+        //change_time_button.style.fontSize = "30pt";
+        change_time_button.classList.add("big_font");
         set_now_button.style.display = "block";
         set_now_button.parentElement.style.display = "block";
         return_set_time_button.style.display = "block";
@@ -1402,7 +1403,8 @@ change_time_button.addEventListener("click",()=>{
             move_time(year,month,day,hour,min);
             star_panel_time.visible = false;
             operate_button_text.innerText = "時間を変更する";
-            change_time_button.style.fontSize = "18pt";
+            change_time_button.classList.remove("big_font");
+            //change_time_button.style.fontSize = "18pt";
             set_now_button.style.display = "none";
             set_now_button.parentElement.style.display = "none";
             return_set_time_button.style.display = "none";
@@ -1444,7 +1446,8 @@ set_now_button.addEventListener("click",()=>{
     move_time(year,month,day,hour,min,true);
     star_panel_time.visible = false;
     operate_button_text.innerText = "時間を変更する";
-    change_time_button.style.fontSize = "18pt";
+    //change_time_button.style.fontSize = "18pt";
+    change_time_button.classList.remove("big_font");
     set_now_button.parentElement.style.display = "none";
     return_set_time_button.parentElement.style.display = "none";
     change_location_button.parentElement.style.display = "block";
@@ -1458,7 +1461,8 @@ return_set_time_button.addEventListener("click",()=>{
     star_panel_time.visible = false;
     CT_year=CT_month=CT_day=CT_hour=CT_min = undefined;
     operate_button_text.innerText = "時間を変更する";
-    change_time_button.style.fontSize = "18pt";
+    //change_time_button.style.fontSize = "18pt";
+    change_time_button.classList.remove("big_font");
     set_now_button.style.display = "none";
     set_now_button.parentElement.style.display = "none";
     return_set_time_button.style.display = "none";
@@ -1566,7 +1570,10 @@ const location_list = {
     "インド":[28.61,77.23],
     "オーストラリア":[-35.3081,149.124],
     "ブラジル":[-15.7801,-47.9292],
-    "ケニア":[-1.29233,36.82]
+    "ケニア":[-1.29233,36.82],
+    "北極点":[89.99,0],
+    "南極点":[-89.99,0],
+    "イギリス":[58.1583333,0]
 };
 let latitude = location_list["東京"][0];
 let longitude = location_list["東京"][1];
@@ -2034,8 +2041,9 @@ function getLST(year,month,day,hour,min,sec, longitudeDeg) {
     const D = JD - 2451545.0; // J2000.0 からの経過日数
 
     // GSTの計算(度)
-    let GST = 280.46061837 + 360.98564736629 * D;//280.46...が、J2000.0でのGST(らしい)//360.98564736629
-
+    let GST = 280.46061837 + D*1.00273791*24*15;//280.46...が、J2000.0でのGST(らしい)
+    //let GST = 24 * (0.671262 + 1.00273791 * (JD-2440000.5))*15;//1太陽日＝1.00273791恒星日(理科年表より)
+    //console.log((GST % 360 + 360) % 360);
     // 経度を足してLSTに変換（東経はプラス、西経はマイナス）
     let LST = GST + longitudeDeg;
 
@@ -2199,14 +2207,14 @@ function update_star() {
         //観測点からの高さを求める
         RA_Rad = newRaDec.ra;
         DEC_Rad = newRaDec.dec;
-        const HA_Rad = LST_Rad - RA_Rad
+        const HA_Rad = LST_Rad - RA_Rad;
         const sinAlt = Math.sin(DEC_Rad) * Math.sin(lat_Rad) + Math.cos(DEC_Rad) * Math.cos(lat_Rad) * Math.cos(HA_Rad);
         //sinAlt = Math.max(-1, Math.min(1, sinAlt));
         const Alt_Rad = Math.asin(sinAlt);
         //観測点からの左右の角度を求める
         const cosAz = (Math.sin(DEC_Rad) - Math.sin(Alt_Rad) * Math.sin(lat_Rad)) / (Math.cos(Alt_Rad) * Math.cos(lat_Rad));
         const sinAz = -Math.cos(DEC_Rad) * Math.sin(HA_Rad) / Math.cos(Alt_Rad);
-        let Az_Rad = Math.atan2(sinAz, cosAz);
+        const Az_Rad = Math.atan2(sinAz, cosAz);
         //let Az_Deg = 360-Az_RAD*180/Math.PI
 
         //console.log("Dec,RA:",DEC_Deg,RA_Deg);
@@ -2335,13 +2343,13 @@ Promise.all([
     const lat_Deg = latitude;//観測点の緯度(北緯)
     const lat_Rad = lat_Deg*Math.PI/180
     const year_JD = getJulianDate(year,month,day,hour,min,sec);
-    const delta_RA_deg = (360 / 25772) * (year_JD - 2451545.0)/365.25;
+    //const delta_RA_deg = (360 / 25772) * (year_JD - 2451545.0)/365.25;
     //console.log(delta_RA_deg);
 
     stars.forEach(star => {
         const raw_RA_Deg = star.ra_deg;//RA(度数法)(春分点の赤経からの距離)(J.2000.0)
         
-        const RA_Deg = raw_RA_Deg + delta_RA_deg;
+        const RA_Deg = raw_RA_Deg// + delta_RA_deg;
 
         const DEC_Deg = star.dec_deg;//DEC(度数法)(天の赤道からの距離)
         //ラジアンに変換
@@ -2354,7 +2362,7 @@ Promise.all([
         DEC_Rad = newRaDec.dec;
 
         //観測点からの高さを求める
-        const HA_Rad = LST_Rad - RA_Rad
+        const HA_Rad = LST_Rad - RA_Rad;
         const sinAlt = Math.sin(DEC_Rad) * Math.sin(lat_Rad) + Math.cos(DEC_Rad) * Math.cos(lat_Rad) * Math.cos(HA_Rad);
         const Alt_Rad = Math.asin(sinAlt);
         //観測点からの左右の角度を求める
@@ -2515,32 +2523,32 @@ const angle_parent = document.getElementById("angle_parent");
 const angle_45 = document.createElement("div");
 angle_45.innerText = "45";
 angle_45.classList.add("angles");
-angle_45.style.fontSize = "20pt"
+//angle_45.style.fontSize = "20pt"
 angle_45.style.top = "25%";
 angle_parent.appendChild(angle_45);
 const angle_90 = document.createElement("div");
 angle_90.innerText = "90";
 angle_90.classList.add("angles");
-angle_90.style.fontSize = "20pt"
+//angle_90.style.fontSize = "20pt"
 angle_90.style.top = "0%";
 angle_parent.appendChild(angle_90);
 const angle_0 = document.createElement("div");
 angle_0.innerText = "0";
 angle_0.classList.add("angles");
-angle_0.style.fontSize = "20pt"
+//angle_0.style.fontSize = "20pt"
 angle_0.style.top = "50%";
 angle_parent.appendChild(angle_0);
 
 const angle_m45 = document.createElement("div");
 angle_m45.innerText = "-45";
 angle_m45.classList.add("angles");
-angle_m45.style.fontSize = "20pt"
+//angle_m45.style.fontSize = "20pt"
 angle_m45.style.top = "75%";
 angle_parent.appendChild(angle_m45);
 const angle_m90 = document.createElement("div");
 angle_m90.innerText = "-90";
 angle_m90.classList.add("angles");
-angle_m90.style.fontSize = "20pt"
+//angle_m90.style.fontSize = "20pt"
 angle_m90.style.top = "100%";
 angle_parent.appendChild(angle_m90);
 
@@ -3694,7 +3702,7 @@ function placeTextSprite(text,bv,bright,size) {
             //scene.remove(tanzaku);
             if(!tanzaku.isAnimating){
                 num_found_tanzaku++;
-                if(num_found_tanzaku>=2){
+                if(num_found_tanzaku>=27){
                     found_tanzaku.style.color = "red";
                 }
                 get_tanzaku_animation(tanzaku.mesh,tanzaku.imgURL);
@@ -3736,7 +3744,7 @@ class ParticleExplosion  {
         this.lifetime = lifetime;
         this.elapsed = 0;
         this.count = count;
-        this.clear_border = 2;
+        this.clear_border = 27;
         this.num_found_tanzaku = num_found_tanzaku;
         if(num_found_tanzaku>=this.clear_border){
             this.color = line_colors[Math.floor(Math.random()*line_colors.length)];
@@ -3894,12 +3902,13 @@ function drawImageRotated(ctx, img, x, y, options = {}) {
 }
 const tanzaku_back_ims = button_back_imgs.concat([milkyway_img]);
 let tanzaku_list = [];
-function make_tanzaku_and_place(dis=40,quantity_per_one = 5){
+let original_tanzaku_list = [];
+function make_tanzaku_and_place(dis=40,quantity_per_one = 6){
     tanzaku_list = [];
     tanzaku_imgs.forEach(tanzaku => {
         const img = new Image();
         img.src = tanzaku;
-        img.onload = async  () => { // 読み込みが終わったらこの中が実行される
+        img.onload = async  () => {
             for (let i = 0; i < quantity_per_one; i++) {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
@@ -3964,8 +3973,12 @@ function make_tanzaku_and_place(dis=40,quantity_per_one = 5){
                 const z = dis* Math.cos(phi) * Math.sin(theta);
                 tanzaku_mesh.position.set(x,y,z);
                 tanzaku_mesh.lookAt(0, 0, 0);
-                scene.add(tanzaku_mesh);
-                tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl});
+                if(i<5){
+                    scene.add(tanzaku_mesh);
+                    tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl});
+                }else{
+                    original_tanzaku_list.push({mesh:tanzaku_mesh,imgURL:dataUrl})
+                }
             }
         }
     });
@@ -4268,9 +4281,40 @@ agree_return_galaxy_button.addEventListener("click",()=>{
 disagree_return_galaxy_button.addEventListener("click",()=>{
     realy_return_ele.style.display = "none";
 });
+function waitForImages(count = 5, interval = 100) {
+    return new Promise(resolve => {
+        const check = setInterval(() => {
+            if (original_tanzaku_list.length >= count) {
+                clearInterval(check);
+                resolve();
+            }
+        }, interval);
+    });
+}
 const go_observe_button = document.getElementById("go_observe");
+const write_wish_ele = document.getElementById("write_wish");
+make_tanzaku_and_place();
+async function set_tanzaku_img() {
+    await waitForImages();
+    console.log("Load_tanzaku");
+    const tanzaku_back = document.createElement("img");
+    tanzaku_back.src = original_tanzaku_list[0].imgURL;
+    tanzaku_back.classList.add("back_tanzaku");
+    document.getElementById("parent_write_tanzaku").appendChild(tanzaku_back);
+}
+
 go_observe_button.addEventListener("click",()=>{
-    introduce_ele.style.display = "none";
+    introduce_ele.classList.add("fade_out");
+    setTimeout(()=>{
+        introduce_ele.style.display = "none";
+    },1000);
+    //original_tanzaku_list
+    set_tanzaku_img();
+    // = tanzaku_imgs[Math.floor(Math.random()*tanzaku_imgs.length)];
+    
+    
+    write_wish_ele.style.display = "flex";
+    write_wish_ele.classList.add("fade_in");
 })
 
 function random_spread(current,top=60,count=500){

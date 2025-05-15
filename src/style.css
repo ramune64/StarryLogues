@@ -1,7 +1,7 @@
 body{
     margin: 0;
     height: fit-content;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 
 
@@ -36,7 +36,7 @@ body{
     opacity: 0.7;
 }
 #angle_parent{
-    height: 99.4%;
+    height: 100%;
     width: 60px;
     position: absolute;
     z-index: 2;
@@ -46,6 +46,7 @@ body{
     /* background-color: #d74443; */
 }
 .angles{
+    font-size: 20pt;
     text-align: right;
     color: #e2e67d;
     font-family: "nikokaku";
@@ -425,8 +426,19 @@ div:has(audio){
         opacity: 0;
     }
 }
+@keyframes fade_in{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
 .fade_out{
     animation: fade_out 1s forwards linear;
+}
+.fade_in{
+    animation: fade_in 1s forwards linear;
 }
 
 #start_observe{
@@ -986,7 +998,7 @@ img.back_milkyway{
     box-shadow: 0 0 0;
     transform: translateX(-2px) translateY(2px);
 }
-#all_wrapper,#save_record,#realy_return,#introduce{
+#all_wrapper,#save_record,#realy_return,#introduce,#write_wish{
     width: 100%;
     height: 100%;
     position: absolute;
@@ -1030,7 +1042,44 @@ img.back_milkyway{
         text-align: center;
     }
 }
-
+#parent_write_tanzaku{
+    display: block;
+    margin-top: 7%;
+}
+.write_tanzaku{
+    width: 120px;
+    height: 70%;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0);
+    border: none;
+    border-radius: 5px;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    padding: 30px;
+    padding-top: 60px;
+    box-sizing: border-box;
+    font-size: 17pt;
+    resize: none;
+    overflow: hidden;
+    display: inline-block;
+    font-family: "れいこ";
+    margin: auto;
+    display: block;
+    }
+#introduce{
+    display: block;
+}
+#write_wish{
+    margin: auto;
+    display: none;
+    justify-content: center;
+    gap: 10%;
+    & img.back_tanzaku{
+        position: absolute;
+        display: block;
+        z-index: -1;
+    }
+}
 #return_or_not,#save_return_or_not,#return_galaxy_or_not,#LetsGo{
     opacity: 1;
     margin: 25px auto;
@@ -1361,7 +1410,7 @@ img.back_milkyway{
             font-size: 15pt;
         }
     }
-    #all_wrapper,#save_record,#realy_return,#introduce{
+    #all_wrapper,#save_record,#realy_return,#introduce,#write_wish{
         padding-top: 5%;
     }
     #loading{
@@ -1372,6 +1421,132 @@ img.back_milkyway{
         }
         & h1{
             font-size: 70pt;
+        }
+    }
+}
+
+.big_font{
+    font-size: 30pt !important;
+}
+@media (max-width: 1000px) {
+    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe{
+        min-width: 130px;
+        font-size: 10pt;
+        padding: 10px;
+    }
+    #change_time{
+        font-size: 10pt;
+        bottom: 5px;
+    }
+    #change_location{
+        bottom: 50px;
+    }
+    #set_now{
+        bottom: 60px;
+    }
+    #change_constellation_name,#return_change_location{
+        bottom: 95px;
+    }
+    #return_set_time{
+        bottom: 105px;
+    }
+
+
+    #select_galaxy{
+        font-size: 10pt;
+        padding: 10px;
+    }
+    #galaxy_container_left,#galaxy_container_right{
+        & .song_button_wrapper div:not(.back_song_button){
+            color: rgb(79, 79, 79);
+            font-size: 10pt;
+            margin: 20px 5px;
+            padding-left: 1.3em;
+        }
+    }
+    .back_song_button span{
+        font-size: 7pt;
+    }
+    #start_observe{
+        bottom: 10px;
+        & img{
+            height: 20px;
+        }
+        & p{
+            font-size: 10pt;
+            margin: 3px 0;
+        }
+    }
+    #observe_gauge{
+        top: 52%;
+        height: 55%;
+    }
+    #observe_gauge img.back_star{
+        width: 5px;
+        height: 5px;
+    }
+    #tanzaku_space{
+        & div p{
+            font-size: 8pt;
+        }
+    }
+    #all_wrapper,#save_record,#realy_return,#introduce,#write_wish{
+        & h1{
+            font-size: 16pt;
+        }
+        & h2{
+            font-size: 10pt;
+        }
+        & p,li{
+            font-size: 7pt;
+        }
+        padding-top: 0;
+    }
+    #loading{
+        transform: translateX(-30%) scale(1); 
+        & img{
+            
+            width: 100px;
+        }
+        & h1{
+            font-size: 70pt;
+        }
+    }
+    #show_time_and_location{
+        width: 180px;
+        font-size: 7pt;
+        
+    }
+    #direction_parent{
+        height: 30px;
+        & img{
+            height: 100%;
+        }
+    }
+    #angle_parent{
+        width: 30px;
+    }
+    .angles{
+        font-size: 10pt;
+    }
+    .big_font{
+    font-size: 15pt !important;
+    }
+    #name_galaxy{
+        top: 30px;
+        font-size: 8pt;
+        padding: 5px;
+        padding-left: 20px;
+        box-shadow: 3px 3px 5px white;
+    }
+    #found_tanzaku_wrapper{
+        padding: 5px;
+        bottom: -5%;
+        right: -2%;
+        padding-left: 15px;
+        box-shadow: 3px 3px 5px white;
+        & p{
+            font-size: 8pt;
         }
     }
 }
