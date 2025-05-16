@@ -1847,7 +1847,7 @@ function get_6dir_img() {
     const faceMap = {};
     for (const face of faceImages) {
         faceMap[face.dataset.name] = face;
-}
+    }
     renderer.setSize(width, height);
     composer.setSize(width, height);
     composer.render();
@@ -1889,9 +1889,41 @@ function get_6dir_img() {
     }
     ctx.putImageData(outputImageData, 0, 0);
     const link = document.createElement('a');
-    link.download = 'output.png';
+    link.download = 'result1.png';
     link.href = outputCanvas.toDataURL('image/png');
     link.click();
+
+    const outputCanvas2 = document.createElement('canvas');
+    outputCanvas2.width = size*4;
+    outputCanvas2.height = size*3;
+    const ctx2 = outputCanvas2.getContext('2d');
+    for (const dir of directions) {
+        const face = faceMap[dir.name];
+        if(dir.name == "px"){
+            const imageData = face.getContext('2d').getImageData(0, 0, size, size);
+            ctx2.putImageData(imageData,size*1.5,size);
+        }else if(dir.name == "py"){
+            const imageData = face.getContext('2d').getImageData(0, 0, size, size);
+            ctx2.putImageData(imageData,size*1.5,0);
+        }else if(dir.name == "pz"){
+            const imageData = face.getContext('2d').getImageData(0, 0, size, size);
+            ctx2.putImageData(imageData,size*1.5+size,size);
+        }else if(dir.name == "nz"){
+            const imageData = face.getContext('2d').getImageData(0, 0, size, size);
+            ctx2.putImageData(imageData,size*1.5-size,size);
+        }else if(dir.name == "nx"){
+            const imageData = face.getContext('2d').getImageData(0, 0, size, size);
+            ctx2.putImageData(imageData,size*1.5-size*2,size);
+            ctx2.putImageData(imageData,size*1.5+size*2,size);
+        }else{
+            const imageData = face.getContext('2d').getImageData(0, 0, size, size);
+            ctx2.putImageData(imageData,size*1.5,size*2);
+        }
+    }
+    const link2 = document.createElement('a');
+    link2.download = 'result2.png';
+    link2.href = outputCanvas2.toDataURL('image/png');
+    link2.click();
 }
 
 function downloadComposerOutput() {
@@ -1945,8 +1977,8 @@ function downloadComposerOutput() {
 /* show_time_and_location_ele.addEventListener("click",()=>{
     //downloadComposerOutput();
     get_6dir_img();
-}) */
-
+})
+ */
 //リアルな星空の背景をヒッパルコス星表で作ろう！
 //等級と大きさの変換
 function vmagToSize(vmag){
@@ -3132,7 +3164,20 @@ player.addListener({
         prev = null;
         last_beat = null;
         
-        current_wishList = wishList.concat();
+        let temporary = wishList.concat();
+        current_wishList = [];
+        for(let i=0;i<30;i++){
+            let rand_idx = Math.floor(Math.random()*temporary.length)
+            current_wishList.push(temporary[rand_idx]);
+            
+            
+            //console.log(temporary[rand_idx]);
+            temporary.splice(rand_idx,1);
+            //console.log(temporary.length);
+            //console.log(temporary[rand_idx] in temporary);
+            
+        }
+        max_tanzaku_ele.innerText = "30";
         InPreparationSong = false;
         num_found_tanzaku = 0;
         found_tanzaku.innerText = num_found_tanzaku;
@@ -3704,7 +3749,7 @@ function placeTextSprite(text,bv,bright,size) {
                 if(num_found_tanzaku>=27){
                     found_tanzaku.style.color = "red";
                 }
-                get_tanzaku_animation(tanzaku.mesh,tanzaku.imgURL);
+                get_tanzaku_animation(tanzaku.mesh,tanzaku.imgURL,tanzaku.users);
                 tanzaku.isAnimating = true;
             }
         }
@@ -3982,7 +4027,7 @@ function make_tanzaku_and_place(dis=40,quantity_per_one = 6){
                 tanzaku_mesh.lookAt(0, 0, 0);
                 if(i<5){
                     scene.add(tanzaku_mesh);
-                    tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl});
+                    tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl,users:false});
                 }else{
                     original_tanzaku_list.push({mesh:tanzaku_mesh,imgURL:dataUrl,URL4css:tanzaku});
                 }
@@ -4072,7 +4117,7 @@ const fonts = [
     "MyFont"
 ]
 const found_tanzaku = document.getElementById("found_tanzaku");
-function get_tanzaku_animation(tanzaku_mesh,imgURL){
+function get_tanzaku_animation(tanzaku_mesh,imgURL,users){
     let tl = gsap.timeline();
     const twist_z = Math.random()*2*Math.PI;
     const twist_x = Math.random()*2*Math.PI;
@@ -4082,7 +4127,7 @@ function get_tanzaku_animation(tanzaku_mesh,imgURL){
     },0);
     tl.to(tanzaku_mesh.rotation,{
         duration:1,
-        z: tanzaku_mesh.rotation.x + twist_x,
+        x: tanzaku_mesh.rotation.x + twist_x,
         y: tanzaku_mesh.rotation.y + Math.PI * 2,
         z: tanzaku_mesh.rotation.z + twist_z
     },0);
@@ -4103,12 +4148,18 @@ function get_tanzaku_animation(tanzaku_mesh,imgURL){
             img_parent_ele.classList.add("slidedown");
             img_parent_ele.appendChild(tanzaku_img_ele);
             const tanzaku_txt = document.createElement('p');
-            const wish_idx = Math.floor(Math.random()*current_wishList.length);
-            const current_wish = current_wishList[wish_idx];
-            current_wishList.splice(wish_idx,1);
-            console.log(current_wishList.length,wishList.length);
+            let current_wish;
+            if(!users){
+                const wish_idx = Math.floor(Math.random()*current_wishList.length);
+                current_wish = current_wishList[wish_idx];
+                current_wishList.splice(wish_idx,1);
+                tanzaku_txt.style.fontFamily = fonts[Math.floor(Math.random()*fonts.length)];
+            }else{
+                current_wish = users_wish;
+                tanzaku_txt.style.fontFamily = "れいこ";
+            }
             tanzaku_txt.innerHTML = current_wish.replace(/=/g, '<span class="rotate">=</span>').replace(/－/g, '<span class="rotate">－</span>').replace(/\)/g, '<span class="rotate">)</span>').replace(/\(/g, '<span class="rotate">(</span>').replace(/-/g, '<span class="rotate">-</span>');
-            tanzaku_txt.style.fontFamily = fonts[Math.floor(Math.random()*fonts.length)];
+            
             img_parent_ele.appendChild(tanzaku_txt);
             tanzaku_space.insertBefore(img_parent_ele,tanzaku_space.children[0]);
             found_tanzaku.innerText = num_found_tanzaku;
@@ -4337,9 +4388,61 @@ change_color_button.addEventListener("click",()=>{
     set_tanzaku_img();
 })
 const decide_tanzaku_button = document.getElementById("decide_tanzaku");
+const wish_ele = document.getElementById("wish");
+const max_tanzaku_ele = document.getElementById("max_tanzaku");
+let users_wish;
 
 decide_tanzaku_button.addEventListener("click",()=>{
+    //current_wishList.splice(0,1);
+    //scene.remove(tanzaku_list[0].mesh);
+    //tanzaku_list.splice(0,1);
+    users_wish = wish_ele.value;
     write_wish_ele.style.display = "none";
+
+    if(users_wish!==""){
+        const theta = Math.random()*Math.PI*2/* *0 */;//短冊の緯度
+        const phi = Math.asin(/* 1.41/2 */2 * Math.random() - 1);//短冊の経度//直接高さの角度を決めると偏るのでasinで逆算
+        const x = 40* Math.cos(phi) * Math.cos(theta);
+        const y = 40* Math.sin(phi);
+        const z = 40* Math.cos(phi) * Math.sin(theta);
+
+        const tanzaku_mesh = original_tanzaku_list[current_img_idx].mesh;
+        const imgURL = original_tanzaku_list[current_img_idx].imgURL;
+        tanzaku_mesh.position.set(x,y,z);
+        tanzaku_mesh.lookAt(0, 0, 0);
+        scene.add(tanzaku_mesh);
+        let tl = gsap.timeline();
+        const twist_z = Math.random()*2*Math.PI;
+        const twist_x = Math.random()*2*Math.PI;
+        const origin_Rotate_x = tanzaku_mesh.rotation.x;
+        const origin_Rotate_y = tanzaku_mesh.rotation.y;
+        const origin_Rotate_z = tanzaku_mesh.rotation.z;
+        tanzaku_mesh.rotation.x += twist_x;
+        tanzaku_mesh.rotation.z + twist_z;
+        tanzaku_mesh.rotation.y + Math.PI * 2;
+        tanzaku_mesh.position.y += 1;
+        tanzaku_mesh.material.opacity = 0;
+        tl.to(tanzaku_mesh.position,{
+            duration:0.5,
+            y:"-=1"
+        },0);
+        tl.to(tanzaku_mesh.rotation,{
+            duration:1,
+            x: origin_Rotate_x,
+            y: origin_Rotate_y,
+            z: origin_Rotate_z,
+        },0);
+        tl.to(tanzaku_mesh.material,{
+            duration:0.2,
+            opacity:0.4,
+        },0.8);
+        tl.to(tanzaku_mesh.material,{
+            duration:0.5,
+            opacity:5,
+        },0);
+        tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:imgURL,users:true});
+        max_tanzaku_ele.innerText = "31";
+    }
 })
 
 
@@ -4416,7 +4519,7 @@ function create_galaxy(){
             colors.push(color.r,color.g,color.b);
         }
     }
-    console.log(colors);
+    //console.log(colors);
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     galazy_star_geometory = geometry;
