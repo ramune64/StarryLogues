@@ -535,7 +535,7 @@ div:has(audio){
     }
 }
 
-#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe{
+#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe,#change_color,#decide_tanzaku{
     position: absolute;
     border: none;
     background: none;
@@ -771,7 +771,8 @@ img.back_milkyway{
 #return_galaxy + .back_tanzaku,
 #agree_return_galaxy + .back_tanzaku,
 #disagree_return_galaxy + .back_tanzaku,
-#go_observe + .back_tanzaku{
+#go_observe + .back_tanzaku,
+#decide_tanzaku + .back_tanzaku{
     position: absolute;
     inset: 0;
     background-image: url(./imgs/tanzaku_ka.png);
@@ -1044,7 +1045,6 @@ img.back_milkyway{
 }
 #parent_write_tanzaku{
     display: block;
-    margin-top: 7%;
 }
 .write_tanzaku{
     width: 120px;
@@ -1056,7 +1056,7 @@ img.back_milkyway{
     writing-mode: vertical-rl;
     text-orientation: upright;
     padding: 30px;
-    padding-top: 60px;
+    padding-top: 70px;
     box-sizing: border-box;
     font-size: 17pt;
     resize: none;
@@ -1066,9 +1066,9 @@ img.back_milkyway{
     margin: auto;
     display: block;
     }
-#introduce{
+/* #introduce{
     display: block;
-}
+} */
 #write_wish{
     margin: auto;
     display: none;
@@ -1355,13 +1355,13 @@ img.back_milkyway{
 
 
 
-#go_observe{
+#go_observe,#decide_tanzaku{
     color: white;
     position: relative;
     top: 0;
     left: 0;
 }
-#go_observe::before{
+#go_observe::before,#decide_tanzaku::before{
     content: "";
     position: absolute;
     inset: 0;
@@ -1372,9 +1372,62 @@ img.back_milkyway{
     z-index: -1;
     
 }
-#go_observe + .back_tanzaku{
+#go_observe + .back_tanzaku,#decide_tanzaku + .back_tanzaku{
     background-image: url(./imgs/tanzaku_mi.png);
 }
+
+#decide_tanzaku{
+    width: fit-content;
+    margin: auto;
+    margin-top: 50px;
+}
+
+/* @property --bg-img{
+    
+} */
+body{
+    --bgimg:url(/src/imgs/tanzaku_mi.png);
+    --bgimg2:url(/src/imgs/tanzaku_mi.png);
+}
+#change_color{
+    /*  */
+    margin: auto;
+    margin-top: 100px;
+    width: fit-content;
+    color: black;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+#change_color::before{
+    content: "";
+    position: absolute;
+    display: block;
+    inset: 0;
+    background-image:  var(--bgimg);
+    background-repeat:no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: -1;
+    
+}
+#change_color_back{
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-position: center left;
+    background-size: cover;
+    z-index: 0;
+    transform-origin: bottom left;
+    transition: transform 0.2s ease;
+    filter: contrast(1.5);
+    pointer-events: none; /* hoverの邪魔をしない */
+    width: 100%;
+    height: 100%;
+    background-image: var(--bgimg2);
+}
+
+
 
 @media (max-width: 1550px) {
     #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe{
@@ -1424,6 +1477,10 @@ img.back_milkyway{
         }
     }
 }
+
+
+
+
 
 .big_font{
     font-size: 30pt !important;

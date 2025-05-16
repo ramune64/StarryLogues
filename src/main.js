@@ -2859,7 +2859,6 @@ function update_back_tanzaku(){
         back_song_button.style.top = back_song_button.parentElement.children[0].offsetTop + "px";
     })
 }
-update_back_tanzaku();
 
 //ボタンの背景
 import star_img4 from "./imgs/star4.png"
@@ -3876,6 +3875,14 @@ const tanzaku_imgs = [
     tanzaku_lu_img,
     tanzaku_ka_img
 ];
+const URL4css = [
+    "url(/src/imgs/tanzaku_mi.png)",
+    "url(/src/imgs/tanzaku_me.png)",
+    "url(/src/imgs/tanzaku_ri.png)",
+    "url(/src/imgs/tanzaku_le.png)",
+    "url(/src/imgs/tanzaku_lu.png)",
+    "url(/src/imgs/tanzaku_ka.png)"
+];
 
 function drawImageRotated(ctx, img, x, y, options = {}) {
     const {
@@ -3977,7 +3984,7 @@ function make_tanzaku_and_place(dis=40,quantity_per_one = 6){
                     scene.add(tanzaku_mesh);
                     tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl});
                 }else{
-                    original_tanzaku_list.push({mesh:tanzaku_mesh,imgURL:dataUrl})
+                    original_tanzaku_list.push({mesh:tanzaku_mesh,imgURL:dataUrl,URL4css:tanzaku});
                 }
             }
         }
@@ -4293,14 +4300,20 @@ function waitForImages(count = 5, interval = 100) {
 }
 const go_observe_button = document.getElementById("go_observe");
 const write_wish_ele = document.getElementById("write_wish");
-make_tanzaku_and_place();
+const change_color_button = document.querySelector("#change_color");
+const change_color_back_ele = document.getElementById("change_color_back");
+let current_img_idx = 0;
+const tanzaku_back = document.createElement("img");
+//make_tanzaku_and_place();
 async function set_tanzaku_img() {
     await waitForImages();
     console.log("Load_tanzaku");
-    const tanzaku_back = document.createElement("img");
-    tanzaku_back.src = original_tanzaku_list[0].imgURL;
+    
+    tanzaku_back.src = original_tanzaku_list[current_img_idx].imgURL;
     tanzaku_back.classList.add("back_tanzaku");
     document.getElementById("parent_write_tanzaku").appendChild(tanzaku_back);
+    document.body.style.setProperty("--bgimg",`url("${original_tanzaku_list[current_img_idx].URL4css}")`);
+    document.body.style.setProperty("--bgimg2",`url("${original_tanzaku_list[(current_img_idx+1)%6].URL4css}")`);
 }
 
 go_observe_button.addEventListener("click",()=>{
@@ -4310,6 +4323,7 @@ go_observe_button.addEventListener("click",()=>{
     },1000);
     //original_tanzaku_list
     set_tanzaku_img();
+    //change_color_back_ele.style.backgroundImage = `url("${tanzaku_me_img}")`;
     // = tanzaku_imgs[Math.floor(Math.random()*tanzaku_imgs.length)];
     
     
@@ -4317,8 +4331,21 @@ go_observe_button.addEventListener("click",()=>{
     write_wish_ele.classList.add("fade_in");
 })
 
+change_color_button.addEventListener("click",()=>{
+    current_img_idx++;
+    current_img_idx %= 6;
+    set_tanzaku_img();
+})
+const decide_tanzaku_button = document.getElementById("decide_tanzaku");
+
+decide_tanzaku_button.addEventListener("click",()=>{
+    write_wish_ele.style.display = "none";
+})
+
+
+
 function random_spread(current,top=60,count=500){
-    return  -((top-10)*4/count**2)*((current - count/2)**2)+top;//みんな大好き二次関数上に凸の二次関数だね
+    return  -((top-10)*4/count**2)*((current - count/2)**2)+top;//みんな大好き二次関数 上に凸の二次関数だね
 }
 import cloud1 from "./imgs/cloud1.png";
 import cloud2 from "./imgs/cloud2.png";
