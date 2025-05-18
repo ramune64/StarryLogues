@@ -9,6 +9,7 @@ import { precess } from 'astronomia';//歳差運動取得用
 import { gsap, toArray } from "gsap";
 import { Player } from "textalive-app-api";
 import { MeshLine, MeshLineMaterial } from 'three.meshline';
+import { DeviceOrientationControls } from './controls/DeviceOrientationControls.js';
 
 
 const width = window.innerWidth;
@@ -32,20 +33,21 @@ const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 5000);
 // カメラの初期座標を設定（X座標:0, Y座標:0, Z座標:0）
 camera.position.set(0, 3, 0);
 
+const controls = new DeviceOrientationControls(camera);
 
 import modelUrl from './telescope3.glb?url';
 let telescope;
 const loader = new GLTFLoader();
 loader.load(modelUrl, function (gltf) {
-    console.log("Loaded GLTF:", gltf); // <- ここで構造確認
-    console.log("Children:", gltf.scene.children);
+    //console.log("Loaded GLTF:", gltf); // <- ここで構造確認
+    //console.log("Children:", gltf.scene.children);
     gltf.scene.traverse((child) => {
-        console.log(child.type, child.name);
+        //console.log(child.type, child.name);
         if (child.isMesh) {
             child.material.transparent = false;
             child.material.opacity = 1;
             child.visible = true;
-            console.log(child.material);
+            //console.log(child.material);
         }
     });
     gltf.scene.scale.set(1, 1, 1); // 必要なら 10 や 0.1 に変えて調整
@@ -2844,6 +2846,8 @@ function animate() {
     rotate_galaxyStars();
     always_rotate_galaxyStars();
     transform_stars();
+
+    //controls.update();
 }
 const tanzaku_space = document.getElementById("tanzaku_space_wrapper");
 const start_observe_button = document.getElementById("start_observe");
