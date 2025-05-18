@@ -32,7 +32,7 @@
         
             <img src="./imgs/galaxy3.png" alt="" id="galaxy_img">
         
-        <img src="./imgs/info_icon.png" alt="" id="info_icon">
+        <img src="./imgs/setting_icon.png" alt="" id="info_icon">
         <!-- <img src="./imgs/target.png" alt="" id="star_name"> -->
         <div id="location_firstQ">
             <div class="firstQ_child">あなたの地域</div>
@@ -100,13 +100,17 @@
             <p>未来はいずれやってきますが、<br>もう過去に戻ることは出来ません。</p>
         </div>
         <div id="info_operate">
-            <h1>操作方法</h1>
+            <h1>設定</h1>
             <div id="close_parent_info">
                 <div id="close1_info"></div>
                 <div id="close2_info"></div>
             </div>
-            <p>1.画面内でどこかをクリックすると、望遠鏡がそれに追随して動くようになります。</p>
-            <p>2.その状態でもう一度クリックするか、Escキーを押すと再びマウスカーソルが表示されます。</p>
+            <p>星座線の色：<span id="color_mode">ランダム</span></p>
+            <div class="operate_button_wrapper">
+                    <div id="change_line_color" class="operate_button">短冊の色を変える</div>
+                    <div class="back_tanzaku" id="change_line_color_back"></div>
+            </div>
+            <p>※：星座線の色が変わるのは変更時より後のものだけです<br>　　既に表示された線の色は変わりません</p>
         </div>
         <div id="select_galaxy">
             <h1>Choose a Galaxy</h1>

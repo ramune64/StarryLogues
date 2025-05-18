@@ -245,11 +245,13 @@ body{
 #info_icon{
     position: absolute;
     bottom: 10px;
-    right: 70px;
+    left: 270px;
     height: 5%;
     z-index: 1;
     cursor: pointer;
     display: none;
+    background-color: #92c1e4;
+    border-radius: 40%;
 }
 #info_operate{
     position: absolute;
@@ -259,11 +261,14 @@ body{
     left: 50%;
     height: fit-content;
     transform: translateX(-50%) translateY(-50%);
-    background-color: #4c59abCC;
+    background-color: #4c59ab68;
     display: none;
+    color: white;
+    border-bottom-color:#92c1e4;
     & h1{
         text-align: center;
         color: #eccbdc;
+        margin: 10px;
     }
     & p{
         font-size: 20pt;
@@ -535,7 +540,7 @@ div:has(audio){
     }
 }
 
-#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe,#change_color,#decide_tanzaku{
+#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe,#change_color,#decide_tanzaku,#change_line_color{
     position: absolute;
     border: none;
     background: none;
@@ -755,6 +760,7 @@ img.back_milkyway{
 .operate_button_wrapper {
     position: relative;
     overflow: visible;
+    width: fit-content;
 }
 .back_tanzaku{
     overflow: hidden;
@@ -1388,8 +1394,10 @@ img.back_milkyway{
 body{
     --bgimg:url(/src/imgs/tanzaku_mi.png);
     --bgimg2:url(/src/imgs/tanzaku_mi.png);
+    --bgimg3:url(/src/imgs/tanzaku_everyone.png);
+    --bgimg4:url(/src/imgs/tanzaku_mi.png);
 }
-#change_color{
+#change_color,#change_line_color{
     /*  */
     margin: auto;
     margin-top: 100px;
@@ -1399,7 +1407,7 @@ body{
     top: 0;
     left: 0;
 }
-#change_color::before{
+#change_color::before,#change_line_color::before{
     content: "";
     position: absolute;
     display: block;
@@ -1411,7 +1419,7 @@ body{
     z-index: -1;
     
 }
-#change_color_back{
+#change_color_back,#change_line_color_back{
     position: absolute;
     inset: 0;
     background-repeat: no-repeat;
@@ -1427,6 +1435,20 @@ body{
     background-image: var(--bgimg2);
 }
 
+.operate_button_wrapper:has(#change_line_color){
+    margin: 0 auto;
+}
+
+#change_line_color{
+    width: fit-content;
+    margin: 20px 0;
+}
+#change_line_color::before{
+    background-image:  var(--bgimg3);
+}
+#change_line_color_back{
+    background-image: var(--bgimg4);
+}
 
 
 @media (max-width: 1550px) {
@@ -1475,6 +1497,9 @@ body{
         & h1{
             font-size: 70pt;
         }
+    }
+    #info_icon{
+        left: 250px;
     }
 }
 

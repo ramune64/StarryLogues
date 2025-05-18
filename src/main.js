@@ -965,6 +965,37 @@ close_parent_info_button.addEventListener("click",()=>{
     info_icon.style.display = "block";
     info_operate_ele.style.display = "none";
 })
+import tanzaku_everyone_img from "./imgs/tanzaku_everyone.png";
+let tanzaku_imgs_for_line = [
+    tanzaku_everyone_img,
+    tanzaku_mi_img,
+    tanzaku_ri_img,
+    tanzaku_le_img,
+    tanzaku_lu_img,
+    tanzaku_me_img,
+    tanzaku_ka_img,
+    
+];
+let line_color_namme = [
+    "ランダム",
+    "水色",
+    "黄色1",
+    "黄色2",
+    "ピンク",
+    "赤",
+    "青",
+]
+const change_line_color_button = document.getElementById("change_line_color");
+let current_line_color_mode = 0;
+const color_mode_txt = document.getElementById("color_mode");
+change_line_color_button.addEventListener("click",()=>{
+    current_line_color_mode++;
+    current_line_color_mode %=7;
+    document.body.style.setProperty("--bgimg3",`url("${tanzaku_imgs_for_line[(current_line_color_mode)%7]}")`);
+    document.body.style.setProperty("--bgimg4",`url("${tanzaku_imgs_for_line[(current_line_color_mode+1)%7]}")`);
+    color_mode_txt.innerText = line_color_namme[current_line_color_mode];
+})
+
 
 const canvas_star_panel = document.createElement('canvas');
 
@@ -2697,18 +2728,18 @@ function animate() {
         
     }else if(InPreparationSong === false){
         console.log("music_num:",music_num);
-        if(!changed_rotate_mode && (music_num == 0 || music_num == 3 || music_num == 4)){
+        if(!changed_rotate_mode && (music_num == 3 || music_num == 4)){
             always_GalaxyRotating = false;
             GalaxyRotateStart_time = undefined;
             current_galaxy_rotate = addition_angle;
             GalaxyRotating = true;
             changed_rotate_mode = true;
-        }else if(!changed_rotate_mode && !(music_num == 0 || music_num == 3 || music_num == 4)){
+        }else if(!changed_rotate_mode && !(music_num == 3 || music_num == 4)){
             prepareMVimg(music_num);
             always_GalaxyRotating = false;
             changed_rotate_mode = true;
         }
-        if((rotate_progress>0.8 && (music_num == 0 || music_num == 3 || music_num == 4))){//ここにサムネの演出を入れる
+        if((rotate_progress>0.8 && (music_num == 3 || music_num == 4))){//ここにサムネの演出を入れる
             InPreparationSong=undefined;
             
             //galaxy_img.style.display = "none";
@@ -2755,9 +2786,10 @@ function animate() {
                     tanzaku_space.style.display = "block";
                     name_galaxy.innerText = "観測中の銀河："+player.data.song.name;
                     introduce_ele.style.display = "block";
+                    info_icon.style.display = "block";
                 }
             })
-        }else if(Transform_progress>=0.9 && !(music_num == 0 || music_num == 3 || music_num == 4)){
+        }else if(Transform_progress>=0.9 && !(music_num == 3 || music_num == 4)){
             console.log("Transform Done")
             InPreparationSong=undefined;
             let tl = gsap.timeline();
@@ -2802,6 +2834,7 @@ function animate() {
                     loading.style.display = "none";
                     tanzaku_space.style.display = "block";
                     name_galaxy.innerText = "観測中の銀河："+player.data.song.name;
+                    info_icon.style.display = "block";
                     introduce_ele.style.display = "block";
                 }
             })
@@ -3653,7 +3686,7 @@ function sphericalToCartesian(radius, latitude, longitude) {
     const z = radius * Math.cos(latitude) * Math.sin(longitude);
     return new THREE.Vector3(x, y, z);
 }
-const line_colors = [0x7dbbe6,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc];
+const line_colors = [0x7DDFFF,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc];
 let existingSprites = [];
 let starlines = [];
 function placeTextSprite(text,bv,bright,size) {
@@ -3765,7 +3798,23 @@ function placeTextSprite(text,bv,bright,size) {
         linePositions.push(pos1.x,pos1.y,pos1.z,pos2.x,pos2.y,pos2.z);
         const lineGeometry = new THREE.BufferGeometry();
         lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-        const line_color = line_colors[Math.floor(Math.random()*line_colors.length)]
+        let line_color;
+        console.log(current_line_color_mode);
+        if(current_line_color_mode == 1){
+            line_color = line_colors[0];
+        }else if(current_line_color_mode == 2){
+            line_color = line_colors[3];
+        }else if(current_line_color_mode == 3){
+            line_color = line_colors[4];
+        }else if(current_line_color_mode == 4){
+            line_color = line_colors[5];
+        }else if(current_line_color_mode == 5){
+            line_color = line_colors[1];
+        }else if(current_line_color_mode == 6){
+            line_color = line_colors[2];
+        }else{
+            line_color = line_colors[Math.floor(Math.random()*line_colors.length)]
+        }
         const lineMaterial = new THREE.LineBasicMaterial({
             color: line_color, 
             transparent: true, 
@@ -3773,7 +3822,7 @@ function placeTextSprite(text,bv,bright,size) {
             depthTest: true,   
             opacity:0.5,
         });
-        lineMaterial.color.multiplyScalar(25);
+        lineMaterial.color.multiplyScalar(50);
         const lineMesh = new THREE.Line(lineGeometry, lineMaterial);
         scene.add(lineMesh);
         starlines.push(lineMesh);
@@ -3914,20 +3963,13 @@ import tanzaku_lu_img from "./imgs/tanzaku_lu.png";
 import tanzaku_ka_img from "./imgs/tanzaku_ka.png";
 const tanzaku_imgs = [
     tanzaku_mi_img,
-    tanzaku_me_img,
     tanzaku_ri_img,
     tanzaku_le_img,
     tanzaku_lu_img,
+    tanzaku_me_img,
     tanzaku_ka_img
 ];
-const URL4css = [
-    "url(/src/imgs/tanzaku_mi.png)",
-    "url(/src/imgs/tanzaku_me.png)",
-    "url(/src/imgs/tanzaku_ri.png)",
-    "url(/src/imgs/tanzaku_le.png)",
-    "url(/src/imgs/tanzaku_lu.png)",
-    "url(/src/imgs/tanzaku_ka.png)"
-];
+
 
 function drawImageRotated(ctx, img, x, y, options = {}) {
     const {
@@ -4397,51 +4439,56 @@ decide_tanzaku_button.addEventListener("click",()=>{
     //scene.remove(tanzaku_list[0].mesh);
     //tanzaku_list.splice(0,1);
     users_wish = wish_ele.value;
-    write_wish_ele.style.display = "none";
+    if(users_wish.length > 30){
+        alert("内容は30文字以下にしてください。");
+    }else{
+        
+        write_wish_ele.style.display = "none";
 
-    if(users_wish!==""){
-        const theta = Math.random()*Math.PI*2/* *0 */;//短冊の緯度
-        const phi = Math.asin(/* 1.41/2 */2 * Math.random() - 1);//短冊の経度//直接高さの角度を決めると偏るのでasinで逆算
-        const x = 40* Math.cos(phi) * Math.cos(theta);
-        const y = 40* Math.sin(phi);
-        const z = 40* Math.cos(phi) * Math.sin(theta);
+        if(users_wish!==""){
+            const theta = Math.random()*Math.PI*2/* *0 */;//短冊の緯度
+            const phi = Math.asin(/* 1.41/2 */2 * Math.random() - 1);//短冊の経度//直接高さの角度を決めると偏るのでasinで逆算
+            const x = 40* Math.cos(phi) * Math.cos(theta);
+            const y = 40* Math.sin(phi);
+            const z = 40* Math.cos(phi) * Math.sin(theta);
 
-        const tanzaku_mesh = original_tanzaku_list[current_img_idx].mesh;
-        const imgURL = original_tanzaku_list[current_img_idx].imgURL;
-        tanzaku_mesh.position.set(x,y,z);
-        tanzaku_mesh.lookAt(0, 0, 0);
-        scene.add(tanzaku_mesh);
-        let tl = gsap.timeline();
-        const twist_z = Math.random()*2*Math.PI;
-        const twist_x = Math.random()*2*Math.PI;
-        const origin_Rotate_x = tanzaku_mesh.rotation.x;
-        const origin_Rotate_y = tanzaku_mesh.rotation.y;
-        const origin_Rotate_z = tanzaku_mesh.rotation.z;
-        tanzaku_mesh.rotation.x += twist_x;
-        tanzaku_mesh.rotation.z + twist_z;
-        tanzaku_mesh.rotation.y + Math.PI * 2;
-        tanzaku_mesh.position.y += 1;
-        tanzaku_mesh.material.opacity = 0;
-        tl.to(tanzaku_mesh.position,{
-            duration:0.5,
-            y:"-=1"
-        },0);
-        tl.to(tanzaku_mesh.rotation,{
-            duration:1,
-            x: origin_Rotate_x,
-            y: origin_Rotate_y,
-            z: origin_Rotate_z,
-        },0);
-        tl.to(tanzaku_mesh.material,{
-            duration:0.2,
-            opacity:0.4,
-        },0.8);
-        tl.to(tanzaku_mesh.material,{
-            duration:0.5,
-            opacity:5,
-        },0);
-        tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:imgURL,users:true});
-        max_tanzaku_ele.innerText = "31";
+            const tanzaku_mesh = original_tanzaku_list[current_img_idx].mesh;
+            const imgURL = original_tanzaku_list[current_img_idx].imgURL;
+            tanzaku_mesh.position.set(x,y,z);
+            tanzaku_mesh.lookAt(0, 0, 0);
+            scene.add(tanzaku_mesh);
+            let tl = gsap.timeline();
+            const twist_z = Math.random()*2*Math.PI;
+            const twist_x = Math.random()*2*Math.PI;
+            const origin_Rotate_x = tanzaku_mesh.rotation.x;
+            const origin_Rotate_y = tanzaku_mesh.rotation.y;
+            const origin_Rotate_z = tanzaku_mesh.rotation.z;
+            tanzaku_mesh.rotation.x += twist_x;
+            tanzaku_mesh.rotation.z + twist_z;
+            tanzaku_mesh.rotation.y + Math.PI * 2;
+            tanzaku_mesh.position.y += 1;
+            tanzaku_mesh.material.opacity = 0;
+            tl.to(tanzaku_mesh.position,{
+                duration:0.5,
+                y:"-=1"
+            },0);
+            tl.to(tanzaku_mesh.rotation,{
+                duration:1,
+                x: origin_Rotate_x,
+                y: origin_Rotate_y,
+                z: origin_Rotate_z,
+            },0);
+            tl.to(tanzaku_mesh.material,{
+                duration:0.2,
+                opacity:0.4,
+            },0.8);
+            tl.to(tanzaku_mesh.material,{
+                duration:0.5,
+                opacity:5,
+            },0);
+            tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:imgURL,users:true});
+            max_tanzaku_ele.innerText = "31";
+        }
     }
 })
 
@@ -4688,6 +4735,7 @@ function always_rotate_galaxyStars(){
 }
 
 const thumbnails = {
+    0:"https://i.ytimg.com/vi/NPOhKU5VTrQ/hqdefault.jpg",
     1:"https://i.ytimg.com/vi/4thcMKIMBYE/hqdefault.jpg",
     2:"https://i.ytimg.com/vi/H0JMACH0hy4/sddefault.jpg",
     5:"https://i.ytimg.com/vi/TjiNmDf9p0Y/sddefault.jpg"
