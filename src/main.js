@@ -32,8 +32,207 @@ scene.background = new THREE.Color(0x101530);
 const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 5000);
 // カメラの初期座標を設定（X座標:0, Y座標:0, Z座標:0）
 camera.position.set(0, 3, 0);
+camera.rotation.set(0, -90, 0);
 
-const controls = new DeviceOrientationControls(camera);
+const controls = new DeviceOrientationControls(camera,true);
+
+let origin_alpha_rotation;
+let origin_beta_rotation;
+let origin_gamma_rotation;
+let deviceorientation_count = 0;
+let which_side_is_bottom;
+let dir_type = 0;
+let a = undefined;
+const alpha_txt = document.getElementById("alpha");
+let permission;
+console.log(permission);
+let is_gyro = false;
+let offset_rotate_x;
+let offset_rotate_y;
+let reset_offset = false;
+window.addEventListener("deviceorientation", (event) => {
+    if(is_gyro){
+        console.log(permission);
+    if(deviceorientation_count==0){
+        origin_alpha_rotation = event.alpha ?? 0;
+        origin_beta_rotation = event.beta ?? 0;
+        origin_gamma_rotation = event.gamma ?? 0;
+        if(!reset_offset){
+            offset_rotate_x = camera.rotation.x*180/Math.PI;
+            offset_rotate_y = camera.rotation.y*180/Math.PI;
+        }else{
+            if(!at_main_content){
+                offset_rotate_x = 0;
+                offset_rotate_y = -90;
+            }else{
+                offset_rotate_x = 45;
+                offset_rotate_y = -90;
+            }
+            reset_offset = false;
+
+        }
+        if((origin_gamma_rotation> 0/*  && Math.abs(origin_beta_rotation)<90)||(origin_gamma_rotation< 0 && Math.abs(origin_beta_rotation)>90 */)){
+            dir_type = 0;
+            which_side_is_bottom = 1;//右
+            if(Math.abs(origin_beta_rotation)>90){
+                dir_type = 1;
+                which_side_is_bottom = -1;
+            }
+        }else if((origin_gamma_rotation<= 0/*  && Math.abs(origin_beta_rotation)<90)||(origin_gamma_rotation>= 0 && Math.abs(origin_beta_rotation)>90) */)){
+            which_side_is_bottom = -1;//左
+            dir_type = 0;
+            if(Math.abs(origin_beta_rotation)>90){
+                dir_type = 1;
+                which_side_is_bottom = 1;
+            }
+        }
+    }
+    if(deviceorientation_count !== 0){
+        let alpha = event.alpha ?? 0;
+        const beta = event.beta ?? 0;
+        let gamma = event.gamma ?? 0;
+        const o_gamma = gamma;
+        if(dir_type == 0){
+                console.log(origin_alpha_rotation,origin_gamma_rotation);
+                
+                
+                let d = 0;
+                if(gamma<=0 && gamma>=-60 && which_side_is_bottom == -1 && Math.abs(beta) >= 100){
+                    gamma-=180;
+                    alpha+=180;
+                    console.log(a);
+                    d = 1;
+                }else if(gamma>=0 && gamma<=60 && which_side_is_bottom == 1 && Math.abs(beta) >= 100){
+                    gamma+=180;
+                    alpha+=180;
+                    console.log(a);
+                    d = 2;
+                }else if(gamma>=0 && which_side_is_bottom == -1 && Math.abs(beta) >= 100/*  && (camera.rotation.x*180/Math.PI>180 || a) *//*  && camera.rotation.x*180/Math.PI>180 */){
+                    gamma-=180;
+                    alpha+=180;
+                    //a = true;
+                    console.log(a);
+                    d = 3;
+                }else if(gamma<=0 && which_side_is_bottom == 1 && Math.abs(beta) >= 100/*  && camera.rotation.x*180/Math.PI>180 */){
+                    gamma+=180;
+                    alpha+=180;
+                    console.log(a);
+                    d = 4;
+                    //a = false;
+                }
+                console.log(alpha,gamma);
+                console.log(a);
+                //euler.set(-gamma, alpha, 0, 'YXZ');
+                //camera.rotation.order = 'YXZ';
+                //camera.rotation.y = THREE.MathUtils.degToRad(alpha -origin_alpha_rotation -90);
+                //camera.rotation.x = THREE.MathUtils.degToRad(-gamma +origin_gamma_rotation);
+                //新連載！～後で後悔するコードの書き方～第1話:数字の根拠は行方不明！メモもコメントも残ってな～い！！
+                
+                //角度の種類とか(残された時間では)わからんかったので気合でパズル
+                let adjusted_gamma = ((which_side_is_bottom*(gamma -origin_gamma_rotation-offset_rotate_x))%360+360)%360
+                let c = adjusted_gamma;
+                let b = 0;
+                while(adjusted_gamma<0){
+                    adjusted_gamma+=360;
+                }
+                if((adjusted_gamma <= 150 && adjusted_gamma >= 90 && which_side_is_bottom == -1 && gamma<=0 && gamma>-45 && !a)){
+                    adjusted_gamma = 90;
+                    alpha+=180;
+                    b = 1;
+                }else if((adjusted_gamma <= 150 && adjusted_gamma >= 90 && which_side_is_bottom == 1 && gamma>=0 && gamma<45 && !a)){
+                    adjusted_gamma = 90;
+                    alpha+=180;
+                    b = 2;
+                }else if(adjusted_gamma >= 90 && adjusted_gamma < 150 && !a && which_side_is_bottom == -1 && (gamma<0 || (gamma<=0 && gamma>-45))){
+                    adjusted_gamma = 90;
+                    b = 3;
+                }else if(adjusted_gamma >= 90 && adjusted_gamma < 150 && !a && which_side_is_bottom == 1 && (gamma>-30 || (gamma>=-180 && gamma<-135))){
+                    adjusted_gamma = 90;
+                    b = 4;
+                }else if((/* which_side_is_bottom == -1 && */adjusted_gamma > 180 && adjusted_gamma <= 270 && gamma>=0 && gamma<90 && a)){
+                    adjusted_gamma = 270;
+                    //alpha+=180;
+                    b = 5;
+                }else if(adjusted_gamma > 150 &&adjusted_gamma <= 270 && a && gamma<30/*  && which_side_is_bottom == -1 */){
+                    adjusted_gamma = 270;
+                    b = 6;
+                }
+                const euler = new THREE.Euler(
+                    THREE.MathUtils.degToRad(adjusted_gamma),
+                    THREE.MathUtils.degToRad(((alpha -origin_alpha_rotation+offset_rotate_y)% 360 - 360)),
+                    0,
+                    'YXZ'
+                );
+                //console.log(((alpha -origin_alpha_rotation +270)% 360 - 360),((-gamma +origin_gamma_rotation)%360+360)%360);
+                camera.rotation.copy(euler);
+                //alpha_txt.innerText = Math.round(beta)+" :b "+b+" :d "+d+" :c "+Math.round(c)+" : "+a+" :g "+Math.round(gamma)+" :rx "+Math.round(camera.rotation.x*180/Math.PI)+" :og "+Math.round(o_gamma);
+                //alpha_txt.innerText = offset_rotate_y;
+            }else if(dir_type == 1){
+                let d = 0;
+                if(gamma<=0 && which_side_is_bottom == -1 && Math.abs(beta) <= 80){
+                    alpha += 180;
+                    gamma += 180;
+                    d = 1
+                }else if(gamma>=0 && gamma<=60 && which_side_is_bottom == -1 && Math.abs(beta) <= 80){
+                    gamma+=180;
+                    alpha+=180;
+                    console.log(a);
+                    d = 2;
+                }if(gamma>0 && which_side_is_bottom == 1 && Math.abs(beta) <= 80){
+                    alpha += 180;
+                    gamma -= 180;
+                    d = 3
+                }else if(gamma<0 && gamma>=-60 && which_side_is_bottom == 1 && Math.abs(beta) <= 80){
+                    gamma-=180;
+                    alpha+=180;
+                    console.log(a);
+                    d = 4;
+                }
+                
+                let b = 0;
+                let adjusted_gamma = ((which_side_is_bottom*(gamma -origin_gamma_rotation-offset_rotate_x))%360+360)%360
+                let c = adjusted_gamma;
+                if(which_side_is_bottom == -1 && adjusted_gamma<=270 && adjusted_gamma>=150 && a){
+                    adjusted_gamma = 270;
+                    b = 1
+                }else if(which_side_is_bottom == 1 && adjusted_gamma<=270 && adjusted_gamma>=150 && a){
+                    adjusted_gamma = 270;
+                    b = 2
+                }else if(which_side_is_bottom == -1 && adjusted_gamma<=270&& adjusted_gamma>=150 && gamma <= 90 && gamma >= 0){
+                    adjusted_gamma = 270;
+                    alpha+=180;
+                    b = 3;
+                }else if(which_side_is_bottom == 1 && adjusted_gamma<=270&& adjusted_gamma>=150 && gamma <= 0 && gamma >= -90){
+                    adjusted_gamma = 270;
+                    alpha+=180;
+                    b = 4;
+                }else if(which_side_is_bottom == -1 && adjusted_gamma>=90 && adjusted_gamma<=150 && !a){
+                    adjusted_gamma = 90;
+                    b = 5
+                }else if(which_side_is_bottom == 1 && adjusted_gamma>=90 && adjusted_gamma<=150 && !a){
+                    adjusted_gamma = 90;
+                    b = 6
+                }
+                
+                
+                const euler = new THREE.Euler(
+                    THREE.MathUtils.degToRad(adjusted_gamma),
+                    THREE.MathUtils.degToRad(((alpha -origin_alpha_rotation+offset_rotate_y)% 360 - 360)),
+                    0,
+                    'YXZ'
+                );
+                //console.log(((alpha -origin_alpha_rotation +270)% 360 - 360),((-gamma +origin_gamma_rotation)%360+360)%360);
+                camera.rotation.copy(euler);
+                //alpha_txt.innerText = Math.round(beta)+" :b "+b+" :d "+d+" :c "+Math.round(c)+" : "+a+" :g "+Math.round(gamma)+" :rx "+Math.round(camera.rotation.x*180/Math.PI)+" :og "+Math.round(o_gamma);
+            }
+            if(camera.rotation.x*180/Math.PI < 180) a = false;
+            if(camera.rotation.x*180/Math.PI >= 180) a = true;
+    }
+    deviceorientation_count++;
+    
+}
+},true);
+//めっちゃまどろっこしいコードになっちゃったね。
 
 import modelUrl from './telescope3.glb?url';
 let telescope;
@@ -270,7 +469,7 @@ canvas.addEventListener('touchstart', (e) => {
     }
 });
 canvas.addEventListener('touchmove', (e) => {
-    if (!isTouching || e.touches.length !== 1) return;
+    if (!isTouching || e.touches.length !== 1 || is_gyro) return;
 
     const touch = e.touches[0];
     const deltaX = touch.clientX - previousMousePosition.x;
@@ -835,6 +1034,10 @@ const galaxy_img = document.getElementById("galaxy_img");
 const select_galaxy_ele = document.getElementById("select_galaxy");
 let in_transition_telescope = false;
 function into_telescope(){
+    is_gyro = false;
+    gyro_setting_icon.style.display = "none";
+    gyro_settings_ele.style.display = "none";
+    reset_rotate_origin_button.style.display = "none";
     const geometry_hide_panel = new THREE.PlaneGeometry(10, 10);  // 板のサイズ（カメラの前に大きく配置）
     const material_hide_panel = new THREE.MeshBasicMaterial({
         color: 0xffffff, // 白色に設定
@@ -2218,6 +2421,7 @@ var star_geometry;
 var line_geometorlies = [];
 
 function update_star() {
+    if(!at_main_content){
     const simulatedDate = getSimulatedDate();
     const local_time = new Date(simulatedDate.getTime() + offsetHours *60 *60 *1000);
     time_ele.innerText = `${local_time.getFullYear()}年${local_time.getMonth()+1}月${local_time.getDate()}日${local_time.getHours()}時${local_time.getMinutes()}分`;
@@ -2347,6 +2551,7 @@ function update_star() {
             //}
         })
     })
+    }
     //console.log(error_count);
     requestAnimationFrame(update_star);
     animate();
@@ -2699,7 +2904,7 @@ function animate() {
 
 
     const rotate_y = ((camera.rotation.y/Math.PI*180)%360+360)%360;
-
+    //console.log(camera.rotation.y/Math.PI*180,rotate_y);
     let left_rate_N = 100 - (360-rotate_y) /180 *100;
     direction_N.style.left = `${left_rate_N}%`;
 
@@ -2711,10 +2916,13 @@ function animate() {
     let left_rate_E = compute_left_rate_E(rotate_y);
     direction_E.style.left = `${left_rate_E}%`;
 
-    const rotate_x = ((camera.rotation.x/Math.PI*180)%360);
+    let rotate_x = ((camera.rotation.x/Math.PI*180)%360+360)%360;
+    while(rotate_x >= 180){
+        rotate_x -= 360;
+    }
     
     const scaled_x = (rotate_x + 90) / 180 * 100;
-    
+    //console.log(rotate_x);
     angle_45.style.top = `${scaled_x-25}%`;
     angle_0.style.top = `${scaled_x}%`;
     angle_90.style.top = `${scaled_x-50}%`;
@@ -2846,7 +3054,9 @@ function animate() {
     rotate_galaxyStars();
     always_rotate_galaxyStars();
     transform_stars();
-
+    /* if(isGyro){
+        controls.update();
+    } */
     //controls.update();
 }
 const tanzaku_space = document.getElementById("tanzaku_space_wrapper");
@@ -4232,6 +4442,8 @@ agree_return_button.addEventListener("click",()=>{
     return_hide_ele.style.display = "block";
     return_hide_ele.classList.remove("opacity120");
     return_hide_ele.classList.add("opacity021");
+    info_icon.style.display = "none";
+    gyro_setting_icon.style.display = "block";
     starDistance = 600;
     /* constellation_lines.forEach(element => {
         element.visible = true;
@@ -4448,7 +4660,11 @@ decide_tanzaku_button.addEventListener("click",()=>{
     }else{
         
         write_wish_ele.style.display = "none";
-
+        if(switch3.checked){
+            deviceorientation_count = 0;
+            is_gyro = true;
+            reset_rotate_origin_button.style.display = "block";
+        }
         if(users_wish!==""){
             const theta = Math.random()*Math.PI*2/* *0 */;//短冊の緯度
             const phi = Math.asin(/* 1.41/2 */2 * Math.random() - 1);//短冊の経度//直接高さの角度を決めると偏るのでasinで逆算
@@ -4888,5 +5104,103 @@ function transform_stars(){
     }
 }
 
+const escape_explanation_button = document.getElementById("escape_explanation");
+const first_explanation_ele = document.getElementById("first_explanation");
+
+escape_explanation_button.addEventListener("click",()=>{
+    first_explanation_ele.style.display = "none";
+});
+
+const close_parent_settings_button = document.getElementById("close_parent_settings");
+const gyro_settings_ele = document.getElementById("gyro_settings");
+const gyro_setting_icon = document.getElementById("gyro_setting_icon");
+gyro_setting_icon.addEventListener("click",()=>{
+    gyro_setting_icon.style.display = "none";
+    gyro_settings_ele.style.display = "block";
+})
+close_parent_settings_button.addEventListener("click",()=>{
+    gyro_settings_ele.style.display = "none";
+    gyro_setting_icon.style.display = "block";
+})
+const switch_area3_ele = document.getElementById("switch_area3");
+const switch_area3_2_ele = document.getElementById("switch_area3_2");
+const switch3 = document.getElementById("switch3");
+const switch3_2 = document.getElementById("switch3_2");
+const reset_rotate_origin_button = document.getElementById("reset_rotate_origin");
+
+switch_area3_ele.addEventListener("click",()=>{
+    switch3_2.checked = switch3.checked;
+    //is_gyro = switch3.checked;
+        
+        if(switch3.checked){
+            deviceorientation_count = 0;
+        if (typeof DeviceOrientationEvent.requestPermission === 'function'){
+            DeviceOrientationEvent.requestPermission().then(permission=>{
+                if (permission === "granted") {
+                    is_gyro = true;
+                    reset_rotate_origin_button.style.display = "block";
+                }else{
+                    is_gyro = false;
+                    
+                    alert("ジャイロセンサーへのアクセスが拒否されました。")
+                }
+            }).catch(error => {
+                is_gyro = false;
+                
+                alert("ジャイロセンサーの許可取得中にエラーが発生しました: " + error);
+            });
+        }else{
+            is_gyro = true;
+        }
+    }else{
+        is_gyro = false;
+        
+    }
+    if(!is_gyro){
+        yaw = ((camera.rotation.y/Math.PI*180)%360+360)%360/180*Math.PI;
+        pitch = ((camera.rotation.x/Math.PI*180)%360+360)%360/180*Math.PI;
+        reset_rotate_origin_button.style.display = "none";
+    }else{
+        reset_rotate_origin_button.style.display = "block";
+    }
+})
+switch_area3_2_ele.addEventListener("click",async ()=>{
+    switch3.checked = switch3_2.checked;
+    //is_gyro = switch3_2.checked;
+    if(switch3_2.checked){
+        deviceorientation_count = 0;
+        if (typeof DeviceOrientationEvent.requestPermission === 'function'){
+            DeviceOrientationEvent.requestPermission().then(permission=>{
+                if (permission === "granted") {
+                    is_gyro = true;
+                    reset_rotate_origin_button.style.display = "block";
+                }else{
+                    is_gyro = false;
+                    
+                    alert("ジャイロセンサーへのアクセスが拒否されました。")
+                }
+            }).catch(error => {
+                is_gyro = false;
+                
+                alert("ジャイロセンサーの許可取得中にエラーが発生しました: " + error);
+            });
+        }else{
+            is_gyro = true;
+        }
+    }else{
+        is_gyro = false;
+    }
+    if(!is_gyro){
+        yaw = ((camera.rotation.y/Math.PI*180)%360+360)%360/180*Math.PI;
+        pitch = ((camera.rotation.x/Math.PI*180)%360+360)%360/180*Math.PI;
+        reset_rotate_origin_button.style.display = "none";
+    }else{
+        reset_rotate_origin_button.style.display = "block";
+    }
+})
+reset_rotate_origin_button.addEventListener("click",()=>{
+    deviceorientation_count = 0;
+    reset_offset = true;
+})
 //create_galaxy();
 //prepareMVimg(1);

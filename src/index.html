@@ -2,14 +2,14 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 orientation=landscape"" >
     <title>Document</title>
     <link rel="stylesheet" href="./style.css" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <!-- <p id="rylic"></p> -->
-    <div id="canvas_container">
+    <div id="canvas_container" class="landscape-only">
         <canvas id="myCanvas"></canvas>
         <div id="dom_wrapper">
         <div id="direction_parent">
@@ -33,6 +33,7 @@
             <img src="./imgs/galaxy3.png" alt="" id="galaxy_img">
         
         <img src="./imgs/setting_icon.png" alt="" id="info_icon">
+        <img src="./imgs/setting_icon.png" alt="" id="gyro_setting_icon">
         <!-- <img src="./imgs/target.png" alt="" id="star_name"> -->
         <div id="location_firstQ">
             <div class="firstQ_child">あなたの地域</div>
@@ -89,7 +90,7 @@
             <p>星座名:<span id="constellation_name">日本語</span></p>
             <p>地域:<span id="location">東京</span></p>
             <p>時間:<span id="time">912025年10月30日17時20分</span></p>
-            <p style="text-align: right;">(UTC+9)</p>
+            <p style="text-align: right;"><span id="alpha"></span>(UTC+9)</p>
         </div>
         <div id="warn_past">
             <div id="close_parent">
@@ -111,6 +112,27 @@
                     <div class="back_tanzaku" id="change_line_color_back"></div>
             </div>
             <p>※：星座線の色が変わるのは変更時より後のものだけです<br>　　既に表示された線の色は変わりません</p>
+            <p><br>ジャイロによる視点操作</p>
+            <div id="switch_area3">
+                    <input type="checkbox" id="switch3">
+                    <label for="switch3"><span></span></label>
+                    <img src="./imgs/star.png" id="swing3">
+            </div>
+        </div>
+        <div id="gyro_settings">
+            <h1>設定</h1>
+            <div id="close_parent_settings">
+                <div id="close1_settings"></div>
+                <div id="close2_settings"></div>
+            </div>
+            <p>ジャイロによる視点操作</p>
+            <div id="switch_area3_2">
+                    <input type="checkbox" id="switch3_2">
+                    <label for="switch3_2"><span></span></label>
+                    <img src="./imgs/star.png" id="swing3_2">
+            </div>
+            <p>※うまくいかない場合は、<br>ブラウザのモーションセンサなどに<br>関する設定を確認してください。</p>
+            <p></p>
         </div>
         <div id="select_galaxy">
             <h1>Choose a Galaxy</h1>
@@ -248,6 +270,41 @@
                 </div>
             </div>
         </div>
+        <div id="first_explanation">
+            <h1>
+                ようこそ！
+            </h1>
+            <p>
+                (アプリ名)へようこそ。
+                この空間では星空を観察することができます。<br>
+                星にカーソルをホバー/タップするとその星の名前や所属する星座がわかります。<br>
+                また、時間を変更したり観測地点を変更することもできます。<br>
+                ※目の前にある望遠鏡に触るとするとメインコンテンツに進めます。<br>
+            
+                視点の操作方法は画面をクリック/タップしたままドラッグするか、<br>
+                (端末が対応していれば)ジャイロセンサーを使って<br>直感的に操作することもできます。<br>
+            
+                ※ジャイロセンサーの使用に関しては右下の<br>設定ボタンから設定を開くといつでも変更できます。<br>
+                (デフォルトではジャイロセンサーはOFFです)
+            </p>
+            <!-- <div class="parent_setting">
+                <h2>
+                    ジャイロセンサーを使用する
+                </h2>
+                <div id="switch_area3">
+                    <input type="checkbox" id="switch3">
+                    <label for="switch3"><span></span></label>
+                    <img src="./imgs/star.png" id="swing3">
+                </div>
+                
+            </div> -->
+            <div id="escape_explanation_parent">
+                <div class="operate_button_wrapper">
+                    <div id="escape_explanation" class="operate_button">Let's GO!!</div>
+                    <div class="back_tanzaku"></div>
+                </div>
+            </div>
+        </div>
         <div id="realy_return">
             <h1>
                 元の銀河に戻る
@@ -334,8 +391,15 @@
             <div id="take_picture" class="operate_button">記録を保存</div>
             <div class="back_tanzaku"></div>
         </div>
+        <div id="reset_rotate_origin">
+            回転をリセット
+        </div>
         <div id="return_hide"></div>
     </div>
+    </div>
+    <div class="portrait-warning">
+        横向きにしてね！<br>
+        ※自動回転機能OFF推奨
     </div>
     <!-- <button onclick="downloadComposerOutput()">Download</button> -->
 <script src="./main.js" type="module"></script>

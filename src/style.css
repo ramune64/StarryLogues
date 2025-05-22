@@ -7,7 +7,7 @@ body{
 
 
 #myCanvas{
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
     display: block;
 }
@@ -74,7 +74,7 @@ body{
     src: url("./fonts/れいこフォント.TTF") format("truetype");
 }
 
-.firstQ_child,.japan_option_child,.world_option_child,#warn_past,#info_operate,
+.firstQ_child,.japan_option_child,.world_option_child,#warn_past,#info_operate,#gyro_settings,
 #select_galaxy{
     font-family: "nikokaku";
     font-size: 27pt;
@@ -253,11 +253,24 @@ body{
     background-color: #92c1e4;
     border-radius: 40%;
 }
-#info_operate{
+#gyro_setting_icon{
+    display: block;
+    bottom: 70px;
+    right: 70px;
+    position: absolute;
+    height: 7%;
+    z-index: 1;
+    cursor: pointer;
+    display: block;
+    background-color: #92c1e4;
+    border-radius: 40%;
+}
+#info_operate,#gyro_settings{
     position: absolute;
     text-align: left;
     cursor: auto;
     top: 50%;
+    z-index: 10000;
     left: 50%;
     height: fit-content;
     transform: translateX(-50%) translateY(-50%);
@@ -293,7 +306,40 @@ body{
             rotate: -45deg;
         }
     }
+    & #switch_area3,#switch_area3_2{
+        margin: auto;
+    }
 }
+#gyro_settings{
+    display: none;
+    z-index: 200;
+    padding: 70px;
+    padding-top: 10px;
+    & h1{
+        margin: 30px;
+    }
+    
+    & #close_parent_settings{
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 44px;
+        & div{
+            position: absolute;
+            height: 7px;
+            width: 40px;
+            background-color: #d74443;
+            transform-origin: center center;
+        }
+        & #close1_settings{
+            rotate: 45deg;
+        }
+        & #close2_settings{
+            rotate: -45deg;
+        }
+    }
+}
+
 #galaxy_img{
     display: none;
     position: absolute;
@@ -540,7 +586,7 @@ div:has(audio){
     }
 }
 
-#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe,#change_color,#decide_tanzaku,#change_line_color{
+#change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe,#change_color,#decide_tanzaku,#change_line_color,#escape_explanation{
     position: absolute;
     border: none;
     background: none;
@@ -562,6 +608,7 @@ div:has(audio){
         padding: 20px;
     
 }
+
 #change_time::before{
     content: "";
     position: absolute;
@@ -778,7 +825,8 @@ img.back_milkyway{
 #agree_return_galaxy + .back_tanzaku,
 #disagree_return_galaxy + .back_tanzaku,
 #go_observe + .back_tanzaku,
-#decide_tanzaku + .back_tanzaku{
+#decide_tanzaku + .back_tanzaku,
+#escape_explanation + .back_tanzaku{
     position: absolute;
     inset: 0;
     background-image: url(./imgs/tanzaku_ka.png);
@@ -1005,7 +1053,7 @@ img.back_milkyway{
     box-shadow: 0 0 0;
     transform: translateX(-2px) translateY(2px);
 }
-#all_wrapper,#save_record,#realy_return,#introduce,#write_wish{
+#all_wrapper,#save_record,#realy_return,#introduce,#write_wish,#first_explanation{
     width: 100%;
     height: 100%;
     position: absolute;
@@ -1049,9 +1097,16 @@ img.back_milkyway{
         text-align: center;
     }
 }
-#parent_write_tanzaku{
+#first_explanation{
     display: block;
+    & p{
+        width: fit-content;
+        margin: auto;
+    }
 }
+/* #parent_write_tanzaku{
+    display: block;
+} */
 .write_tanzaku{
     width: 120px;
     height: 70%;
@@ -1071,7 +1126,7 @@ img.back_milkyway{
     font-family: "れいこ";
     margin: auto;
     display: block;
-    }
+}
 /* #introduce{
     display: block;
 } */
@@ -1086,7 +1141,7 @@ img.back_milkyway{
         z-index: -1;
     }
 }
-#return_or_not,#save_return_or_not,#return_galaxy_or_not,#LetsGo{
+#return_or_not,#save_return_or_not,#return_galaxy_or_not,#LetsGo,#escape_explanation_parent{
     opacity: 1;
     margin: 25px auto;
     display: flex;
@@ -1264,7 +1319,7 @@ img.back_milkyway{
     gap: 100px;
     margin-top: 20px;
 }
-#switch_area1,#switch_area2{
+#switch_area1,#switch_area2,#switch_area3,#switch_area3_2{
     line-height: 60px;
     text-align: center;
     font-size: 20pt;
@@ -1273,33 +1328,43 @@ img.back_milkyway{
     width: 180px;
     cursor: pointer;
 }
-#switch_area1 input,#switch_area2 input{
+#switch_area1 input,#switch_area2 input,#switch_area3 input,#switch_area3_2 input{
     display: none;
 }
-#switch_area1 label,#switch_area2 label{
+#switch_area1 label,#switch_area2 label,#switch_area3 label,#switch_area3_2 label{
     cursor: pointer;
     display: block;
     height: 60px;
-    background-color:#00a1f8;
+    background-color:#33454e;
     border: 5px solid #464b4f;
     border-radius: 30px;
 }
-#switch_area1 input:checked + label,#switch_area2 input:checked + label{
+#switch_area1 input:checked + label,#switch_area2 input:checked + label,#switch_area3 input:checked + label,#switch_area3_2 input:checked + label{
     cursor: pointer;
-    border-color: #92c1e4;
+    border-color: #ffffff;
     background-color:#4c59ab;
 }
 #switch_area1 label:after,#switch_area2 label:after{
     content: "非表示";
     font-family: "nikokaku";
-    color: #004a82;
+    color: #92c1e4;
+}
+#switch_area3 label:after,#switch_area3_2 label:after{
+    content: "OFF";
+    font-family: "nikokaku";
+    color: #92c1e4;
 }
 #switch_area1 input:checked + label:after,#switch_area2 input:checked + label:after{
     content: "表示";
     font-family: "nikokaku";
     color: #92c1e4;
 }
-#switch_area1 img#swing1,#switch_area2 img#swing2{
+#switch_area3 input:checked + label:after,#switch_area3_2 input:checked + label:after{
+    content: "ON";
+    font-family: "nikokaku";
+    color: #92c1e4;
+}
+#switch_area1 img#swing1,#switch_area2 img#swing2,#switch_area3 img#swing3,#switch_area3_2 img#swing3_2{
     position: absolute;
     width: 60px;
     height: 60px;
@@ -1308,7 +1373,7 @@ img.back_milkyway{
     transition: 0.2s;
     transform: translateX(-50%) rotate(0deg);
 }
-#switch_area1 input:checked ~ img#swing1,#switch_area2 input:checked ~ img#swing2{
+#switch_area1 input:checked ~ img#swing1,#switch_area2 input:checked ~ img#swing2,#switch_area3 input:checked ~ img#swing3,#switch_area3_2 input:checked ~ img#swing3_2{
     transition: 0.2s;
     transform: translateX(calc(180px - 50%)) rotate(360deg);
     filter: hue-rotate(270deg) saturate(7);
@@ -1361,13 +1426,13 @@ img.back_milkyway{
 
 
 
-#go_observe,#decide_tanzaku{
+#go_observe,#decide_tanzaku,#escape_explanation{
     color: white;
     position: relative;
     top: 0;
     left: 0;
 }
-#go_observe::before,#decide_tanzaku::before{
+#go_observe::before,#decide_tanzaku::before,#escape_explanation::before{
     content: "";
     position: absolute;
     inset: 0;
@@ -1378,7 +1443,7 @@ img.back_milkyway{
     z-index: -1;
     
 }
-#go_observe + .back_tanzaku,#decide_tanzaku + .back_tanzaku{
+#go_observe + .back_tanzaku,#decide_tanzaku + .back_tanzaku,#escape_explanation + .back_tanzaku{
     background-image: url(./imgs/tanzaku_mi.png);
 }
 
@@ -1451,8 +1516,9 @@ body{
 }
 
 
+
 @media (max-width: 1550px) {
-    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe{
+    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe,#escape_explanation{
         font-size: 17pt;
         padding: 20px;
     }
@@ -1485,7 +1551,7 @@ body{
             font-size: 15pt;
         }
     }
-    #all_wrapper,#save_record,#realy_return,#introduce,#write_wish{
+    #all_wrapper,#save_record,#realy_return,#introduce,#write_wish,#first_explanation{
         padding-top: 5%;
     }
     #loading{
@@ -1501,9 +1567,27 @@ body{
     #info_icon{
         left: 250px;
     }
+    #gyro_setting_icon{
+        right: 60px;
+        bottom: 65px;
+    }
 }
 
-
+#reset_rotate_origin{
+    position: absolute;
+    border: 2px solid white;
+    color: white;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.332);
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    padding: 10px;
+    font-family: "myFont";
+    font-size: 10pt;
+    display: none;
+}
 
 
 
@@ -1511,16 +1595,16 @@ body{
     font-size: 30pt !important;
 }
 @media (max-width: 1000px) {
-    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe{
+    #change_time,#change_location,#change_constellation_name,#set_now,#return_set_time,#return_change_location,#agree_return,#disagree_return,#take_picture,#run_save,#save_return,#return_galaxy,#agree_return_galaxy,#disagree_return_galaxy,#go_observe,#escape_explanation,#change_color,#decide_tanzaku,#change_line_color{
         min-width: 130px;
         font-size: 10pt;
         padding: 10px;
     }
-    #change_time{
+    #change_time,#take_picture{
         font-size: 10pt;
         bottom: 5px;
     }
-    #change_location{
+    #change_location,#return_galaxy{
         bottom: 50px;
     }
     #set_now{
@@ -1572,7 +1656,7 @@ body{
             font-size: 8pt;
         }
     }
-    #all_wrapper,#save_record,#realy_return,#introduce,#write_wish{
+    #all_wrapper,#save_record,#realy_return,#introduce,#write_wish,#first_explanation{
         & h1{
             font-size: 16pt;
         }
@@ -1582,7 +1666,31 @@ body{
         & p,li{
             font-size: 7pt;
         }
-        padding-top: 0;
+        padding-top: 1%;
+    }
+    #save_record{
+        padding-top: 0%;
+        & #switch_area2,#switch_area1{
+            transform: scale(0.4);
+        }
+    }
+    #save_return_or_not{
+        margin: 15px auto;
+    }
+    .parent_setting{
+        height: 35px;
+        gap: 30px;
+        margin-top: 10px;
+    }
+    .write_tanzaku{
+        width: 50px;
+        height: 250px;
+        padding: 10px;
+        padding-top: 35px;
+        font-size: 10pt;
+    }
+    #parent_write_tanzaku{
+        margin-top: 10px;
     }
     #loading{
         transform: translateX(-30%) scale(1); 
@@ -1597,7 +1705,6 @@ body{
     #show_time_and_location{
         width: 180px;
         font-size: 7pt;
-        
     }
     #direction_parent{
         height: 30px;
@@ -1623,7 +1730,7 @@ body{
     }
     #found_tanzaku_wrapper{
         padding: 5px;
-        bottom: -5%;
+        bottom: -2%;
         right: -2%;
         padding-left: 15px;
         box-shadow: 3px 3px 5px white;
@@ -1631,4 +1738,79 @@ body{
             font-size: 8pt;
         }
     }
+    #gyro_settings,#info_operate{
+        padding: 10px;
+        text-align: center;
+        & h1{
+            margin: 0;
+            font-size: 15pt;
+        }
+        & p{
+            font-size: 8pt;
+        }
+        #switch_area3_2{
+            margin: 0 50px;
+        }
+        & #switch_area3,#switch_area3_2{
+            transform: scale(0.4);
+        }
+    }
+    #change_color,#decide_tanzaku{
+        margin: auto;
+        margin-top: 30px;
+        
+    }
+    #info_icon{
+        left: 150px;
+    }
+    #gyro_setting_icon{
+        bottom: 50px;
+        right: 40px;
+        width: 30px;
+        height: 30px;
+    }
+    #back_telescope{
+        top: 10px;
+        & h1{
+            font-size: 14pt;
+            margin: 3px;
+        }
+        & img{
+            position: absolute;
+            width: 15px;
+            z-index: -1;
+            rotate: 0deg;
+            transition: 0.5s;
+            transform-origin: 50% 50%;
+            opacity: 0;
+        }
+    }
+}
+
+.landscape-only {
+  display: none;
+}
+
+@media screen and (orientation: landscape) {
+  .landscape-only {
+    display: block;
+  }
+  .portrait-warning {
+    display: none;
+  }
+}
+
+@media screen and (orientation: portrait) {
+  .landscape-only {
+    display: none;
+  }
+  .portrait-warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    background: black;
+    color: white;
+    font-size: 2rem;
+  }
 }
