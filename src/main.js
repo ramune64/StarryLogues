@@ -34,7 +34,7 @@ const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 5000);
 camera.position.set(0, 3, 0);
 camera.rotation.set(0, -90, 0);
 
-const controls = new DeviceOrientationControls(camera,true);
+//const controls = new DeviceOrientationControls(camera,true);
 
 let origin_alpha_rotation;
 let origin_beta_rotation;
@@ -460,6 +460,7 @@ document.addEventListener('mousemove', (e) => {
 })
 
 let isTouching = false;
+let allow_touch_move = true;
 
 canvas.addEventListener('touchstart', (e) => {
     if (e.touches.length === 1) {
@@ -469,7 +470,7 @@ canvas.addEventListener('touchstart', (e) => {
     }
 });
 canvas.addEventListener('touchmove', (e) => {
-    if (!isTouching || e.touches.length !== 1 || is_gyro) return;
+    if (!isTouching || e.touches.length !== 1 || is_gyro || !allow_touch_move) return;
 
     const touch = e.touches[0];
     const deltaX = touch.clientX - previousMousePosition.x;
@@ -479,11 +480,11 @@ canvas.addEventListener('touchmove', (e) => {
     previousMousePosition.y = touch.clientY;
 
     if(!at_main_content){
-        yaw += deltaX * 0.003;
-        pitch += deltaY * 0.003;
+        yaw += deltaX * 0.0003;
+        pitch += deltaY * 0.0003;
     }else{
-        yaw += deltaX * 0.0009;
-        pitch += deltaY * 0.0009;
+        yaw += deltaX * 0.0018;
+        pitch += deltaY * 0.0018;
     }
     const maxPitch = Math.PI / 2 - 0.01;
     const minPitch = -Math.PI / 2 + 0.01;
@@ -1048,6 +1049,7 @@ function into_telescope(){
     in_transition_telescope = true;
     at_main_content = true;
     panel.visible = false;
+    allow_touch_move = false;
     change_constellation_name_button.parentElement.style.display = "none";
     change_location_button.parentElement.style.display = "none";
     change_time_button.parentElement.style.display = "none";
@@ -1912,8 +1914,8 @@ change_constellation_name_button.addEventListener("click",()=>{
 
 // レンダリング
 //renderer.render(scene, camera);
-const axesHelper = new THREE.AxesHelper( 1000 );
-scene.add( axesHelper );
+//const axesHelper = new THREE.AxesHelper( 1000 );
+//scene.add( axesHelper );
 
 // ブルームエフェクトの設定
 const renderScene = new RenderPass(scene, camera);
@@ -3403,6 +3405,7 @@ player.addListener({
             //load_music(5);//デバッグ用
             loading_gray.style.display = "none";
             loading.style.display = "none";
+            first_explanation_ele.style.display = "block";
         }
     },
     onVideoReady:(video)=>{
@@ -4659,13 +4662,18 @@ decide_tanzaku_button.addEventListener("click",()=>{
         alert("内容は30文字以下にしてください。");
     }else{
         
-        write_wish_ele.style.display = "none";
+        //
+        allow_touch_move = true;
         if(switch3.checked){
             deviceorientation_count = 0;
             is_gyro = true;
             reset_rotate_origin_button.style.display = "block";
         }
         if(users_wish!==""){
+            document.getElementById("parent_write_tanzaku").classList.add("go_above");
+            setTimeout(()=>{
+                write_wish_ele.style.display = "none";
+            }, 500);
             const theta = Math.random()*Math.PI*2/* *0 */;//短冊の緯度
             const phi = Math.asin(/* 1.41/2 */2 * Math.random() - 1);//短冊の経度//直接高さの角度を決めると偏るのでasinで逆算
             const x = 40* Math.cos(phi) * Math.cos(theta);
@@ -4708,6 +4716,8 @@ decide_tanzaku_button.addEventListener("click",()=>{
             },0);
             tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:imgURL,users:true});
             max_tanzaku_ele.innerText = "31";
+        }else{
+            write_wish_ele.style.display = "none";
         }
     }
 })
