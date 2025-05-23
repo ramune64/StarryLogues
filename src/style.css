@@ -208,7 +208,7 @@ body{
     }
 }
 
-#telescope_filter{
+/* #telescope_filter{
     top: 0;
     left: 0;
     z-index: 1;
@@ -217,6 +217,28 @@ body{
     width: 100%;
     height: 100%;
     pointer-events: none;
+    display: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+} */
+#telescope_filter{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(
+        circle,
+        transparent 0%,
+        transparent 55vmin,
+        rgba(53, 0, 131, 0.758) 55vmin,
+        rgba(53, 0, 131, 0.758) 60vmin,
+        rgba(0, 0, 40, 0.589) 70vmin,
+        rgba(0, 0, 40, 0.95) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
     display: none;
     user-select: none;
     -webkit-user-select: none;
@@ -394,6 +416,7 @@ body{
     display: none;
     position: absolute;
     height: fit-content;
+    z-index: 2;
     /* background-color: #d74443; */
     top: 50%;
     left: 50%;

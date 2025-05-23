@@ -12,8 +12,8 @@ import { MeshLine, MeshLineMaterial } from 'three.meshline';
 import { DeviceOrientationControls } from './controls/DeviceOrientationControls.js';
 
 
-const width = window.innerWidth;
-const height =  window.innerHeight;
+let width = window.innerWidth;
+let height =  window.innerHeight;
 
 // レンダラーを作成
 const renderer = new THREE.WebGLRenderer({
@@ -30,10 +30,20 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x101530);
 // カメラを作成
 const camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 5000);
+camera.aspect = width / height;
+camera.updateProjectionMatrix();
 // カメラの初期座標を設定（X座標:0, Y座標:0, Z座標:0）
 camera.position.set(0, 3, 0);
 camera.rotation.set(0, -90, 0);
+function onResize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+}
 
+window.addEventListener('resize', onResize);
 //const controls = new DeviceOrientationControls(camera,true);
 
 let origin_alpha_rotation;
@@ -480,8 +490,8 @@ canvas.addEventListener('touchmove', (e) => {
     previousMousePosition.y = touch.clientY;
 
     if(!at_main_content){
-        yaw += deltaX * 0.0003;
-        pitch += deltaY * 0.0003;
+        yaw += deltaX * 0.003;
+        pitch += deltaY * 0.003;
     }else{
         yaw += deltaX * 0.0018;
         pitch += deltaY * 0.0018;
@@ -1144,8 +1154,8 @@ function into_telescope(){
             telescope_filter_img.style.display = "block";
             //galaxy_img.style.display = "block";
             
-            /* telescope_filter_img.classList.add("opacity_animation");
-            galaxy_img.classList.add("opacity_animation"); */
+            telescope_filter_img.classList.add("opacity_animation");
+            //galaxy_img.classList.add("opacity_animation");
         },
         onComplete: () => {
             telescope_filter_img.classList.add("opacity_animation");
@@ -4132,7 +4142,7 @@ class ParticleExplosion  {
         this.elapsed += delta;
         for (let i = 0; i < this.velocities.length; i++) {
           this.positions[i * 3] += this.velocities[i].x;
-          this.positions[i * 3 + 1] += this.velocities[i].y;
+          this.positions[i * 3 + 1] += this.velocities[i].y - 0.15*this.elapsed;
           this.positions[i * 3 + 2] += this.velocities[i].z;
         }
         if(this.num_found_tanzaku<this.clear_border){
@@ -4859,6 +4869,7 @@ const GalaxyRotate_duration = 5000;
 let GalaxyRotateStart_time = undefined;
 let GalaxyRotating = false;
 let rotate_progress = 0;
+let center_goal2= new THREE.Vector3(50,50,0);
 function rotate_galaxyStars(){
     let addition_angle = 0;
 
@@ -4892,12 +4903,12 @@ function rotate_galaxyStars(){
             armz = radius*Math.cos(updated_angleRad);
             const rotatedX = army * Math.cos(zRotation);
             const rotatedY = army * Math.sin(zRotation);
-
+            center = new THREE.Vector3().lerpVectors(center, center_goal2, eased_progress);
             armx = rotatedX + center.x + armx;
             army = rotatedY + center.y;
             armz = armz + center.z;
-            center.x -= 2;
-            center.y -= 2;
+            
+            //arms[3] = center;
             galaxystar_positions[index*3] = armx;
             galaxystar_positions[1+index*3] = army;
             galaxystar_positions[2+index*3] = armz;
