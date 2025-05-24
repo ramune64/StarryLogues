@@ -2468,10 +2468,11 @@ function update_star() {
         const DEC_Deg = star.dec_deg;//DEC(度数法)(天の赤道からの距離)
 
         //固有運動を考慮
-        const pm_ra_deg = star.pm_ra / 3600000 *Math.cos(DEC_Deg*Math.PI/180);//ミリ秒角=>度
         const pm_dec_deg = star.pm_dec / 3600000;
-        const new_ra_deg = star.ra_deg + pm_ra_deg * year_diff;
         const new_dec_deg = star.dec_deg + pm_dec_deg * year_diff;
+        const pm_ra_deg = star.pm_ra / 3600000 *Math.cos(new_dec_deg*Math.PI/180);//ミリ秒角=>度
+        const new_ra_deg = star.ra_deg + pm_ra_deg * year_diff;
+        
         const new_ra_rad = new_ra_deg * Math.PI / 180;
         const new_dec_rad = new_dec_deg * Math.PI / 180;
         //ラジアンに変換
