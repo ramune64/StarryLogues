@@ -493,8 +493,8 @@ canvas.addEventListener('touchmove', (e) => {
         yaw += deltaX * 0.003;
         pitch += deltaY * 0.003;
     }else{
-        yaw += deltaX * 0.0018;
-        pitch += deltaY * 0.0018;
+        yaw += deltaX * 0.004;
+        pitch += deltaY * 0.004;
     }
     const maxPitch = Math.PI / 2 - 0.01;
     const minPitch = -Math.PI / 2 + 0.01;
@@ -1161,7 +1161,7 @@ function into_telescope(){
             telescope_filter_img.classList.add("opacity_animation");
             galaxy_img.classList.add("size_animation");
             select_galaxy_ele.style.display = "block";
-            telescope_filter_img.classList.add("opacity_animation");
+            //telescope_filter_img.classList.add("opacity_animation");
             yaw = -Math.PI / 2;   // 左右
             pitch = 45 * Math.PI / 180; // 上下
             scene.remove(hide_plane);
@@ -3234,11 +3234,30 @@ const galaxy_container_song_ele = document.getElementById("galaxy_container_song
 galaxy_container_song_ele.addEventListener("click",(e)=>{
     for(let i=0;i<6;i++){
         if(e.target === song_buttons[i]){
-            console.log(i);
             load_music(i);
         }
     }
 })
+
+let touching_button = null;
+galaxy_container_song_ele.addEventListener("touchstart", (e) => {
+    for(let i=0;i<6;i++){
+        if(e.target === song_buttons[i]){
+            touching_button = i;
+        }
+    }
+});
+galaxy_container_song_ele.addEventListener("touchend", (e) => {
+    for(let i=0;i<6;i++){
+        if(e.target === song_buttons[i]){
+            if(i == touching_button){
+                load_music(i);
+                touching_button = null;
+            }
+        }
+    }
+});
+
 
 function load_music(num){
     
