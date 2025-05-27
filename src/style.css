@@ -1735,16 +1735,18 @@ body{
         }
     }
     #all_wrapper,#save_record,#realy_return,#introduce,#write_wish,#first_explanation{
+        padding-top: 1%;
         & h1{
-            font-size: 16pt;
+            font-size: 12pt;
         }
         & h2{
-            font-size: 10pt;
-        }
-        & p,li{
+            margin: 0;
             font-size: 7pt;
         }
-        padding-top: 1%;
+        & p,li{
+            font-size: 6pt;
+        }
+        
     }
     #save_record{
         padding-top: 0%;

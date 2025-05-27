@@ -3086,11 +3086,15 @@ start_observe_button.addEventListener("click",()=>{
     console.log(player.isPlaying);
     if(!player.isPlaying){
         player.requestPlay();
+        if(!hasEverPlayed){
+            player.timer.seek(0);
+        }
         hasEverPlayed = true;
-        
+        started_byUser = true;
         
     }else{
         player.requestPause();
+        started_byUser = false;
         /* play_button.src = play_button_img;
         start_dbserve_child.innerText = "観測を再開する"; */
     }
@@ -3262,7 +3266,8 @@ galaxy_container_song_ele.addEventListener("touchend", (e) => {
 
 function load_music(num){
     
-    
+    started_byUser = false;
+    hasEverPlayed = false;
     // ストリートライト / 加賀(ネギシャワーP)
     if(num == 0){
     player.createFromSongUrl("https://piapro.jp/t/ULcJ/20250205120202", {
@@ -3359,6 +3364,7 @@ function load_music(num){
     loading.style.top = "80%";
     loading.style.left = "90%";
     loading_txt.innerText = "移動中..."
+    player.timer.seek(0);
     fit_loading_parent();
 }
 function fit_loading_parent(){
@@ -3457,6 +3463,7 @@ player.addListener({
             //console.log(temporary[rand_idx] in temporary);
             
         }
+        
         max_tanzaku_ele.innerText = "30";
         InPreparationSong = false;
         num_found_tanzaku = 0;
@@ -3494,17 +3501,18 @@ player.addListener({
         }
         if(!hasEverPlayed){
             start_dbserve_child.innerText = "観測を開始する";
+            player.timer.seek(0);
         }
     },
     onStop:()=>{
         console.log("stop");
         isStopped = true;
-        hasEverPlayed = false;
+        //hasEverPlayed = false;
         play_button.src = play_button_img;
         start_dbserve_child.innerText = "観測を開始する";
     },
     onTimerReady:()=>{
-        console.log("楽曲準備完了")
+        console.log("楽曲準備完了");
         console.log(player);
         console.log(player.data.song);
         
@@ -3512,7 +3520,8 @@ player.addListener({
         hasEverPlayed = false;
         play_button.src = play_button_img;
         start_dbserve_child.innerText = "観測を開始する";
-        //player.requestPlay();
+        player.timer.seek(0);
+        player.requestPause();
         ignor_count = 0;
         let rylic = player.video.firstWord;
         while(rylic){
@@ -3538,7 +3547,9 @@ player.addListener({
         player.timer.seek(0);
     },
     onTimeUpdate : (pos) =>{
+        //found_tanzaku.innerText = pos;//デバッグ
         //console.log(pos);
+        if(started_byUser){
         let bv;
         updateCount++;
         //console.log("再生位置のアップデート:", pos, "ミリ秒");
@@ -3878,6 +3889,7 @@ player.addListener({
     } */
     }
 }
+    }
 }
 )
 function createTextSprite(text,RGB,bright,size) {
@@ -4162,7 +4174,7 @@ class ParticleExplosion  {
         this.elapsed += delta;
         for (let i = 0; i < this.velocities.length; i++) {
           this.positions[i * 3] += this.velocities[i].x;
-          this.positions[i * 3 + 1] += this.velocities[i].y - 0.15*this.elapsed;
+          this.positions[i * 3 + 1] += this.velocities[i].y - 0.06*this.elapsed;
           this.positions[i * 3 + 2] += this.velocities[i].z;
         }
         if(this.num_found_tanzaku<this.clear_border){
@@ -4630,6 +4642,7 @@ agree_return_galaxy_button.addEventListener("click",()=>{
 disagree_return_galaxy_button.addEventListener("click",()=>{
     realy_return_ele.style.display = "none";
 });
+let started_byUser = false;
 function waitForImages(count = 5, interval = 100) {
     return new Promise(resolve => {
         const check = setInterval(() => {
@@ -4662,6 +4675,7 @@ go_observe_button.addEventListener("click",()=>{
     introduce_ele.classList.add("fade_out");
     setTimeout(()=>{
         introduce_ele.style.display = "none";
+        introduce_ele.classList.remove("fade_out");
     },1000);
     //original_tanzaku_list
     set_tanzaku_img();
