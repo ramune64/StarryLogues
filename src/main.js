@@ -3361,7 +3361,7 @@ function load_music(num){
     select_galaxy_ele.style.display = "none";
     loading.style.display = "block";
     loading.style.transform = "translateX(-50%) scale(0.2)";
-    loading.style.top = "80%";
+    loading.style.top = "60%";
     loading.style.left = "90%";
     loading_txt.innerText = "移動中..."
     player.timer.seek(0);
