@@ -3982,10 +3982,10 @@ function placeTextSprite(text,bv,bright,size) {
     let final_lng;
     let corrected_pos;
     //corrected_pos = basePos;
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 100; i++) {
         let safe = true;
         const angle = Math.random() * 2 * Math.PI;
-        const r = 0.06 * i*size;
+        const r = 0.12 * i*size;
         const latOffset = Math.sin(angle) * r;
         const lngOffset = Math.cos(angle) * r;
             //const latOffset = Math.sign((Math.random()) - 0.5) * 0.06*i; // 調整可
