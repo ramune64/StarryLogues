@@ -1033,7 +1033,8 @@ canvas.addEventListener('mouseup', (event) => {
 }
 });
 
-
+let geometry_hide_panel;
+let material_hide_panel;
 let hide_plane;
 let at_main_content = false;
 const show_time_and_location_ele = document.getElementById("show_time_and_location");
@@ -1049,8 +1050,8 @@ function into_telescope(){
     gyro_setting_icon.style.display = "none";
     gyro_settings_ele.style.display = "none";
     reset_rotate_origin_button.style.display = "none";
-    const geometry_hide_panel = new THREE.PlaneGeometry(10, 10);  // 板のサイズ（カメラの前に大きく配置）
-    const material_hide_panel = new THREE.MeshBasicMaterial({
+    geometry_hide_panel = new THREE.PlaneGeometry(10, 10);  // 板のサイズ（カメラの前に大きく配置）
+    material_hide_panel = new THREE.MeshBasicMaterial({
         color: 0xffffff, // 白色に設定
         opacity: 10,      // 最初は完全に不透明
         transparent: true // 透明にする
@@ -1165,6 +1166,8 @@ function into_telescope(){
             yaw = -Math.PI / 2;   // 左右
             pitch = 45 * Math.PI / 180; // 上下
             scene.remove(hide_plane);
+            geometry_hide_panel.dispose()
+            material_hide_panel.dispose()
             create_galaxy();
             rotation_pase = 20;
             always_GalaxyRotating = true;
@@ -2991,9 +2994,15 @@ function animate() {
                 opacity: 0,
                 onComplete: () => {
                     scene.remove(cloudsprite);
+                    cloudtexture.dispose();
+                    cloudmaterial.dispose();
                     scene.remove(galaxy_star_points);
+                    galazy_star_material.dispose();
+                    galazy_star_geometory.dispose();
                     hide_plane.visible = false;
                     scene.remove(hide_plane);
+                    geometry_hide_panel.dispose()
+                    material_hide_panel.dispose()
                     in_transition_telescope = false;
                     start_observe_button.style.pointerEvents = "auto";
                     start_observe_button.style.opacity = 1;
@@ -3040,9 +3049,15 @@ function animate() {
                 opacity: 0,
                 onComplete: () => {
                     scene.remove(cloudsprite);
+                    cloudtexture.dispose();
+                    cloudmaterial.dispose();
                     scene.remove(galaxy_star_points);
+                    galazy_star_material.dispose();
+                    galazy_star_geometory.dispose();
                     hide_plane.visible = false;
                     scene.remove(hide_plane);
+                    geometry_hide_panel.dispose()
+                    material_hide_panel.dispose()
                     in_transition_telescope = false;
                     start_observe_button.style.pointerEvents = "auto";
                     start_observe_button.style.opacity = 1;
@@ -3927,7 +3942,7 @@ function createTextSprite(text,RGB,bright,size) {
     // スケール調整（大きさ）
     sprite.scale.set(size*text.length*0.01,size*0.01, 1); // 横:縦の比率をCanvasと合わせると綺麗
 
-    return {sprite,radius:text.length*size};
+    return {sprite,radius:text.length*size,texture:texture,material:material};
 }
 
 function get_lookat_pos(dis = 40){
@@ -3953,7 +3968,7 @@ function placeTextSprite(text,bv,bright,size) {
     const color_rgb = bvToRgb(bv);
     const color = new THREE.Color();
     color.setRGB(color_rgb[0],color_rgb[1],color_rgb[2]);
-    const {sprite ,radius} = createTextSprite(text,color,bright,size);
+    const {sprite ,radius,texture,material} = createTextSprite(text,color,bright,size);
     
     let basePos = get_lookat_pos(40);
     const dir = new THREE.Vector3(0, 0, -1);
@@ -3997,7 +4012,7 @@ function placeTextSprite(text,bv,bright,size) {
         }
         if (safe) {
             sprite.position.copy(corrected_pos);
-            existingSprites.push({ sprite:sprite, radius:radius });
+            existingSprites.push({ sprite:sprite, radius:radius ,texture:texture,material:material});
             scene.add(sprite);
             placed = true;
             console.log("succeed:",text)
@@ -4008,7 +4023,7 @@ function placeTextSprite(text,bv,bright,size) {
         final_lat = baseLat;
         final_lng = baseLng;
         sprite.position.copy(basePos);
-        existingSprites.push({ sprite:sprite, radius:radius });
+        existingSprites.push({ sprite:sprite, radius:radius ,texture:texture,material:material});
         scene.add(sprite);
         console.log("failed");
     }
@@ -4257,6 +4272,7 @@ const tanzaku_back_ims = button_back_imgs.concat([milkyway_img]);
 let tanzaku_list = [];
 let original_tanzaku_list = [];
 function make_tanzaku_and_place(dis=40,quantity_per_one = 6){
+    original_tanzaku_list = [];
     tanzaku_list = [];
     tanzaku_imgs.forEach(tanzaku => {
         const img = new Image();
@@ -4326,11 +4342,11 @@ function make_tanzaku_and_place(dis=40,quantity_per_one = 6){
                 const z = dis* Math.cos(phi) * Math.sin(theta);
                 tanzaku_mesh.position.set(x,y,z);
                 tanzaku_mesh.lookAt(0, 0, 0);
-                if(i<5){
+                if(i<quantity_per_one-1){
                     scene.add(tanzaku_mesh);
-                    tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl,users:false});
+                    tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:dataUrl,users:false,geometry:geometry,material:material,texture:texture});
                 }else{
-                    original_tanzaku_list.push({mesh:tanzaku_mesh,imgURL:dataUrl,URL4css:tanzaku});
+                    original_tanzaku_list.push({mesh:tanzaku_mesh,imgURL:dataUrl,URL4css:tanzaku,geometry:geometry,material:material,texture:texture});
                 }
             }
         }
@@ -4597,11 +4613,23 @@ agree_return_galaxy_button.addEventListener("click",()=>{
             existingSprites.forEach(sprite=>{
                 sprite.sprite.visible = false;
                 scene.remove(sprite.sprite);
+                sprite.texture.dispose();
+                sprite.material.dispose();
             });
             existingSprites = [];
             tanzaku_list.forEach(tanzaku=>{
                 tanzaku.mesh.visible = false;
                 scene.remove(tanzaku.mesh);
+                tanzaku.texture.dispose();
+                tanzaku.material.dispose();
+                tanzaku.geometry.dispose();
+            })
+            original_tanzaku_list.forEach(tanzaku=>{
+                tanzaku.mesh.visible = false;
+                scene.remove(tanzaku.mesh);
+                tanzaku.texture.dispose();
+                tanzaku.material.dispose();
+                tanzaku.geometry.dispose();
             })
             tanzaku_list = [];
             telescope.visible = true;
@@ -4717,6 +4745,7 @@ decide_tanzaku_button.addEventListener("click",()=>{
             document.getElementById("parent_write_tanzaku").classList.add("go_above");
             setTimeout(()=>{
                 write_wish_ele.style.display = "none";
+                document.getElementById("parent_write_tanzaku").classList.remove("go_above");
             }, 500);
             const theta = Math.random()*Math.PI*2/* *0 */;//短冊の緯度
             const phi = Math.asin(/* 1.41/2 */2 * Math.random() - 1);//短冊の経度//直接高さの角度を決めると偏るのでasinで逆算
@@ -4758,8 +4787,9 @@ decide_tanzaku_button.addEventListener("click",()=>{
                 duration:0.5,
                 opacity:5,
             },0);
-            tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:imgURL,users:true});
+            tanzaku_list.push({mesh:tanzaku_mesh,isAnimating:false,imgURL:imgURL,users:true,texture:original_tanzaku_list[current_img_idx].texture,geometry:original_tanzaku_list[current_img_idx].geometry,material:original_tanzaku_list[current_img_idx].material});
             max_tanzaku_ele.innerText = "31";
+            wish_ele.value = "";
         }else{
             write_wish_ele.style.display = "none";
         }
@@ -4776,6 +4806,7 @@ import cloud2 from "./imgs/cloud2.png";
 import cloud3 from "./imgs/cloud3.png";
 import cloud4 from "./imgs/cloud4.png";
 import cloud5 from "./imgs/cloud5.png";
+//import { texture } from "three/tsl";
 const clouds = [cloud1,cloud2,cloud3,cloud4,cloud5];
 
 //ありがとうchatgpt(n度目)
@@ -4792,10 +4823,13 @@ function loadImages(srcArray) {
     );
 }
 let galazy_star_geometory;
+let galazy_star_material;
 let arms_data = [];
 const zRotation = -Math.PI / 4;
 let current_galaxy_rotate = 0;
 let cloudsprite;
+let cloudtexture;
+let cloudmaterial;
 let galaxy_star_points;
 function create_galaxy(){
     arms_data = [];
@@ -4855,8 +4889,9 @@ function create_galaxy(){
         alphaTest: 0.001,
         blending: THREE.AdditiveBlending,
     });
+    galazy_star_material = material;
     const points = new THREE.Points(geometry, material);
-    galaxy_star_points = points
+    galaxy_star_points = points;
     scene.add(points);
     
     loadImages(clouds).then(images => {
@@ -4880,15 +4915,16 @@ function create_galaxy(){
         });
 
         // CanvasからThree.js用のテクスチャに
-        const texture = new THREE.CanvasTexture(canvas);
+        cloudtexture = new THREE.CanvasTexture(canvas);
         //document.body.appendChild(canvas);
-        const cloudmaterial = new THREE.SpriteMaterial({
-            map: texture,
+        cloudmaterial = new THREE.SpriteMaterial({
+            map: cloudtexture,
             transparent: true,
             depthWrite: false,
             opacity:0.5,
             color:0x11ffff
         });
+        
         cloudsprite = new THREE.Sprite(cloudmaterial);
         cloudsprite.scale.set(1000, 1000, 1);
         cloudsprite.position.set(800, 800, 0);
@@ -5108,6 +5144,8 @@ function transform_stars(){
             GalaxyTransformStart_time = undefined;
             GalaxyTransforming = false;
             scene.remove(cloudsprite);
+            cloudtexture.dispose();
+            cloudmaterial.dispose();
             return
         }
         const eased_progress = easeInOutCubic(Transform_progress);
