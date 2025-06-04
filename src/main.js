@@ -1200,7 +1200,7 @@ let line_color_namme = [
     "ランダム",
     "水色",
     "黄色1",
-    "黄色2",
+    "オレンジ",
     "ピンク",
     "赤",
     "青",
@@ -2733,7 +2733,7 @@ Promise.all([
     const points = new THREE.Points(geometry,star_material);
     star_points = points;
     scene.add(points);
-    const line_colors = [0x7dbbe6,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc];
+    const line_colors = [0x1df8de,0xd74443,0x70aeff,0xe0e34c,0xf89d1d,0xeccbdc];
     
     constellations.constellations.forEach(constellation => {
         let line_color = line_colors[Math.floor(Math.random()*line_colors.length)]
@@ -3960,7 +3960,7 @@ function sphericalToCartesian(radius, latitude, longitude) {
     const z = radius * Math.cos(latitude) * Math.sin(longitude);
     return new THREE.Vector3(x, y, z);
 }
-const line_colors = [0x7DDFFF,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc];
+const line_colors = [0x1df8de,0xd74443,0x70aeff,0xe0e34c,0xf89d1d,0xeccbdc];
 let existingSprites = [];
 let starlines = [];
 function placeTextSprite(text,bv,bright,size) {
@@ -4073,7 +4073,7 @@ function placeTextSprite(text,bv,bright,size) {
         const lineGeometry = new THREE.BufferGeometry();
         lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
         let line_color;
-        console.log(current_line_color_mode);
+        //console.log(current_line_color_mode);
         if(current_line_color_mode == 1){
             line_color = line_colors[0];
         }else if(current_line_color_mode == 2){
