@@ -2901,18 +2901,18 @@ function animate() {
         
     }else if(InPreparationSong === false){
         //console.log("music_num:",music_num);
-        if(!changed_rotate_mode && (music_num == 3 || music_num == 4)){
+        if(!changed_rotate_mode && (music_num == 7)){
             always_GalaxyRotating = false;
             GalaxyRotateStart_time = undefined;
             current_galaxy_rotate = addition_angle;
             GalaxyRotating = true;
             changed_rotate_mode = true;
-        }else if(!changed_rotate_mode && !(music_num == 3 || music_num == 4)){
+        }else if(!changed_rotate_mode && !(music_num == 7)){
             prepareMVimg(music_num);
             always_GalaxyRotating = false;
             changed_rotate_mode = true;
         }
-        if((rotate_progress>0.8 && (music_num == 3 || music_num == 4))){//ここにサムネの演出を入れる
+        if((rotate_progress>0.8 && (music_num == 7))){//ここにサムネの演出を入れる
             InPreparationSong=undefined;
             
             //galaxy_img.style.display = "none";
@@ -2968,7 +2968,7 @@ function animate() {
                     info_icon.style.display = "block";
                 }
             })
-        }else if(Transform_progress>=0.9 && !(music_num == 3 || music_num == 4)){
+        }else if(Transform_progress>=0.9 && !(music_num == 7)){
             //console.log("Transform Done")
             InPreparationSong=undefined;
             let tl = gsap.timeline();
@@ -4996,6 +4996,8 @@ const thumbnails = {
     0:"https://i.ytimg.com/vi/NPOhKU5VTrQ/hqdefault.jpg",
     1:"https://i.ytimg.com/vi/4thcMKIMBYE/hqdefault.jpg",
     2:"https://i.ytimg.com/vi/H0JMACH0hy4/sddefault.jpg",
+    3:"https://i.ytimg.com/vi/IN0PORisHSs/hq720.jpg",
+    4:"https://i.ytimg.com/vi/Mzttgw4LuPA/hq720.jpg",
     5:"https://i.ytimg.com/vi/TjiNmDf9p0Y/sddefault.jpg"
 }
 
