@@ -324,60 +324,7 @@ plane.position.set(0, 0, 0);
 const light = new THREE.AmbientLight(0xFFFFFF, 0.1);
 scene.add(light);
 
-// 平行光源
-/* const light = new THREE.DirectionalLight(0xFFFFFF);
-light.intensity = 1; // 光の強さを倍に
-light.position.set(0, 1, 0); // ライトの方向
-// シーンに追加
-scene.add(light); */
 
-/* const light = new THREE.HemisphereLight(0x888888, 0xDDDDFF, 10);
-scene.add(light); */
-
-
-
-
-
-//tick();
-//import hdriUrl from './kloppenheim02puresky2k.hdr?url';
-//import hdriUrl from './rogland_clear_night_2k2.hdr?url';
-/* import hdriUrl from './qwantani_night_2k.hdr?url';
-
-// PMREM生成器（環境マップ変換用）
-const pmremGenerator = new THREE.PMREMGenerator(renderer);
-pmremGenerator.compileEquirectangularShader();
-
-const rgbeLoader = new RGBELoader();
-rgbeLoader.load(hdriUrl, (texture) => {
-    const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-    scene.environment = envMap;
-    scene.background = envMap;
-    scene.environment.encoding = THREE.sRGBEncoding;
-    scene.environmentIntensity = 0;
-    scene.backgroundIntensity = 0.04;
-
-
-    texture.dispose();
-    pmremGenerator.dispose();
-}); */
-
-// OrbitControls を設定
-/* const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // 慣性を加える
-controls.dampingFactor = 0.25; // 慣性の強さ */
-/* controls.screenSpacePanning = false; // 水平方向のみパン
-controls.enablePan = false;
-controls.enableZoom = false;
-controls.minPolarAngle = 0; // 真上
-controls.maxPolarAngle = Math.PI; // 真下 */
-
-
-// パン（平行移動）無効化
-/* controls.enablePan = false;
-
-// 回転の範囲を制限（必要に応じて）
-controls.minPolarAngle = 0; // 真上
-controls.maxPolarAngle = Math.PI; // 真下 */
 
 let isMouseDown = false;
 let previousMousePosition = { x: 0, y: 0 };
@@ -530,8 +477,7 @@ ctx.canvas.width = 960;
 ctx.canvas.height = 540;
 // 背景
 
-
-var target_data = "data:image/png;base64,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"
+import target_data2 from "./imgs/target.png"
 
 // 背景
 ctx.fillStyle = 'rgba(255, 255, 255, 0)';
@@ -571,7 +517,7 @@ img.onload = () => {
     panel.visible = false;
     scene.add(panel);
 }
-img.src = target_data;
+img.src = target_data2;
 
 const chTime_x_list = { "y5":[0,0.09],
                         "y4":[0.091,0.18],
@@ -1199,8 +1145,8 @@ let tanzaku_imgs_for_line = [
 let line_color_namme = [
     "ランダム",
     "水色",
-    "黄色1",
-    "黄色2",
+    "オレンジ",
+    "黄色",
     "ピンク",
     "赤",
     "青",
@@ -1258,7 +1204,8 @@ img2.onload = () => {
     star_panel.visible = false;
     scene.add(star_panel);
 }
-img2.src = target_data;
+
+img2.src = target_data2;
 
 let panel_pos = {x:0,y:0,z:0};
 
@@ -2733,7 +2680,7 @@ Promise.all([
     const points = new THREE.Points(geometry,star_material);
     star_points = points;
     scene.add(points);
-    const line_colors = [0x7dbbe6,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc];
+    const line_colors = [0x1df8de,0xd74443,0x70aeff,0xe0e34c,0xf89d1d,0xeccbdc];
     
     constellations.constellations.forEach(constellation => {
         let line_color = line_colors[Math.floor(Math.random()*line_colors.length)]
@@ -2953,7 +2900,7 @@ function animate() {
         //galaxy_img_scale = Math.min(galaxy_img_scale,1.6);
         
     }else if(InPreparationSong === false){
-        console.log("music_num:",music_num);
+        //console.log("music_num:",music_num);
         if(!changed_rotate_mode && (music_num == 3 || music_num == 4)){
             always_GalaxyRotating = false;
             GalaxyRotateStart_time = undefined;
@@ -3022,13 +2969,13 @@ function animate() {
                 }
             })
         }else if(Transform_progress>=0.9 && !(music_num == 3 || music_num == 4)){
-            console.log("Transform Done")
+            //console.log("Transform Done")
             InPreparationSong=undefined;
             let tl = gsap.timeline();
             tl.to(camera,{
                 duration:2,
                 onComplete:()=>{
-                    console.log("wait finished");
+                    //console.log("wait finished");
                     GalaxyTransformStart_time = undefined;
                     GalaxyTransforming = true;
                     Transform_progress = 0;
@@ -3452,7 +3399,7 @@ const finaly_tanzaku_num = document.getElementById("finaly_tanzaku_num");
 player.addListener({
     onAppReady: (app) => {
         if (!app.managed) {
-            console.log("準備完了");
+            //console.log("準備完了");
             //load_music(5);//デバッグ用
             loading_gray.style.display = "none";
             loading.style.display = "none";
@@ -3460,7 +3407,7 @@ player.addListener({
         }
     },
     onVideoReady:(video)=>{
-        console.log("動画情報:", video);
+        //console.log("動画情報:", video);
         current = null;
         prev = null;
         last_beat = null;
@@ -3488,7 +3435,7 @@ player.addListener({
         updateCount = 0;
     },
     onPlay:()=>{
-        console.log("play");
+        //console.log("play");
         isStopped = false;
         
         if(hasEverPlayed){
@@ -3520,16 +3467,16 @@ player.addListener({
         }
     },
     onStop:()=>{
-        console.log("stop");
+        //console.log("stop");
         isStopped = true;
         //hasEverPlayed = false;
         play_button.src = play_button_img;
         start_dbserve_child.innerText = "観測を開始する";
     },
     onTimerReady:()=>{
-        console.log("楽曲準備完了");
-        console.log(player);
-        console.log(player.data.song);
+        //console.log("楽曲準備完了");
+        //console.log(player);
+        //console.log(player.data.song);
         
         isStopped = true;
         hasEverPlayed = false;
@@ -3647,7 +3594,7 @@ player.addListener({
                     //console.log(bv);
                     ///console.log(player.getVocalAmplitude(current.startTime));
                     finished_loop = false;
-                    console.log(current);
+                    //console.log(current);
                     //console.log(beat);
                     //console.log("チェック用");
                     let text = "";
@@ -3875,8 +3822,8 @@ player.addListener({
                     }
                     finished_loop = true;
                     //console.log("next ignor",ignor_count);
-                    console.log("本来の歌詞:",current.text);
-                    console.log("現在の歌詞:",text);
+                    //console.log("本来の歌詞:",current.text);
+                    //console.log("現在の歌詞:",text);
                     //rylic_ele.innerText += current.text;  // 現在の歌詞を即座に表示
                     if(text !== ""){
                         placeTextSprite(text,bv,bright,size*3/2);
@@ -3960,7 +3907,7 @@ function sphericalToCartesian(radius, latitude, longitude) {
     const z = radius * Math.cos(latitude) * Math.sin(longitude);
     return new THREE.Vector3(x, y, z);
 }
-const line_colors = [0x7DDFFF,0xd74443,0x4c59ab,0xe0e34c,0xe2e67d,0xeccbdc];
+const line_colors = [0x1df8de,0xd74443,0x70aeff,0xe0e34c,0xf89d1d,0xeccbdc];
 let existingSprites = [];
 let starlines = [];
 function placeTextSprite(text,bv,bright,size) {
@@ -4015,7 +3962,7 @@ function placeTextSprite(text,bv,bright,size) {
             existingSprites.push({ sprite:sprite, radius:radius ,texture:texture,material:material});
             scene.add(sprite);
             placed = true;
-            console.log("succeed:",text)
+            //console.log("succeed:",text)
             break;
         }
     }
@@ -4025,7 +3972,7 @@ function placeTextSprite(text,bv,bright,size) {
         sprite.position.copy(basePos);
         existingSprites.push({ sprite:sprite, radius:radius ,texture:texture,material:material});
         scene.add(sprite);
-        console.log("failed");
+        //console.log("failed");
     }
     let tl = gsap.timeline();
     sprite.material.rotation = 0;
@@ -4073,13 +4020,13 @@ function placeTextSprite(text,bv,bright,size) {
         const lineGeometry = new THREE.BufferGeometry();
         lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
         let line_color;
-        console.log(current_line_color_mode);
+        //console.log(current_line_color_mode);
         if(current_line_color_mode == 1){
             line_color = line_colors[0];
         }else if(current_line_color_mode == 2){
-            line_color = line_colors[3];
-        }else if(current_line_color_mode == 3){
             line_color = line_colors[4];
+        }else if(current_line_color_mode == 3){
+            line_color = line_colors[3];
         }else if(current_line_color_mode == 4){
             line_color = line_colors[5];
         }else if(current_line_color_mode == 5){
@@ -4310,7 +4257,7 @@ function make_tanzaku_and_place(dis=40,quantity_per_one = 6){
                     
                         const x = Math.random() * ctx.canvas.width;
                         const y = Math.max(Math.random(),0.3) * ctx.canvas.height;
-                        console.log(x,y);
+                        //console.log(x,y);
                         drawImageRotated(ctx,back_img,
                             x,y,
                             {
@@ -4690,7 +4637,7 @@ const tanzaku_back = document.createElement("img");
 //make_tanzaku_and_place();
 async function set_tanzaku_img() {
     await waitForImages();
-    console.log("Load_tanzaku");
+    //console.log("Load_tanzaku");
     
     tanzaku_back.src = original_tanzaku_list[current_img_idx].imgURL;
     tanzaku_back.classList.add("back_tanzaku");
