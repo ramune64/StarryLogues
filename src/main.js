@@ -950,10 +950,10 @@ canvas.addEventListener('mouseup', (event) => {
     }
     // オブジェクトとの交差を検出
     const intersects = raycaster.intersectObjects(allObjects,true);
-    console.log(intersects);
+    //console.log(intersects);
     const meshHits = intersects.filter(i => i.object.isMesh);//Points
     
-    console.log(meshHits);
+    //console.log(meshHits);
     
     // 交差したオブジェクトがあればイベントを発火
     if (meshHits.length > 0) {
@@ -4992,23 +4992,38 @@ function always_rotate_galaxyStars(){
     }
 }
 
-const thumbnails = {
+import thumbnail0 from "./imgs/thumbnail0.jpg";
+import thumbnail1 from "./imgs/thumbnail1.jpg";
+import thumbnail2 from "./imgs/thumbnail2.jpg";
+import thumbnail3 from "./imgs/thumbnail3.jpg";
+import thumbnail4 from "./imgs/thumbnail4.jpg";
+import thumbnail5 from "./imgs/thumbnail5.jpg";
+
+/* const thumbnails = {
     0:"https://i.ytimg.com/vi/NPOhKU5VTrQ/hqdefault.jpg",
     1:"https://i.ytimg.com/vi/4thcMKIMBYE/hqdefault.jpg",
     2:"https://i.ytimg.com/vi/H0JMACH0hy4/sddefault.jpg",
     3:"https://i.ytimg.com/vi/IN0PORisHSs/hq720.jpg",
     4:"https://i.ytimg.com/vi/Mzttgw4LuPA/hq720.jpg",
     5:"https://i.ytimg.com/vi/TjiNmDf9p0Y/sddefault.jpg"
-}
+} */
+const thumbnails = [
+    thumbnail0,
+    thumbnail1,
+    thumbnail2,
+    thumbnail3,
+    thumbnail4,
+    thumbnail5,
+]
 
 let move_target = [];
 function prepareMVimg(music_num){//星をサムネの画像に変形させる関数
     move_target = [];
     const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    //console.log(thumbnails[music_num]);
+    //img.crossOrigin = 'Anonymous';
+    console.log(thumbnails[music_num]);
     img.src = thumbnails[music_num];
-    img.onload = () => {
+    img.onload =  () => {
         const scale = 1;
         const scaledWidth = 160*scale;
         const scaledHeight = 90*scale;

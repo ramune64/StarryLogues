@@ -6,6 +6,7 @@
     "*.json": ["@parcel/transformer-raw"],
     "*.ttf": ["@parcel/transformer-raw"],
     "*.otf": ["@parcel/transformer-raw"],
-    "*.png": ["@parcel/transformer-raw"]
+    "*.png": ["@parcel/transformer-raw"],
+    "*.jpg": ["@parcel/transformer-raw"]
   }
 }
