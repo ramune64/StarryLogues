@@ -1162,6 +1162,7 @@ img.back_milkyway{
     }
 }
 #first_explanation{
+    padding-top: 4%;
     & p{
         width: fit-content;
         margin: auto;
