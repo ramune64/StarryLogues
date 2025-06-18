@@ -10,7 +10,6 @@
   "name": "contest",
   "version": "1.0.0",
   "scripts": {
-    "test": "parcel --https src/index.html --host 0.0.0.0",
     "dev": "parcel --https src/index.html --host 0.0.0.0",
     "build": "parcel build src/index.html"
   },
