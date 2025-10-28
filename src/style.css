@@ -10,8 +10,12 @@ body{
     -webkit-tap-highlight-color: transparent;
     -moz-user-select: none; 
 }
-
-
+a{
+    color: #92c1e4;
+}
+a:hover{
+    color: #e0e34c;
+}
 
 #myCanvas{
     height: 100vh;
@@ -1129,6 +1133,12 @@ img.back_milkyway{
     z-index: 100;
     display: none;
     padding-top: 3%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    margin-bottom: 100px;
+    & ::-webkit-scrollbar{
+        display: none;
+    }
     & h1{
         text-align: center;
         font-family: "nikokaku";
