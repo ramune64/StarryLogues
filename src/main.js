@@ -2789,10 +2789,10 @@ angle_parent.appendChild(angle_m90);
 const direction_parent = document.getElementById("direction_parent");
 
 //西と東を逆にしてしまっていたので、変数は変えずに画像だけ入れ替えて解決（おいコラ）
-import northURL from "./imgs/北.png";
-import eastURL from "./imgs/西.png";
-import southURL from "./imgs/南.png";
-import westURL from "./imgs/東.png";
+import northURL from "./imgs/kita.png";
+import eastURL from "./imgs/nishi.png";
+import southURL from "./imgs/minami.png";
+import westURL from "./imgs/higashi.png";
 const direction_N = document.createElement('img');
 direction_N.src = northURL;
 direction_N.classList.add("directions");
